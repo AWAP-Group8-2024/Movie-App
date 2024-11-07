@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import popularRouter from "./routers/PopularRouter.js";
 import userRouter from "./routers/UserRouter.js";
-
 const port = process.env.SERVER_PORT;
 
 const app = express();

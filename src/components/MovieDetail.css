@@ -1,0 +1,131 @@
+/* MovieDetail.css */
+.movie-detail-container {
+    padding: 2rem;
+    min-height: 100vh;
+  }
+  
+  .movie-poster-container {
+    position: relative;
+  }
+  
+  .movie-poster {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+  
+  .action-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .movie-info h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .movie-meta {
+    margin-bottom: 2rem;
+  }
+  
+  .rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .star {
+    color: #ffd700;
+    cursor: pointer;
+  }
+  
+  .views, .comments {
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .cont-movie-details{
+    display: flex;
+    gap: 1rem;
+    color: #888;
+    margin-bottom: 1rem;
+  }
+  
+  .genres {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .genre {
+    background-color: rgba(255,255,255,0.1);
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+  }
+  
+  .synopsis {
+    color: #ccc;
+    margin-bottom: 2rem;
+  }
+  
+  .cast-crew {
+    color: #ccc;
+    margin-bottom: 2rem;
+  }
+  
+  .recommended-section {
+    margin: 3rem 0;
+  }
+  
+  .review-section {
+    margin-top: 3rem;
+  }
+  
+  .dark-textarea, .dark-input {
+    background-color: #1a1f2e;
+    border: 1px solid #2a2f3e;
+    color: #fff;
+  }
+  
+  .dark-textarea:focus, .dark-input:focus {
+    background-color: #1a1f2e;
+    border-color: #3a3f4e;
+    color: #fff;
+    box-shadow: none;
+  }
+  
+  .submit-btn {
+    background-color: #7952b3;
+    border: none;
+    padding: 0.5rem 2rem;
+  }
+  
+  .submit-btn:hover {
+    background-color: #6942a3;
+  }
+  
+  /* Responsive  - media query  */
+  @media (max-width: 768px) {
+    .movie-detail-container {
+      padding: 1rem;
+    }
+    
+    .movie-info h1 {
+      font-size: 2rem;
+    }
+  }

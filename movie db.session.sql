@@ -1,4 +1,4 @@
--- select * from account
+
 
 
 -- DROP TABLE IF EXISTS account;
@@ -9,3 +9,5 @@
 --     firstname VARCHAR(50),
 --     lastname VARCHAR(50)
 -- );
+
+SELECT * from account

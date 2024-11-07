@@ -7,6 +7,7 @@ import TVShowDetails from './components/TVShowDetails'; // Import the TVShowDeta
 import Authentication, { AuthenticationMode } from './UserComponents/Authentication.jsx'; // Import the Authentication component
 import UserProvider from './UserComponents/UserProvider.jsx'; // Import the UserProvider component
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import List from './components/List';
 
 function App() {
   // return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/tv/:id" element={<TVShowDetails />} /> {/* TV Show Details page */}
           <Route path="/login" element={<Authentication authenticationMode={AuthenticationMode.Login} />} /> {/* Login page */}
           <Route path="/register" element={<Authentication authenticationMode={AuthenticationMode.Register} />} /> {/* Register page */}
+          <Route path="/list/:condition" element={<List />}/>
         </Routes>
       </UserProvider>
     </BrowserRouter>

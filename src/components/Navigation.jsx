@@ -63,9 +63,9 @@ export default function Navigation() {
 							<NavDropdown.Item as={Link} to="#">Genre 3</NavDropdown.Item>
 						</NavDropdown>
 						<NavDropdown title="Categories" id="basic-nav-dropdown">
-							<NavDropdown.Item as={Link} to="#">Popular movies</NavDropdown.Item>
-							<NavDropdown.Item as={Link} to="#">Trending movies</NavDropdown.Item>
-							<NavDropdown.Item as={Link} to="#">Popular TV shows</NavDropdown.Item>
+							<NavDropdown.Item as={Link} onClick={() => window.location.replace('/list/movie_popular?page=1')}>Popular movies</NavDropdown.Item>
+							<NavDropdown.Item as={Link} onClick={() => window.location.replace('/list/trending_movie_week?page=1')}>Trending movies</NavDropdown.Item>
+							<NavDropdown.Item as={Link} onClick={() => window.location.replace('/list/tv_popular?page=1')}>Popular TV shows</NavDropdown.Item>
 						</NavDropdown>
 					</Nav>
 					<Form inline className="position-relative" onSubmit={handleSearch}>

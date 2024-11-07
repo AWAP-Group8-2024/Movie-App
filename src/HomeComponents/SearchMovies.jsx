@@ -10,9 +10,26 @@ export default function SearchMovies() {
         e.preventDefault();
         if (searchQuery.trim() === "") return;
 
-        fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${searchQuery}&page=1`)
-            .then(res => res.json())
-            .then(data => setSuggestions(data.results.slice(0, 5)))
+        Promise.all([
+            fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${searchQuery}&page=1`),
+            fetch(`https://api.themoviedb.org/3/search/tv?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${searchQuery}&page=1`)
+        ])
+            .then(([movieRes, tvRes]) => Promise.all([movieRes.json(), tvRes.json()]))
+            .then(([movieData, tvData]) => {
+                const combined = [
+                    ...movieData.results.map(item => ({
+                        ...item,
+                        mediaType: 'movie'
+                    })),
+                    ...tvData.results.map(item => ({
+                        ...item,
+                        mediaType: 'tv',
+                        title: item.name,
+                        release_date: item.first_air_date
+                    }))
+                ];
+                setSuggestions(combined.slice(0, 5));
+            })
             .catch(error => console.error("Error fetching data:", error));
     };
 
@@ -21,9 +38,26 @@ export default function SearchMovies() {
         setSearchQuery(query);
 
         if (query.trim() !== "") {
-            fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${query}&page=1`)
-                .then(res => res.json())
-                .then(data => setSuggestions(data.results.slice(0, 5)))
+            Promise.all([
+                fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${query}&page=1`),
+                fetch(`https://api.themoviedb.org/3/search/tv?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${query}&page=1`)
+            ])
+                .then(([movieRes, tvRes]) => Promise.all([movieRes.json(), tvRes.json()]))
+                .then(([movieData, tvData]) => {
+                    const combined = [
+                        ...movieData.results.map(item => ({
+                            ...item,
+                            mediaType: 'movie'
+                        })),
+                        ...tvData.results.map(item => ({
+                            ...item,
+                            mediaType: 'tv',
+                            title: item.name,
+                            release_date: item.first_air_date
+                        }))
+                    ];
+                    setSuggestions(combined.slice(0, 5));
+                })
                 .catch(error => console.error("Error fetching suggestions:", error));
         } else {
             setSuggestions([]);
@@ -35,7 +69,7 @@ export default function SearchMovies() {
             <Form inline onSubmit={handleSearch} className="d-flex justify-content-center mt-3">
                 <Form.Control
                     type="text"
-                    placeholder="Search for a movie"
+                    placeholder="Search for a movie or TV show"
                     value={searchQuery}
                     onChange={handleInputChange}
                     className="me-2"
@@ -46,8 +80,8 @@ export default function SearchMovies() {
             {suggestions.length > 0 && (
                 <ListGroup className="position-absolute w-100 mt-1" style={{ zIndex: 1000 }}>
                     {suggestions.map((item) => (
-                        <ListGroup.Item key={item.id} as={Link} to={`/movie/${item.id}`} action>
-                            {item.title || item.name} {item.release_date ? `(${item.release_date.split("-")[0]})` : ""}
+                        <ListGroup.Item key={item.id} as={Link} to={`/${item.mediaType}/${item.id}`} action>
+                            {item.title} {item.release_date ? `(${item.release_date.split("-")[0]})` : ""}
                         </ListGroup.Item>
                     ))}
                 </ListGroup>

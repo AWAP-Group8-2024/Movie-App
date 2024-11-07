@@ -7,7 +7,6 @@ export default function Navigation() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [suggestions, setSuggestions] = useState([]);
 	const navigate = useNavigate();
-
 	const { user } = useUser();
 
 	const handleInputChange = (e) => {
@@ -15,9 +14,26 @@ export default function Navigation() {
 		setSearchQuery(query);
 
 		if (query.trim() !== "") {
-			fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${query}&page=1`)
-				.then(res => res.json())
-				.then(data => setSuggestions(data.results.slice(0, 5)))
+			Promise.all([
+				fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${query}&page=1`),
+				fetch(`https://api.themoviedb.org/3/search/tv?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${query}&page=1`)
+			])
+				.then(([movieRes, tvRes]) => Promise.all([movieRes.json(), tvRes.json()]))
+				.then(([movieData, tvData]) => {
+					const combined = [
+						...movieData.results.map(item => ({
+							...item,
+							mediaType: 'movie'
+						})),
+						...tvData.results.map(item => ({
+							...item,
+							mediaType: 'tv',
+							title: item.name,
+							release_date: item.first_air_date
+						}))
+					];
+					setSuggestions(combined.slice(0, 5));
+				})
 				.catch(error => console.error("Error fetching suggestions:", error));
 		} else {
 			setSuggestions([]);
@@ -27,7 +43,8 @@ export default function Navigation() {
 	const handleSearch = (e) => {
 		e.preventDefault();
 		if (suggestions.length > 0) {
-			navigate(`/movie/${suggestions[0].id}`);
+			const firstResult = suggestions[0];
+			navigate(`/${firstResult.mediaType}/${firstResult.id}`);
 		} else {
 			alert("No results found");
 		}
@@ -56,7 +73,7 @@ export default function Navigation() {
 							<Col xs="auto">
 								<Form.Control
 									type="text"
-									placeholder="Search"
+									placeholder="Search Movies & TV Shows"
 									value={searchQuery}
 									onChange={handleInputChange}
 									className="mr-sm-2"
@@ -69,7 +86,7 @@ export default function Navigation() {
 						{suggestions.length > 0 && (
 							<ListGroup className="position-absolute w-100 mt-1" style={{ zIndex: 1000 }}>
 								{suggestions.map((item) => (
-									<ListGroup.Item key={item.id} as={Link} to={`/movie/${item.id}`} action className="d-flex align-items-center">
+									<ListGroup.Item key={item.id} as={Link} to={`/${item.mediaType}/${item.id}`} action className="d-flex align-items-center">
 										{item.poster_path ? (
 											<img
 												src={`https://image.tmdb.org/t/p/w92${item.poster_path}`}
@@ -84,6 +101,9 @@ export default function Navigation() {
 											<div>{item.title}</div>
 											<div className="text-muted" style={{ fontSize: "0.9em" }}>
 												{item.release_date ? item.release_date.split("-")[0] : "N/A"}
+                                                <span className="ms-2 badge bg-secondary">
+                                                    {item.mediaType === 'movie' ? 'Movie' : 'TV Series'}
+                                                </span>
 											</div>
 										</div>
 									</ListGroup.Item>
@@ -99,12 +119,12 @@ export default function Navigation() {
 						variant="outline-dark"
 						className="ms-0 ms-lg-5 mt-2 mt-lg-0"
 						onClick={() => {
-							sessionStorage.removeItem("user");  
+							sessionStorage.removeItem("user");
 							navigate("/");
-							window.location.reload();// Clear session storage and forced refresh
+							window.location.reload();
 						}}>Log out</Button>)}
 				</Navbar.Collapse>
 			</Container>
 		</Navbar>
-	)
+	);
 }

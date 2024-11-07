@@ -3,6 +3,7 @@
 import './App.css';
 import Home from './Home';
 import MovieDetails from './components/MovieDetails'; // Import the MovieDetails component
+import TVShowDetails from './components/TVShowDetails'; // Import the TVShowDetails component
 import Authentication, { AuthenticationMode } from './UserComponents/Authentication.jsx'; // Import the Authentication component
 import UserProvider from './UserComponents/UserProvider.jsx'; // Import the UserProvider component
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -26,13 +27,13 @@ function App() {
   //     </header>
   //   </div>
   // );
-
   return (
     <BrowserRouter>
       <UserProvider>
         <Routes>
           <Route path="/" element={<Home />} /> {/* Set Home as the default route */}
           <Route path="/movie/:id" element={<MovieDetails />} /> {/* Movie Details page */}
+          <Route path="/tv/:id" element={<TVShowDetails />} /> {/* TV Show Details page */}
           <Route path="/login" element={<Authentication authenticationMode={AuthenticationMode.Login} />} /> {/* Login page */}
           <Route path="/register" element={<Authentication authenticationMode={AuthenticationMode.Register} />} /> {/* Register page */}
         </Routes>

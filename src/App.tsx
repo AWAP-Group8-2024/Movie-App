@@ -6,6 +6,7 @@ import MovieDetails from './components/MovieDetails'; // Import the MovieDetails
 import TVShowDetails from './components/TVShowDetails'; // Import the TVShowDetails component
 import Authentication, { AuthenticationMode } from './UserComponents/Authentication.jsx'; // Import the Authentication component
 import UserProvider from './UserComponents/UserProvider.jsx'; // Import the UserProvider component
+import Profile from './UserComponents/Profile.jsx'; // Import the Profile component
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import List from './components/List';
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/tv/:id" element={<TVShowDetails />} /> {/* TV Show Details page */}
           <Route path="/login" element={<Authentication authenticationMode={AuthenticationMode.Login} />} /> {/* Login page */}
           <Route path="/register" element={<Authentication authenticationMode={AuthenticationMode.Register} />} /> {/* Register page */}
+          <Route path="/profile" element={<Profile />} /> {/* Profile page */}
           <Route path="/list/:condition" element={<List />}/>
         </Routes>
       </UserProvider>

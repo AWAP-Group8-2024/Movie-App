@@ -109,17 +109,10 @@ export default function Navigation() {
 						)}
 					</Form>
 					{!user || !user.token ? (
-						<Button as={Link} to="/login" variant="outline-dark" className="ms-0 ms-lg-5 mt-2 mt-lg-0">
-							Log in
-						</Button>
-					) : (<Button
-						variant="outline-dark"
-						className="ms-0 ms-lg-5 mt-2 mt-lg-0"
-						onClick={() => {
-							sessionStorage.removeItem("user");
-							navigate("/");
-							window.location.reload();
-						}}>Log out</Button>)}
+						<Button as={Link} to="/login" variant="outline-dark" className="ms-0 ms-lg-2 mt-2 mt-lg-0">Log in</Button>
+					) : (
+						<Button as={Link} to="/profile" variant="outline-primary" className="ms-0 ms-lg-2 mt-2 mt-lg-0">Profile</Button>
+					)}
 				</Navbar.Collapse>
 			</Container>
 		</Navbar>

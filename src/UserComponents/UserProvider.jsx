@@ -24,7 +24,6 @@ export default function UserProvider({ children }) {
 		const headers = { headers: { "Content-Type": "application/json" } };
 		try {
 			const response = await axios.post(url + '/user/login', json, headers);
-			const token = response.data.token;
 			setUser(response.data);
 			sessionStorage.setItem("user", JSON.stringify(response.data));
 		} catch (error) {
@@ -33,19 +32,23 @@ export default function UserProvider({ children }) {
 		}
 	}
 
-	/* const Remove = async () => {
-		const json = JSON.stringify(user);
-		const headers = { headers: { "Content-Type": "application/json" } };
+	const RemoveAccount = async () => {
 		try {
-			const response = await axios.delete(url + 'user/profile/:' + user.id, json, headers);
-			sessionStorage.removeItem("user");
+			const token = JSON.parse(sessionStorage.getItem("user"))?.token;
+			const headers = {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`
+				},
+			};
+			await axios.delete(`${url}/user/profile/${user.id}`, headers);
 		} catch (error) {
 			throw error;
 		}
-	}*/
+	};
 
 	return (
-		<UserContext.Provider value={{ user, setUser, signUp, signIn}}>
+		<UserContext.Provider value={{ user, setUser, signUp, signIn, RemoveAccount }}>
 			{children}
 		</UserContext.Provider>
 	);

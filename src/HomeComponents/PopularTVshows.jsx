@@ -14,7 +14,7 @@ export default function PopularTVshows() {
                 <Col className="text-start fw-bold">
                     Popular TV shows
                 </Col>
-                <Col className="text-end text-decoration-none text-dark" as={Link}>
+                <Col className="text-end text-decoration-none text-dark" as={Link} to={`/list/tv_popular?page=1`}>
                     {'View all ->'}
                 </Col>
             </Row>

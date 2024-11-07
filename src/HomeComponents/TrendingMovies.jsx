@@ -14,7 +14,7 @@ export default function TrendingMovies() {
                 <Col className="text-start fw-bold">
                     Trending movies
                 </Col>
-                <Col className="text-end text-decoration-none text-dark" as={Link}>
+                <Col className="text-end text-decoration-none text-dark" as={Link} to={`/list/trending_movie_week?page=1`}>
                     {'View all ->'}
                 </Col>
             </Row>

@@ -98,12 +98,9 @@ export default function Navigation() {
 											<div className="me-2" style={{ width: "50px", height: "75px", backgroundColor: "#ccc" }} />
 										)}
 										<div>
-											<div>{item.title}</div>
-											<div className="text-muted" style={{ fontSize: "0.9em" }}>
-												{item.release_date ? item.release_date.split("-")[0] : "N/A"}
-                                                <span className="ms-2 badge bg-secondary">
-                                                    {item.mediaType === 'movie' ? 'Movie' : 'TV Series'}
-                                                </span>
+											<div className="fw-bold">{item.title}</div>
+											<div className="text-muted" style={{ fontSize: "0.85em" }}>
+												{item.mediaType === 'movie' ? 'Movie' : 'TV Show'} • {item.release_date ? item.release_date.split("-")[0] : "N/A"}
 											</div>
 										</div>
 									</ListGroup.Item>

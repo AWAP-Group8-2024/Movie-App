@@ -25,4 +25,18 @@ const deleteUserById = async (id) => {
   return result;
 };
 
-export { insertUser, searchUserByEmail, searchUserById, deleteUserById };
+const isEmailExisting = async (email) => {
+  const emailCheck = await pool.query(
+    "SELECT id FROM account WHERE email = $1",
+    [email]
+  );
+  return emailCheck.rowCount > 0;
+};
+
+export {
+  insertUser,
+  searchUserByEmail,
+  searchUserById,
+  deleteUserById,
+  isEmailExisting,
+};

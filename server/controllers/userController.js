@@ -4,6 +4,7 @@ import {
   searchUserByEmail,
   searchUserById,
   deleteUserById,
+  isEmailExisting,
 } from "../models/User.js";
 import { ApiError } from "../helpers/apiError.js";
 import jwt from "jsonwebtoken";
@@ -12,15 +13,27 @@ const { sign } = jwt;
 const registration = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    if (!email || email.length === 0)
-      return next(new ApiError("Invalid email", 400));
-    if (!password || password.length < 8)
-      return next(new ApiError("Invalid password", 400));
+
+    if (!isEmailValid(email)) {
+      return next(new ApiError("Invalid email format", 400));
+    }
+    if (!isPasswordValid(password)) {
+      return next(
+        new ApiError(
+          "Invalid password. The password should contain at least one capital letter and number.",
+          400
+        )
+      );
+    }
+    const emailExists = await isEmailExisting(email);
+    if (emailExists) {
+      return next(new ApiError("Email already exists", 409));
+    }
 
     const hashedPassword = await hash(password, 10);
     const result = await insertUser(email, hashedPassword);
     const user = result.rows[0];
-    res.status(201).json(createUserObj(user.id, user.email));
+    return res.status(201).json(createUserObj(user.id, user.email));
   } catch (error) {
     return next(error);
   }
@@ -93,6 +106,15 @@ const createProfileObj = (id, email, password, firstname, lastname) => {
     firstname: firstname,
     lastname: lastname,
   };
+};
+
+const isEmailValid = (email) => {
+  return email && email.trim().length > 0;
+};
+
+const isPasswordValid = (password) => {
+  const regex = /^(?=.*[A-Z])(?=.*[0-9]).*$/;
+  return regex.test(password);
 };
 
 export { registration, login, getUserProfile, deleteUser };

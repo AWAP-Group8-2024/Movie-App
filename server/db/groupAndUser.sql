@@ -1,6 +1,7 @@
--- DROP TABLE IF EXISTS groups;
--- DROP TABLE IF EXISTS account;
--- DROP TABLE IF EXISTS group_account;
+BEGIN;
+DROP TABLE IF EXISTS group_account;
+DROP TABLE IF EXISTS groups;
+DROP TABLE IF EXISTS account;
 
 CREATE TABLE account (
     id SERIAL PRIMARY KEY,
@@ -28,6 +29,8 @@ INSERT INTO account (email, password) VALUES ('test2@gmail.com', 'P2');
 INSERT INTO group_account (group_id, account_id) VALUES (1, 1);
 INSERT INTO group_account (group_id, account_id) VALUES (1, 2);
 INSERT INTO group_account (group_id, account_id) VALUES (2, 1);
+
+COMMIT;
 
 -- SELECT * from account;
 -- SELECT * from groups;

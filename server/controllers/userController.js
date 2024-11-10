@@ -51,7 +51,8 @@ const login = async (req, res, next) => {
     const isPasswordValid = await compare(password, user.password);
     if (!isPasswordValid) return next(new ApiError("Invalid password", 401));
 
-    const token = sign({ user: email }, process.env.JWT_SECRET);
+    const payload = { id: user.id, email: user.email };
+    const token = sign(payload, process.env.JWT_SECRET);
 
     return res.status(200).json(createUserObj(user.id, user.email, token));
   } catch (error) {
@@ -117,4 +118,4 @@ const isPasswordValid = (password) => {
   return regex.test(password);
 };
 
-export { registration, login, getUserProfile, deleteUser };
+export { registration, login, getUserProfile, deleteUser, createUserObj };

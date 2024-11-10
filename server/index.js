@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import popularRouter from "./routers/PopularRouter.js";
 import userRouter from "./routers/UserRouter.js";
-const port = process.env.SERVER_PORT;
+import groupRouter from "./routers/groupRouter.js";
+const port = process.env.SERVER_PORT || 5000;
 
 const app = express();
 app.use(cors());
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/user", userRouter);
 app.use("/popular", popularRouter);
+app.use("/group", groupRouter);
 
 // Global Error handling middleware
 app.use((err, req, res, next) => {

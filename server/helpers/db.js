@@ -18,4 +18,8 @@ const openDb = () => {
   return pool;
 };
 const pool = openDb();
+console.log("Database connected");
+console.log("Environment:", env);
+console.log("Database:", process.env.DB_NAME);
+console.log("Password:", process.env.DB_PASSWORD);
 export { pool };

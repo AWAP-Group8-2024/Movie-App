@@ -16,9 +16,35 @@ CREATE TABLE account (
     lastname VARCHAR(50)
 );
 
-CREATE TABLE group (
+CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
-    account_id INTEGER UNIQUE REFERENCES account(id)
+    name VARCHAR(255) NOT NULL,
+    owner_id INTEGER REFERENCES account(id) ON DELETE CASCADE -- Use "account" as reference
+);
+
+-- Association table for group members
+CREATE TABLE group_members (
+    account_id INTEGER REFERENCES account(id),
+    group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
+    role VARCHAR(50) DEFAULT 'member',
+    status VARCHAR(50) DEFAULT 'pending', -- status options: 'pending', 'accepted', 'rejected'
+    PRIMARY KEY (account_id, group_id)
+);
+CREATE TABLE membership_requests (
+    id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES account(id) ON DELETE CASCADE,
+    status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'accepted', 'rejected'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Content table to manage content associated with groups
+CREATE TABLE group_content (
+    id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
+    content_type VARCHAR(50), -- 'movie' or 'showtime'
+    content_id INTEGER,
+    added_by INTEGER REFERENCES account(id) -- References user who added the content
 );
 
 -- For content

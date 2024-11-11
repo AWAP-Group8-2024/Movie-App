@@ -10,6 +10,7 @@ import Profile from './UserComponents/Profile.jsx'; // Import the Profile compon
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import List from './components/ListCategories';
 import ListCategories from './components/ListCategories';
+import ListFiltered from './components/ListFiltered';
 
 function App() {
   // return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="/register" element={<Authentication authenticationMode={AuthenticationMode.Register} />} /> {/* Register page */}
           <Route path="/profile" element={<Profile />} /> {/* Profile page */}
           <Route path="/list/:condition" element={<ListCategories />}/>
+          <Route path="/filtered/:condition" element={<ListFiltered />}/>
         </Routes>
       </UserProvider>
     </BrowserRouter>

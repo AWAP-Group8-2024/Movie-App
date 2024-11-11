@@ -108,11 +108,13 @@ export default function Navigation() {
 							</ListGroup>
 						)}
 					</Form>
+					<Form inline className="position-relative">
 					{!user || !user.token ? (
 						<Button as={Link} to="/login" variant="outline-dark" className="ms-0 ms-lg-2 mt-2 mt-lg-0">Log in</Button>
 					) : (
 						<Button as={Link} to="/profile" variant="outline-primary" className="ms-0 ms-lg-2 mt-2 mt-lg-0">Profile</Button>
 					)}
+					</Form>
 				</Navbar.Collapse>
 			</Container>
 		</Navbar>

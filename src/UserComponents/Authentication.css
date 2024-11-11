@@ -1,0 +1,29 @@
+.auth_container {
+	width: 80%;
+	max-width: 400px;
+	margin: 3rem auto 0; /* Centers the container and adds space on top */
+	padding: 2rem;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	background-color: "#ccc";
+	outline: ridge thin;
+}
+
+.auth_title {
+	font-size: 2em;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.auth_form {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.auth_form input {
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 100%;
+}

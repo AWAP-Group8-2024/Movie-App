@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { UserContext } from "./UserContext.jsx";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const url = process.env.REACT_APP_API_URL;
 
 export default function UserProvider({ children }) {
 	const userFromSessionStorage = sessionStorage.getItem("user");
-	const [user, setUser] = useState(userFromSessionStorage ? JSON.parse(userFromSessionStorage) : { id: "", email: "", password: "", firstname: "", lastname: "" });
+	const [user, setUser] = useState(userFromSessionStorage ? JSON.parse(userFromSessionStorage) : { id: "", email: "", password: "" });
+
+	const navigate = useNavigate();
 
 	const signUp = async () => {
 		const json = JSON.stringify(user);
@@ -32,21 +35,26 @@ export default function UserProvider({ children }) {
 		}
 	}
 
-	const RemoveAccount = async () => {
+	const RemoveAccount = async (email, password) => {
 		try {
 			const token = JSON.parse(sessionStorage.getItem("user"))?.token;
 			const headers = {
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`
+					"Authorization": `Bearer ${token}`,
+					"email": email,
+					"password": password
 				},
 			};
-			await axios.delete(`${url}/user/profile/${user.id}`, headers);
+			const response = await axios.delete(`${url}/user/profile/${user.id}`, headers);
+			sessionStorage.removeItem("user"); // Removes user from session storage after successful deletion
+			navigate("/");
+			window.location.reload();
+			return response.data;
 		} catch (error) {
 			throw error;
 		}
 	};
-
 	return (
 		<UserContext.Provider value={{ user, setUser, signUp, signIn, RemoveAccount }}>
 			{children}

@@ -40,10 +40,18 @@ const getGroupDetailsById = async (groupId) => {
   return result.rows[0];
 };
 
+const deleteGroupById = async (groupId) => {
+  const result = await pool.query("DELETE FROM groups WHERE id = $1", [
+    groupId,
+  ]);
+  return result;
+};
+
 export {
   getAllGroups,
   getGroupsForUser,
   insertNewGroup,
   insertUserGroupAssociation,
   getGroupDetailsById,
+  deleteGroupById,
 };

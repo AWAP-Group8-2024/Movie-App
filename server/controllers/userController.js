@@ -81,11 +81,12 @@ const getUserProfile = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await deleteUserById(id);
-    console.log(result);
-    return res
-      .status(200)
-      .json({ id: id, message: `User ID ${id} deleted successfully.` });
+    await deleteUserById(id);
+    const response = {
+      user: req.user,
+      message: `User ID ${req.user.id} deleted successfully.`,
+    };
+    return res.status(200).json(response);
   } catch (error) {
     return next(error);
   }

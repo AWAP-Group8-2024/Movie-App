@@ -4,10 +4,12 @@ import {
   getGroupsForUser,
   insertNewGroup,
   insertUserGroupAssociation,
+  deleteGroupById,
 } from "../models/Group.js";
 
 import { ApiError } from "../helpers/apiError.js";
 
+// Listing is available for all user
 const getAllGroupsListing = async (req, res, next) => {
   try {
     const result = await getAllGroups();
@@ -19,7 +21,7 @@ const getAllGroupsListing = async (req, res, next) => {
 
 const getGroupsByUserId = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id } = req.user;
     const result = await getGroupsForUser(id);
     return res.status(200).json(result.rows || []);
   } catch (error) {
@@ -41,7 +43,6 @@ const getGroupByGroupId = async (req, res, next) => {
       .status(200)
       .json(createGroupObj(group.id, group.name, group.creator_id));
   } catch (error) {
-    console.error(error);
     return next(error);
   }
 };
@@ -65,6 +66,20 @@ const createNewGroup = async (req, res, next) => {
   }
 };
 
+const deleteGroupByGroupId = async (req, res, next) => {
+  try {
+    const { id } = req.group;
+    await deleteGroupById(id);
+    const response = {
+      group: req.group,
+      message: `Group '${req.group.name}' with ID ${req.group.id} deleted successfully.`,
+    };
+    return res.status(200).json(response);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const createGroupObj = (id, name, creator_id) => {
   return {
     id: id,
@@ -82,4 +97,6 @@ export {
   getGroupsByUserId,
   createNewGroup,
   getGroupByGroupId,
+  deleteGroupByGroupId,
+  createGroupObj,
 };

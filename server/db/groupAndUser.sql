@@ -14,7 +14,7 @@ CREATE TABLE account (
 CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    account_id INTEGER REFERENCES account(id) ON DELETE SET NULL
+    creator_id INTEGER REFERENCES account(id) ON DELETE SET NULL
 );
 
 CREATE TABLE group_account (

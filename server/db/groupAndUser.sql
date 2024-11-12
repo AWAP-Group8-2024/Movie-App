@@ -1,4 +1,7 @@
+
 BEGIN;
+
+DROP TABLE IF EXISTS join_requests;
 DROP TABLE IF EXISTS group_account;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS account;
@@ -23,20 +26,37 @@ CREATE TABLE group_account (
     PRIMARY KEY (group_id, account_id)
 );
 
-INSERT INTO groups (name) VALUES ('group1'), ('group2'), ('group3');
-INSERT INTO account (email, password) VALUES ('test1@gmail.com', 'P1');
-INSERT INTO account (email, password) VALUES ('test2@gmail.com', 'P2');
-INSERT INTO account (email, password) VALUES ('test3@gmail.com', 'P3');
-INSERT INTO account (email, password) VALUES ('test4@gmail.com', 'P4');
-INSERT INTO account (email, password) VALUES ('test5@gmail.com', 'P5');
+CREATE TABLE join_requests (
+    id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
+    account_id INTEGER REFERENCES account(id) ON DELETE CASCADE,
+    status VARCHAR(20) CHECK (status IN ('pending', 'accepted', 'rejected')) DEFAULT 'pending',
+    request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    response_date TIMESTAMP
+);
+
+INSERT INTO account (email, password) VALUES ('test1@123.com', '$2b$10$.bgHzCIBMOPDcSJ1LHpQgel7W5KlSg53ss9UIbtk1/Bq2r60Nwuu.');
+INSERT INTO account (email, password) VALUES ('test2@123.com', '$2b$10$V/kgVRzhzoS/BaxGqNT/.e8X7aeHToNyJkuckWrJVxDkEoWeouaqC');
+INSERT INTO account (email, password) VALUES ('test3@123.com', '$2b$10$XCncdULQh/pfmE1esyXiTeqJSHmOWHutaWkXMbGCRR6/XqV.EucLi');
+INSERT INTO account (email, password) VALUES ('test4@123.com', '$2b$10$LRr/wfzizgtkNVc43dBXO.1vklFtRTWG6sxHKpiIEVMoNVajMoSc.');
+INSERT INTO account (email, password) VALUES ('test5@123.com', '$2b$10$HqXkzyANdNq0.0CLvqVHWeDSJSuSYyv9y17G8xNs5hZIdIxFK/ZhK');
+INSERT INTO account (email, password) VALUES ('test6@123.com', '$2b$10$yiouJ7CNI1Qf4tswmc8Wr.4gdGXzVmvyTnFwwQDzqsTz/ulynPNuy');
+
+INSERT INTO groups  (name, creator_id) VALUES ('group1', 1), ('group2', 2), ('group3', 3);
 
 INSERT INTO group_account (group_id, account_id) VALUES (1, 1);
 INSERT INTO group_account (group_id, account_id) VALUES (1, 2);
-INSERT INTO group_account (group_id, account_id) VALUES (2, 1);
 INSERT INTO group_account (group_id, account_id) VALUES (2, 2);
 INSERT INTO group_account (group_id, account_id) VALUES (2, 3);
+INSERT INTO group_account (group_id, account_id) VALUES (2, 4);
+INSERT INTO group_account (group_id, account_id) VALUES (3, 1);
+INSERT INTO group_account (group_id, account_id) VALUES (3, 2);
+INSERT INTO group_account (group_id, account_id) VALUES (3, 3);
 INSERT INTO group_account (group_id, account_id) VALUES (3, 4);
-INSERT INTO group_account (group_id, account_id) VALUES (3, 5);
+
+INSERT INTO join_requests (group_id, account_id) VALUES (1, 4);
+INSERT INTO join_requests (group_id, account_id) VALUES (2, 5);
+INSERT INTO join_requests (group_id, account_id) VALUES (3, 6);
 
 COMMIT;
 

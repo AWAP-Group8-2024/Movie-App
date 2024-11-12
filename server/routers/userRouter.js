@@ -18,9 +18,4 @@ router.post("/login", login);
 router.post("/profile/:id", auth, getUserProfile);
 router.delete("/profile/:id", auth, deleteUser);
 
-// // list user's groups
-// router.get("/:id/groups", auth, getGroupsByUserId);
-// // access group if the user joined the group.
-// router.get("/:id/group/:groupId", auth, verifyUserInGroup, getGroupByGroupId);
-
 export default router;

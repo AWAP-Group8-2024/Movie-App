@@ -1,12 +1,6 @@
 import { Router } from "express";
 import dotenv from "dotenv";
-import {
-  getGroupsByUserId,
-  getGroupByGroupId,
-  getAllGroupsListing,
-  createNewGroup,
-  deleteGroupByGroupId,
-} from "../controllers/GroupController.js";
+import * as GroupController from "../controllers/GroupController.js";
 import {
   auth,
   verifyUserInGroup,
@@ -17,22 +11,43 @@ dotenv.config();
 
 const router = Router();
 
-router.get("/", auth, getAllGroupsListing);
+router.get("/", auth, GroupController.getAllGroupsListing);
 
-router.post("/create", auth, createNewGroup);
+router.post("/create", auth, GroupController.createNewGroup);
 
 // list user's groups
-router.get("/all", auth, getGroupsByUserId);
+router.get("/all", auth, GroupController.getGroupsByUserId);
 
 // access group if the user joined the group.
-router.get("/:groupId", auth, verifyUserInGroup, getGroupByGroupId);
+router.get(
+  "/:groupId",
+  auth,
+  verifyUserInGroup,
+  GroupController.getGroupByGroupId
+);
 
 // delete group if user is the owner
 router.delete(
   "/delete/:groupId",
   auth,
   verifyCreatorIsValid,
-  deleteGroupByGroupId
+  GroupController.deleteGroupByGroupId
+);
+
+router.post("/:groupId/join", auth, GroupController.sendJoinRequest);
+
+router.get(
+  "/:groupId/requests",
+  auth,
+  verifyCreatorIsValid,
+  GroupController.viewPendingRequests
+);
+
+router.put(
+  "/:groupId/requests/:requestId",
+  auth,
+  verifyCreatorIsValid,
+  GroupController.updateJoinRequestStatus
 );
 
 export default router;

@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken";
-const { verify } = jwt;
 import { createUserObj } from "../controllers/UserController.js";
 import { getGroupsForUser, getGroupDetailsById } from "../models/Group.js";
 import { createGroupObj } from "../controllers/GroupController.js";
 
-const auth = (req, res, next) => {
+const { verify } = jwt;
+
+export const auth = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -26,7 +27,7 @@ const auth = (req, res, next) => {
   }
 };
 
-const verifyUserInGroup = async (req, res, next) => {
+export const verifyUserInGroup = async (req, res, next) => {
   const { id } = req.user;
   const { groupId } = req.params;
   try {
@@ -47,24 +48,25 @@ const verifyUserInGroup = async (req, res, next) => {
   }
 };
 
-const verifyCreatorIsValid = async (req, res, next) => {
+export const verifyCreatorIsValid = async (req, res, next) => {
   const { id } = req.user;
   const { groupId } = req.params;
   try {
     const group = await getGroupDetailsById(groupId);
     if (!group) {
-      return res.status(404).json({ message: "Group not found" });
+      return res.status(404).json({
+        message: "Group not found",
+      });
     }
     if (id !== group.creator_id) {
       return res.status(400).json({
-        message: `The user id: ${id} is not the group owner. Only group owner can delete the group`,
+        message: `The user id: ${id} is not the group owner. Only the group owner can proceed this operation`,
       });
     }
+    // Attached group object to req for further uses.
     req.group = createGroupObj(group.id, group.name, group.creator_id);
     next();
   } catch (error) {
     return next(error);
   }
 };
-
-export { auth, verifyUserInGroup, verifyCreatorIsValid };

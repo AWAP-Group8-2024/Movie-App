@@ -40,7 +40,7 @@ function App() {
           <Route path="/tv/:id" element={<TVShowDetails />} /> {/* TV Show Details page */}
           <Route path="/login" element={<Authentication authenticationMode={AuthenticationMode.Login} />} /> {/* Login page */}
           <Route path="/register" element={<Authentication authenticationMode={AuthenticationMode.Register} />} /> {/* Register page */}
-          <Route path="/profile" element={<Profile />} /> {/* Profile page */}
+          <Route path="/profile/:id" element={<Profile />} /> {/* Profile page */}
           <Route path="/list/:condition" element={<ListCategories />}/>
           <Route path="/filtered/:condition" element={<ListFiltered />}/>
         </Routes>

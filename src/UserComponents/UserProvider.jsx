@@ -10,7 +10,7 @@ export default function UserProvider({ children }) {
   const [user, setUser] = useState(
     userFromSessionStorage
       ? JSON.parse(userFromSessionStorage)
-      : { id: "", email: "", password: "" }
+      : { id: "", email: "", password: "", firstname: "", lastname: "" }
   );
 
   const navigate = useNavigate();
@@ -61,9 +61,23 @@ export default function UserProvider({ children }) {
       throw error;
     }
   };
+
+  const getUserProfile = async (id) => {
+	try {
+	  const headers = {
+		"Content-Type": "application/json",
+		id: id,
+	  };
+	  	const response = await axios.get(`${url}/user/profile/${id}`, {
+	  });
+	  return response.data;
+	} catch (error) {
+	  throw error;
+	}
+  }
   return (
     <UserContext.Provider
-      value={{ user, setUser, signUp, signIn, RemoveAccount }}
+      value={{ user, setUser, signUp, signIn, RemoveAccount, getUserProfile }}
     >
       {children}
     </UserContext.Provider>

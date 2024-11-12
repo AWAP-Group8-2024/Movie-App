@@ -11,11 +11,13 @@ export default function List({ items, total_pages }) {
     const searchQuery = new URLSearchParams(location.search);
     const page = +searchQuery.get('page');
     let currentGenres = searchQuery.get('genres');
+    const currentYear = searchQuery.get('year');
     if (currentGenres) {
         currentGenres = currentGenres.split(',');
     }
     const [genreIdList, setGenreIdList] = useState(currentGenres ? currentGenres : []);
-    const [searchButton, setSearchButton] = useState(genreIdList == 0);
+    const [searchButton, setSearchButton] = useState(genreIdList.length === 0 && (currentYear == '' || currentYear == null));
+    const [year, setYear] = useState(currentYear);
     
     const [body, setBody] = useState(null);
 
@@ -48,6 +50,11 @@ export default function List({ items, total_pages }) {
         );
     }
 
+    function yearChange(event) {
+        setYear(event.target.value);
+        setSearchButton(false);
+    } 
+
     let filterGenres = [];
 
     if (condition.includes('movie')) {
@@ -59,6 +66,10 @@ export default function List({ items, total_pages }) {
             createGenreFilter(element);
         })
     }
+
+    let filterYear = (
+        <input type="number" placeholder="Enter year" onChange={yearChange} value={year}/>
+    );
 
     function createBody() {
         if (total_pages == -1) {
@@ -94,7 +105,7 @@ export default function List({ items, total_pages }) {
     return (
         <div>
             <Navigation />
-            <Accordion defaultActiveKey={!genreIdList.length == 0 ? '0' : ''}>
+            <Accordion defaultActiveKey={genreIdList.length == 0 && (year == '' || year == null) ? '' : '0'}>
                 <Accordion.Item eventKey="0">
                     <Accordion.Header><Col className="fs-3">Filters</Col></Accordion.Header>
                     <Accordion.Body>
@@ -106,13 +117,21 @@ export default function List({ items, total_pages }) {
                         <Row className="row-cols-auto">
                             {filterGenres}
                         </Row>
+                        <Row className="row-cols-auto">
+                            <Col className="fs-4">
+                                Release year:
+                            </Col>
+                        </Row>
+                        <Row className="row-cols-auto">
+                            {filterYear}
+                        </Row>
                         <Row className="justify-content-center row-cols-auto">
                             <Col>
                                 <Button variant="outline-dark" disabled={searchButton} onClick={() => {
                                     if (condition.includes('tv')) {
-                                        window.location.replace(`/filtered/tv?genres=${genreIdList.join(',')}&page=1`)
+                                        window.location.replace(`/filtered/tv?genres=${genreIdList.join(',')}&year=${year}&page=1`)
                                     } else {
-                                        window.location.replace(`/filtered/movie?genres=${genreIdList.join(',')}&page=1`)
+                                        window.location.replace(`/filtered/movie?genres=${genreIdList.join(',')}&year=${year}&page=1`)
                                     }
                                 }}>Show results</Button>
                             </Col>

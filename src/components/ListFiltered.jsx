@@ -10,9 +10,13 @@ export default function ListFiltered() {
     
     const page = +searchQuery.get('page');
     const genres = searchQuery.get('genres');
+    const year = searchQuery.get('year');
 
     function getItems() {
-        fetch(`https://api.themoviedb.org/3/discover/${condition}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&with_genres=${genres}&page=${page}`)
+        fetch(condition == 'tv' ?
+            `https://api.themoviedb.org/3/discover/tv?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&with_genres=${genres}&first_air_date_year=${year}&page=${page}` :
+            `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&with_genres=${genres}&primary_release_year=${year}&page=${page}`
+        )
         .then(res => res.json())
         .then(json => {
             console.log(json);

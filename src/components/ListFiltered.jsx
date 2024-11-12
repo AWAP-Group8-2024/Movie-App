@@ -15,7 +15,11 @@ export default function ListFiltered() {
         fetch(`https://api.themoviedb.org/3/discover/${condition}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&with_genres=${genres}&page=${page}`)
         .then(res => res.json())
         .then(json => {
-            setBody(<List items={json.results}/>);
+            console.log(json);
+            setBody(<List items={json.results || []} total_pages={json.total_pages || -1}/>);
+        })
+        .catch(error => {
+            console.log(error.message);
         })
     }
 

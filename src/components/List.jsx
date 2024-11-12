@@ -5,7 +5,7 @@ import { Row, Col, Container, Accordion, Button } from "react-bootstrap";
 import { movieGenres } from "./movieGenres.js";
 import { tvGenres } from "./tvGenres";
 
-export default function List({ items }) {
+export default function List({ items, total_pages }) {
     const { condition } =  useParams();
     const location = useLocation();
     const searchQuery = new URLSearchParams(location.search);
@@ -19,24 +19,15 @@ export default function List({ items }) {
     
     const [body, setBody] = useState(null);
 
-    let turnPage = null;
-
-    if (page === 1) {
-        turnPage = (
-            <Row className="justify-content-center row-cols-auto">
-                <Col>{page}</Col>
-                <Col as={Link} onClick={() => {window.location.replace(window.location.href.replace(`page=${page}`, `page=${page + 1}`))}} className="text-decoration-none text-dark">{`->`}</Col>
-            </Row>
-        );
-    } else {
-        turnPage = (
-            <Row className="justify-content-center row-cols-auto">
-                <Col as={Link} onClick={() => {window.location.replace(window.location.href.replace(`page=${page}`, `page=${page - 1}`))}} className="text-decoration-none text-dark">{`<-`}</Col>
-                <Col>{page}</Col>
-                <Col as={Link} onClick={() => {window.location.replace(window.location.href.replace(`page=${page}`, `page=${page + 1}`))}} className="text-decoration-none text-dark">{`->`}</Col>
-            </Row>
-        );
-    }
+    let turnPage = (
+        <Row className="justify-content-center row-cols-auto">
+            {page === 1 ? null :
+            <Col as={Link} onClick={() => {window.location.replace(window.location.href.replace(`page=${page}`, `page=${page - 1}`))}} className="text-decoration-none text-dark">{`<-`}</Col>}
+            <Col>{page}</Col>
+            {page >= total_pages ? null :
+            <Col as={Link} onClick={() => {window.location.replace(window.location.href.replace(`page=${page}`, `page=${page + 1}`))}} className="text-decoration-none text-dark">{`->`}</Col>}
+        </Row>
+    );
 
     function createGenreFilter(element) {
         function checkClick(event) {
@@ -70,6 +61,10 @@ export default function List({ items }) {
     }
 
     function createBody() {
+        if (total_pages == -1) {
+            setBody(<div>Failed to fetch. Try again later</div>);
+            return;
+        }
         let setter = [];
         items.forEach(element => {
             setter.push(
@@ -81,13 +76,18 @@ export default function List({ items }) {
                 </Col> 
             );
         });
-        setBody(
-            <Container>
-                <Row>
-                    {setter}
-                </Row>
-            </Container>
-        );
+
+        if (items.length == 0) {
+            setBody(<div>No results were found.</div>);
+        } else {
+            setBody(
+                <Container>
+                    <Row>
+                        {setter}
+                    </Row>
+                </Container>
+            );
+        }
     }
 
     useEffect(createBody, []);

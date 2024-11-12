@@ -14,7 +14,10 @@ export default function ListCategories() {
         fetch(`https://api.themoviedb.org/3/${condition.replaceAll('_','/')}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=${page}`)
         .then(res => res.json())
         .then(json => {
-            setBody(<List items={json.results}/>);
+            setBody(<List items={json.results || []} total_pages={json.total_pages || -1}/>);
+        })
+        .catch(error => {
+            console.log(error.message);
         })
     }
 

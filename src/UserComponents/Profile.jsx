@@ -1,61 +1,90 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useUser } from './useUser.jsx';
-import Navigation from '../components/Navigation.jsx';
-import { Container, Form, Button } from 'react-bootstrap';
+import { useUser } from "./useUser.jsx";
+import Navigation from "../components/Navigation.jsx";
+import { Container, Form, Button, Modal } from "react-bootstrap";
 
 export default function Profile() {
-	const { RemoveAccount } = useUser();
-	const navigate = useNavigate();
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+  const { RemoveAccount } = useUser();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
-	const handleLogout = () => {
-		sessionStorage.removeItem("user");
-		navigate("/");
-		window.location.reload();
-	};
-	const openModal = () => {
-		document.getElementById("modal").style.display = "block";
-	}
-	const closeModal = () => {
-		document.getElementById("modal").style.display = "none";
-	}
-	const handleDelete = async () => {
-		try {
-			await RemoveAccount(email, password); // Passes email, password for verification
-			alert("Account deleted successfully.");
-			navigate("/");
-			window.location.reload();
-		} catch (error) {
-			const message = error.response && error.response.data ? error.response.data.error : error;
-			alert(message);
-		}
-	};
+  const handleLogout = () => {
+    sessionStorage.removeItem("user");
+    navigate("/");
+    window.location.reload();
+  };
+  const handleDelete = async () => {
+    try {
+      await RemoveAccount(email, password); // Passes email, password for verification
+      alert("Account deleted successfully.");
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "Failed to delete account.";
+      alert(message);
+    }
+  };
 
-	return (
-		<Container>
-			<Navigation />
-			<Form align='center' inline className="position-relative">
-				<Button variant="outline-dark" className="ms-0 ms-lg-2 mt-2 mt-lg-0" onClick={handleLogout}>Log out</Button>
-				<Button variant="outline-danger" className="ms-0 ms-lg-2 mt-2 mt-lg-0" onClick={openModal}>Delete Account</Button>
-				<div id="modal" className="modal">
-					<div className="modal-content">
-						<span className="close" align="right" onClick={closeModal}>&times;</span>
-						<p>Are you sure you want to delete your account?</p>
-						<Form align='center'>
-							<div>
-								<input type='email' style={{ width: '40%', marginBottom: '1rem' }} placeholder='Email' onChange={e => setEmail(e.target.value)} />
-							</div>
-							<div>
-								<input type='password' style={{ width: '40%', marginBottom: '1rem' }} placeholder='Password' onChange={e => setPassword(e.target.value)} />
-							</div>
-							<Button variant="outline-danger" style={{ width: '20%' }} className="ms-0 ms-lg-2 mt-2 mt-lg-0" onClick={handleDelete} disabled={!email || !password}>Delete</Button>
-							<Button variant="outline-dark" style={{ width: '20%' }} className="ms-0 ms-lg-2 mt-2 mt-lg-0" onClick={closeModal}>Cancel</Button>
-						</Form>
-					</div>
-				</div>
-			</Form>
-		</Container>
-	)
+  return (
+    <Container>
+      <Navigation />
+      <Form align="center">
+        <Button
+          variant="outline-dark"
+          onClick={handleLogout}
+          className="ms-0 ms-lg-2 mt-2 mt-lg-0"
+        >
+          Log out
+        </Button>
+        <Button
+          variant="outline-danger"
+          onClick={() => setShowModal(true)}
+          className="ms-0 ms-lg-2 mt-2 mt-lg-0"
+        >
+          Delete Account
+        </Button>
+
+        {/* Modal for Account Deletion */}
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Account Deletion</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter your email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Control
+                  type="password"
+                  placeholder="Enter your password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="danger"
+              onClick={handleDelete}
+              disabled={!email || !password}
+            >
+              Delete
+            </Button>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Form>
+    </Container>
+  );
 }

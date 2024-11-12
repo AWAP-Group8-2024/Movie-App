@@ -80,15 +80,15 @@ const getUserProfile = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    const { id } = req.params;//session user id
-    const result0 = await searchUserById(id);
-    const user0 = result0.rows[0];
+    const { id } = req.params; //session user id
+    const { email, password } = req.body;
 
-    const { email, password } = req.headers;//email and password from account delete form
     const result = await searchUserByEmail(email);
     if (result.rowCount === 0)
       return next(new ApiError("Invalid credentials", 400));
-    const isPasswordValid = await compare(password, user0.password);//compare password from account delete form with session user password
+
+    const user = result.rows[0];
+    const isPasswordValid = await compare(password, user.password); //compare password from account delete form with session user password
     if (!isPasswordValid) return next(new ApiError("Invalid password", 401));
     await deleteUserById(id);
     const response = {

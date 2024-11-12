@@ -1,0 +1,389 @@
+.tvshow-details-page {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.tvshow-detail-container {
+    padding: 2rem 1rem;
+}
+
+.sticky-column {
+    position: relative;
+}
+
+.sticky-poster {
+    position: sticky;
+    top: 2rem;
+}
+
+.poster-container {
+    width: 100%;
+}
+
+.show-poster {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.show-info {
+    padding: 0 1rem;
+}
+
+.show-info h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.year {
+    color: #666;
+    font-weight: normal;
+}
+
+.show-meta {
+    margin-bottom: 2rem;
+}
+
+.rating-stats {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.tmdb-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.star-icon {
+    color: #ffc107;
+}
+
+.views {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+}
+
+.show-details {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    color: #666;
+}
+
+.show-details span:not(:last-child)::after {
+    content: "•";
+    margin-left: 1.5rem;
+}
+
+.genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.genre {
+    background-color: #f0f0f0;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.genre:hover {
+    background-color: #e0e0e0;
+}
+
+.overview {
+    margin-bottom: 2.5rem;
+}
+
+.overview h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.overview p {
+    line-height: 1.7;
+    color: #333;
+}
+
+.show-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.detail-item label {
+    font-weight: 600;
+    color: #666;
+}
+
+.seasons-section {
+    margin-bottom: 3rem;
+}
+
+.seasons-section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.seasons-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.season-card {
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.season-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.season-poster {
+    position: relative;
+    overflow: hidden;
+}
+
+.season-poster img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.season-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.season-card:hover .season-overlay {
+    opacity: 1;
+}
+
+.season-overlay span {
+    color: white;
+    font-weight: 500;
+}
+
+.season-info {
+    padding: 1rem;
+}
+
+.season-info h5 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.season-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.air-date {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.season-details {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.back-button {
+    margin-bottom: 1.5rem;
+}
+
+.season-detail-poster {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.season-detail-info h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.season-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #666;
+}
+
+.season-overview {
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.episodes-list {
+    margin-top: 2rem;
+}
+
+.episodes-list h3 {
+    margin-bottom: 1.5rem;
+}
+
+.episodes-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.episode-card {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.episode-number {
+    font-weight: 600;
+    color: #007bff;
+    margin-bottom: 0.5rem;
+}
+
+.episode-card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.episode-card p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+.review-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.review-section h3 {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+}
+
+.star-rating {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating label {
+    cursor: pointer;
+}
+
+.review-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submit-review-btn {
+    padding: 0.75rem 2rem;
+    font-weight: 500;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+.loader {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .tvshow-detail-container {
+        padding: 1rem;
+    }
+
+    .sticky-column {
+        margin-bottom: 2rem;
+    }
+
+    .show-info {
+        padding: 0;
+    }
+
+    .show-info h1 {
+        font-size: 2rem;
+    }
+
+    .show-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .show-details span::after {
+        display: none;
+    }
+
+    .seasons-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .season-details {
+        padding: 1rem;
+    }
+
+    .show-details-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+.season-details-error {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.alert {
+    margin: 1rem 0;
+    border-radius: 8px;
+}

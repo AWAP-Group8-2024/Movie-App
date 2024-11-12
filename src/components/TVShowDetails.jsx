@@ -1,8 +1,9 @@
-// TVShowDetails.jsx
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import { FaEye, FaStar } from 'react-icons/fa';
 import Navigation from './Navigation';
+import './TVShowDetails.css';
 
 export default function TVShowDetails() {
     const { id } = useParams();
@@ -10,6 +11,8 @@ export default function TVShowDetails() {
     const [selectedSeason, setSelectedSeason] = useState(null);
     const [seasonDetails, setSeasonDetails] = useState(null);
     const [error, setError] = useState(null);
+    const [rating, setRating] = useState(0);
+    const [hover, setHover] = useState(0);
 
     useEffect(() => {
         fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
@@ -41,12 +44,40 @@ export default function TVShowDetails() {
     if (!show) return (
         <div>
             <Navigation />
-            <Container className="text-dark">Loading...</Container>
+            <Container className="loading-container text-dark">
+                <div className="loader">Loading...</div>
+            </Container>
         </div>
     );
 
+    const renderRatingStars = () => {
+        return (
+            <div className="star-rating">
+                {[...Array(5)].map((star, index) => {
+                    const ratingValue = index + 1;
+                    return (
+                        <label key={index}>
+                            <input
+                                type="radio"
+                                name="rating"
+                                value={ratingValue}
+                                onClick={() => setRating(ratingValue)}
+                            />
+                            <FaStar
+                                className="star"
+                                size={20}
+                                color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
+                                onMouseEnter={() => setHover(ratingValue)}
+                                onMouseLeave={() => setHover(0)}
+                            />
+                        </label>
+                    );
+                })}
+            </div>
+        );
+    };
+
     const renderSeasonsList = () => {
-        // Filter seasons that have poster_path and aren't season 0
         const availableSeasons = show.seasons?.filter(season => 
             season.season_number !== 0 && season.poster_path
         );
@@ -60,41 +91,45 @@ export default function TVShowDetails() {
         }
 
         return (
-            <Row className="mt-4">
-                <Col>
-                    <h2 className="mb-4">Seasons</h2>
-                    <Row>
-                        {availableSeasons.map((season) => (
-                            <Col key={season.id} xs={6} sm={4} md={3} className="mb-4">
-                                <div 
-                                    className="card h-100" 
-                                    style={{ cursor: 'pointer' }}
-                                    onClick={() => fetchSeasonDetails(season.season_number)}
-                                >
+            <section className="seasons-section">
+                <h2>Seasons</h2>
+                <Row className="seasons-grid">
+                    {availableSeasons.map((season) => (
+                        <Col key={season.id} xs={6} sm={4} md={3} className="mb-4">
+                            <div 
+                                className="season-card"
+                                onClick={() => fetchSeasonDetails(season.season_number)}
+                            >
+                                <div className="season-poster">
                                     <img
                                         src={`https://image.tmdb.org/t/p/w300${season.poster_path}`}
-                                        className="card-img-top"
                                         alt={`Season ${season.season_number}`}
                                     />
-                                    <div className="card-body">
-                                        <h5 className="card-title">Season {season.season_number}</h5>
+                                    <div className="season-overlay">
+                                        <span>View Details</span>
                                     </div>
                                 </div>
-                            </Col>
-                        ))}
-                    </Row>
-                </Col>
-            </Row>
+                                <div className="season-info">
+                                    <h5>Season {season.season_number}</h5>
+                                    <p>{season.episode_count} Episodes</p>
+                                    {season.air_date && (
+                                        <p className="air-date">{new Date(season.air_date).getFullYear()}</p>
+                                    )}
+                                </div>
+                            </div>
+                        </Col>
+                    ))}
+                </Row>
+            </section>
         );
     };
 
     const renderSeasonDetails = () => {
         if (error) {
             return (
-                <div className="mt-4">
+                <div className="season-details-error">
                     <Button 
-                        variant="secondary" 
-                        className="mb-4"
+                        variant="secondary"
                         onClick={() => {
                             setSelectedSeason(null);
                             setSeasonDetails(null);
@@ -103,20 +138,41 @@ export default function TVShowDetails() {
                     >
                         ← Back to Seasons
                     </Button>
-                    <Alert variant="info">
+                    <Alert variant="info" className="mt-3">
                         {error}
                     </Alert>
                 </div>
             );
         }
 
-        if (!seasonDetails) return <div>Loading season details...</div>;
+        if (!seasonDetails) return <div className="loader">Loading season details...</div>;
+
+        if (!seasonDetails.episodes || seasonDetails.episodes.length === 0) {
+            return (
+                <div className="season-details">
+                    <Button 
+                        variant="secondary"
+                        className="back-button"
+                        onClick={() => {
+                            setSelectedSeason(null);
+                            setSeasonDetails(null);
+                            setError(null);
+                        }}
+                    >
+                        ← Back to Seasons
+                    </Button>
+                    <Alert variant="info" className="mt-3">
+                        No season details available in TMDB for this show.
+                    </Alert>
+                </div>
+            );
+        }
 
         return (
-            <div className="mt-4">
+            <div className="season-details">
                 <Button 
-                    variant="secondary" 
-                    className="mb-4"
+                    variant="secondary"
+                    className="back-button"
                     onClick={() => {
                         setSelectedSeason(null);
                         setSeasonDetails(null);
@@ -125,20 +181,35 @@ export default function TVShowDetails() {
                 >
                     ← Back to Seasons
                 </Button>
-                <Row>
+                <Row className="mt-4">
                     <Col md={4}>
                         <img
                             src={`https://image.tmdb.org/t/p/w500${seasonDetails.poster_path}`}
                             alt={seasonDetails.name}
-                            className="img-fluid rounded"
+                            className="season-detail-poster"
                         />
                     </Col>
                     <Col md={8}>
-                        <h2>{seasonDetails.name}</h2>
-                        <p><strong>First Air Date:</strong> {seasonDetails.air_date}</p>
-                        <p><strong>Overview:</strong> {seasonDetails.overview}</p>
-                        <p><strong>Episodes:</strong> {seasonDetails.episodes?.length}</p>
-                        <p><strong>Rating:</strong> {seasonDetails.vote_average?.toFixed(1)}/10</p>
+                        <div className="season-detail-info">
+                            <h2>{seasonDetails.name}</h2>
+                            <div className="season-meta">
+                                <span>{seasonDetails.air_date && new Date(seasonDetails.air_date).getFullYear()}</span>
+                                <span>{seasonDetails.episodes.length} Episodes</span>
+                            </div>
+                            <p className="season-overview">{seasonDetails.overview}</p>
+                            <div className="episodes-list">
+                                <h3>Episodes</h3>
+                                <div className="episodes-grid">
+                                    {seasonDetails.episodes.map((episode) => (
+                                        <div key={episode.id} className="episode-card">
+                                            <div className="episode-number">Episode {episode.episode_number}</div>
+                                            <h4>{episode.name}</h4>
+                                            <p>{episode.overview ? episode.overview : "No information available for this episode on TMDB."}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                     </Col>
                 </Row>
             </div>
@@ -146,35 +217,133 @@ export default function TVShowDetails() {
     };
 
     return (
-        <div>
+        <div className="tvshow-details-page">
             <Navigation />
 
-            <Container className="text-dark my-5">
-                <h1>{show.name}</h1>
-                <h4>{new Date(show.first_air_date).getFullYear()}</h4>
+            <Container className="tvshow-detail-container">
                 <Row>
-                    <Col md={4}>
-                        <img 
-                            src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
-                            alt={show.name} 
-                            className="img-fluid rounded"
-                        />
+                    <Col md={3} className="sticky-column">
+                        <div className="sticky-poster">
+                            <div className="poster-container">
+                                <img
+                                    src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
+                                    alt={show.name}
+                                    className="show-poster"
+                                />
+                            </div>
+                        </div>
                     </Col>
-                    <Col md={8}>
-                        <p><strong>First Air Date:</strong> {show.first_air_date}</p>
-                        <p><strong>Overview:</strong> {show.overview}</p>
-                        <p><strong>Genres:</strong> {show.genres?.map((genre) => genre.name).join(", ")}</p>
-                        <p><strong>Rating:</strong> {show.vote_average}/10</p>
-                        <p><strong>Number of Seasons:</strong> {show.number_of_seasons}</p>
-                        <p><strong>Number of Episodes:</strong> {show.number_of_episodes}</p>
-                        <p><strong>Status:</strong> {show.status}</p>
-                        {show.last_air_date && (
-                            <p><strong>Last Air Date:</strong> {show.last_air_date}</p>
-                        )}
+
+                    <Col md={9}>
+                        <div className="show-info">
+                            <h1>{show.name} <span className="year">({new Date(show.first_air_date).getFullYear()})</span></h1>
+
+                            <div className="show-meta">
+                                <div className="rating-stats">
+                                    <div className="tmdb-rating">
+                                        <FaStar className="star-icon" />
+                                        <span>{show.vote_average?.toFixed(1)}/10</span>
+                                    </div>
+                                    <span className="views">
+                                        <FaEye /> {Math.round(show.popularity)} Views
+                                    </span>
+                                </div>
+
+                                <div className="show-details">
+                                    <span>{new Date(show.first_air_date).getFullYear()}</span>
+                                    <span>{show.number_of_seasons} Season{show.number_of_seasons !== 1 ? 's' : ''}</span>
+                                    <span>{show.status}</span>
+                                </div>
+
+                                <div className="genres">
+                                    {show.genres?.map(genre => (
+                                        <span key={genre.id} className="genre">
+                                            {genre.name}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="overview">
+                                <h3>Overview</h3>
+                                <p>{show.overview}</p>
+                            </div>
+
+                            <div className="show-details-grid">
+                                <div className="detail-item">
+                                    <label>Network</label>
+                                    <span>{show.networks?.[0]?.name || 'N/A'}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <label>Status</label>
+                                    <span>{show.status}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <label>Original Language</label>
+                                    <span>{show.original_language?.toUpperCase()}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <label>Total Episodes</label>
+                                    <span>{show.number_of_episodes}</span>
+                                </div>
+                            </div>
+
+                            {selectedSeason ? renderSeasonDetails() : renderSeasonsList()}
+
+                            <section className="review-section">
+                                <h3>Add Your Review</h3>
+                                <Form className="review-form">
+                                    <Form.Group className="mb-4">
+                                        <Form.Label>Your Rating</Form.Label>
+                                        {renderRatingStars()}
+                                    </Form.Group>
+
+                                    <Form.Group className="mb-4">
+                                        <Form.Label>Your Review</Form.Label>
+                                        <Form.Control
+                                            as="textarea"
+                                            rows={4}
+                                            placeholder="Write your review here..."
+                                        />
+                                    </Form.Group>
+
+                                    <Row>
+                                        <Col md={6}>
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Name</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    placeholder="Your name"
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={6}>
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Email</Form.Label>
+                                                <Form.Control
+                                                    type="email"
+                                                    placeholder="Your email"
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+
+                                    <Form.Group className="mb-4">
+                                        <Form.Check
+                                            type="checkbox"
+                                            label="Save my information for next time"
+                                            id="save-info"
+                                        />
+                                    </Form.Group>
+
+                                    <Button variant="primary" className="submit-review-btn">
+                                        Submit Review
+                                    </Button>
+                                </Form>
+                            </section>
+                        </div>
                     </Col>
                 </Row>
-
-                {selectedSeason ? renderSeasonDetails() : renderSeasonsList()}
             </Container>
         </div>
     );

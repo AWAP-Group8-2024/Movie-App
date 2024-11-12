@@ -68,7 +68,7 @@ const getUserProfile = async (req, res, next) => {
     const profile = createProfileObj(
       user.id,
       user.email,
-      user.password,
+      user.password=null, //since this function is used to get user profile and show it to guest users, it should not return the password
       user.firstname,
       user.lastname
     );

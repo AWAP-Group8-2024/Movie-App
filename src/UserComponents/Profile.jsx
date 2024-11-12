@@ -1,17 +1,25 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUser } from "./useUser.jsx";
 import Navigation from "../components/Navigation.jsx";
 import { Card, Container, Form, Button, Modal, Row, Col } from "react-bootstrap";
 
 export default function Profile() {
-	const { user, RemoveAccount } = useUser();
+	const { user, RemoveAccount, getUserProfile } = useUser();
+
 	const navigate = useNavigate();
 	const currentUrl = window.location.href;
+	const profileId = currentUrl.match(/\/profile\/(\d+)/)?.[1];
+	const [profileData, setprofileData] = useState(""); // Stores the resolved object
+	useEffect(() => {
+		getUserProfile(profileId).then((userProfile) => {
+			setprofileData(userProfile);
+		});
+	}, [profileId]); // Only run when profileId changes
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [showModal, setShowModal] = useState(false);
-	
+
 	const handleLogout = () => {
 		sessionStorage.removeItem("user");
 		navigate("/");
@@ -38,11 +46,11 @@ export default function Profile() {
 					<Card style={{ width: "100%" }}>
 						<Card.Img variant="top" src="holder.js/100px180" alt="Profile Image" />
 						<Card.Body>
-							<Card.Text>Email: {user.email}</Card.Text>
-							<Card.Text>Firstname: {user.firstname}</Card.Text>
-							<Card.Text>Lastname: {user.lastname}</Card.Text>
+							<Card.Text>Email: {profileData.email}</Card.Text>{/*use profileData instead of user to see on logged out state*/}
+							<Card.Text>Firstname: {profileData.firstname}</Card.Text>
+							<Card.Text>Lastname: {profileData.lastname}</Card.Text>
 							<Button variant="outline-primary" className="me-2"
-							onClick={() => {try{navigator.clipboard.writeText(currentUrl); alert("URL copied to clipboard!");}catch(error){alert("Failed to copy URL.");}}}>Share</Button>
+								onClick={() => { try { navigator.clipboard.writeText(currentUrl); alert("URL copied to clipboard!"); } catch (error) { alert("Failed to copy URL."); } }}>Share</Button>
 							<Button variant="outline-dark" disabled={!user || !user.token}>Edit</Button>
 						</Card.Body>
 					</Card>

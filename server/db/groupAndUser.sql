@@ -11,7 +11,9 @@ CREATE TABLE account (
     email VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     firstname VARCHAR(50),
-    lastname VARCHAR(50)
+    lastname VARCHAR(50).
+    address VARCHAR(50),
+    phone VARCHAR(50)
 );
 
 CREATE TABLE groups (

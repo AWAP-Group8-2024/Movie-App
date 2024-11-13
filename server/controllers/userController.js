@@ -64,13 +64,18 @@ const getUserProfile = async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await searchUserById(id);
+    if (result.rowCount === 0) {
+      return next(new ApiError("User not found", 404));
+    }
     const user = result.rows[0];
     const profile = createProfileObj(
       user.id,
       user.email,
-      user.password=null, //since this function is used to get user profile and show it to guest users, it should not return the password
+      user.password,
       user.firstname,
-      user.lastname
+      user.lastname,
+      user.address,
+      user.phone
     );
     return res.status(200).json(profile);
   } catch (error) {

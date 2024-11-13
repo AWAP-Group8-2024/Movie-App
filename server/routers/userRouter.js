@@ -7,7 +7,7 @@ import {
   deleteUser,
 } from "../controllers/UserController.js";
 
-import { auth, verifyUserInGroup } from "../helpers/auth.js";
+import { auth } from "../helpers/auth.js";
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ const router = Router();
 
 router.post("/register", registration);
 router.post("/login", login);
-router.get("/profile/:id", getUserProfile);//does not require auth no more
+router.post("/profile/:id", auth, getUserProfile);
 router.delete("/profile/:id", auth, deleteUser);
 
 export default router;

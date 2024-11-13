@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from "react";
-
-import GroupForm from "./GroupForm";
-import GroupList from "./GroupList";
+import React from 'react';
+import GroupList from './GroupList';
+import GroupForm from './GroupForm';
 
 const GroupPage = () => {
-    const [groups, setGroups] = useState([]);
-
-    const handleGroupCreated = (newGroup) => {
-        setGroups([...groups, newGroup]);
-    };
-};
-
-return (
+  return (
     <div>
-        <GroupForm onGroupCreate={handleGroupCreated} />
-        <GroupList groups={groups} />
+      <h1>Group Management</h1>
+      <GroupForm />
+      <GroupList />
     </div>
-);
+  );
+};
 
 export default GroupPage;

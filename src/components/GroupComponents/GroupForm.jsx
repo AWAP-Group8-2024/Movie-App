@@ -1,35 +1,44 @@
-import React from 'react'
-import  {createNewGroup} from '../../services/GroupServices'
+import React, { useState } from 'react';
+import { createNewGroup } from '../../services/GroupServices';
+const GroupForm = () => {
+  const [name, setName] = useState('');
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
-const GroupForm = ({ onGroupCreate }) => {
-    const [newGroupName, setNewGroupName] = useState("");
-    const handleCreateGroup = async (e) => {
-        e.preventDefault();
-        if (!newGroupName) return;
-        try {
-        const newGroup = await createNewGroup({ name: newGroupName });
-        onGroupCreate(newGroup);
-        setNewGroupName("");
-        } catch (error) {
-        console.error(error);
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!name.trim()) {
+      setError('Group name is required');
+      return;
+    }
+    try {
+      const newGroup = await createNewGroup({ name});
+      setMessage(`Group ${newGroup.name} created!`);
+      
+      setName('');
+    } catch (error) {
+      setError('Error creating group');
+    }
+  };
+
+
   return (
-      <div>
-          <form onSubmit={handleCreateGroup}>
-              <label>
-                  Group Name:
-              </label>
-                <input
-                    type="text"
-                    value={newGroupName}
-                  onChange={(e) => setNewGroupName(e.target.value)}
-              />
-              <button type="submit">Create Group</button>
-              
-          </form>
-    </div>
-  )
-}
+    <div>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
 
-export default GroupForm
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Group name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <button type="submit">Create Group</button>
+      </form>
+
+      {message && <p>{message}</p>}
+    </div>
+  );
+};
+
+export default GroupForm;

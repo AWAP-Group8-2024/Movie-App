@@ -112,6 +112,17 @@ export default function Navigation() {
                 Popular TV shows
               </NavDropdown.Item>
             </NavDropdown>
+            <NavDropdown title="Groups" id="groups-nav-dropdown">
+              <NavDropdown.Item as={Link} to="/groups">
+                View All Groups
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/group/join">
+                Join Group
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/groups/create">
+                Create Group
+              </NavDropdown.Item>
+            </NavDropdown>
           </Nav>
           <Form
             className="d-inline-flex position-relative"

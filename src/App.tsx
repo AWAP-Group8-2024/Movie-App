@@ -11,6 +11,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import List from './components/ListCategories';
 import ListCategories from './components/ListCategories';
 import ListFiltered from './components/ListFiltered';
+import GroupPage from './components/GroupComponents/GroupPage';
+import GroupDetail from './components/GroupComponents/GroupDetails';
 import GroupForm from './components/GroupComponents/GroupForm';
 
 function App() {
@@ -39,12 +41,15 @@ function App() {
           <Route path="/" element={<Home />} /> {/* Set Home as the default route */}
           <Route path="/movie/:id" element={<MovieDetails />} /> {/* Movie Details page */}
           <Route path="/tv/:id" element={<TVShowDetails />} /> {/* TV Show Details page */}
-          <Route path='/group' element={<GroupForm onGroupCreate={() => { /* handle group creation */ }} />} />
           <Route path="/login" element={<Authentication authenticationMode={AuthenticationMode.Login} />} /> {/* Login page */}
           <Route path="/register" element={<Authentication authenticationMode={AuthenticationMode.Register} />} /> {/* Register page */}
           <Route path="/profile/:id" element={<Profile />} /> {/* Profile page */}
           <Route path="/list/:condition" element={<ListCategories />}/>
-          <Route path="/filtered/:condition" element={<ListFiltered />}/>
+          <Route path="/filtered/:condition" element={<ListFiltered />} />
+          <Route path="/groups" element={<GroupPage />} />
+          <Route path="/groups/create" element={<GroupForm />} />
+          <Route path="/group/:groupId" element={<GroupDetail />} />
+
         </Routes>
       </UserProvider>
     </BrowserRouter>

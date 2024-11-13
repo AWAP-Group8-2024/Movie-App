@@ -7,6 +7,13 @@ export default function AccountDeleteModal({
   userConfirm,
   setUserConfirm,
 }) {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUserConfirm((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)} centered>
       <Modal.Header closeButton>
@@ -17,22 +24,20 @@ export default function AccountDeleteModal({
           <Form.Group>
             <Form.Control
               type="email"
-              placeholder="Enter your email"
+              name="email"
               value={userConfirm.email}
-              onChange={(e) =>
-                setUserConfirm({ ...userConfirm, email: e.target.value })
-              }
+              placeholder="Enter your email"
+              onChange={handleInputChange}
               required
             />
           </Form.Group>
           <Form.Group className="mt-3">
             <Form.Control
               type="password"
-              placeholder="Enter your password"
+              name="password"
               value={userConfirm.password}
-              onChange={(e) =>
-                setUserConfirm({ ...userConfirm, password: e.target.value })
-              }
+              placeholder="Enter your password"
+              onChange={handleInputChange}
               required
             />
           </Form.Group>

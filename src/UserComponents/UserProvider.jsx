@@ -10,7 +10,7 @@ export default function UserProvider({ children }) {
   const [user, setUser] = useState(
     userFromSessionStorage
       ? JSON.parse(userFromSessionStorage)
-      : { id: "", email: "" }
+      : { id: "", email: "", token: "" }
   );
 
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export default function UserProvider({ children }) {
   const signUp = async () => {
     try {
       const response = await axios.post(`${url}/user/register`, user);
-      setUser({ email: "", password: "" });
+      setUser({ id: "", email: "", token: "", password: "" });
       return response.data;
     } catch (error) {
       throw error;
@@ -28,11 +28,11 @@ export default function UserProvider({ children }) {
   const signIn = async () => {
     try {
       const response = await axios.post(`${url}/user/login`, user);
-      setUser(response.data);
+      setUser({ ...response.data, password: "" });
       sessionStorage.setItem("user", JSON.stringify(response.data));
       return response.data;
     } catch (error) {
-      setUser({ email: "", password: "" });
+      setUser({ id: "", email: "", token: "", password: "" });
       throw error;
     }
   };
@@ -53,7 +53,7 @@ export default function UserProvider({ children }) {
         data: body,
       });
       sessionStorage.removeItem("user"); // Removes user from session storage after successful deletion
-      setUser({ id: "", email: "", token: "" });
+      setUser({ id: "", email: "", token: "", password: "" });
       navigate("/");
       window.location.reload();
       return response.data;

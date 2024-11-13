@@ -2,15 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useUser } from "./useUser.jsx";
 import Navigation from "../components/Navigation.jsx";
-import {
-  Card,
-  Container,
-  Form,
-  Button,
-  Modal,
-  Row,
-  Col,
-} from "react-bootstrap";
+import { Card, Container, Button, Row, Col } from "react-bootstrap";
 import AccountDeleteModal from "./AccountDeleteModal.jsx";
 
 export default function Profile() {
@@ -137,44 +129,6 @@ export default function Profile() {
         </Col>
       </Row>
 
-      {/* Modal for Account Deletion */}
-      {/* <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Account Deletion</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group>
-              <Form.Control
-                type="email"
-                placeholder="Enter your email"
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mt-3">
-              <Form.Control
-                type="password"
-                placeholder="Enter your password"
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="danger"
-            onClick={handleDelete}
-            disabled={!email || !password}
-          >
-            Delete
-          </Button>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Cancel
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
       <AccountDeleteModal
         showModal={showModal}
         setShowModal={setShowModal}

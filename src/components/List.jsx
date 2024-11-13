@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Row, Col, Container, Accordion, Button } from "react-bootstrap";
 import { movieGenres } from "./movieGenres.js";
 import { tvGenres } from "./tvGenres";
+import { FaRegStar, FaStar } from "react-icons/fa";
 
 export default function List({ items, total_pages }) {
     const { condition } =  useParams();
@@ -11,12 +12,13 @@ export default function List({ items, total_pages }) {
     const searchQuery = new URLSearchParams(location.search);
     const page = +searchQuery.get('page');
     let currentGenres = searchQuery.get('genres');
-    const currentYear = searchQuery.get('year');
+    const currentYear = searchQuery.get('year') || '';
     if (currentGenres) {
         currentGenres = currentGenres.split(',');
     }
+    const [rating, setRating] = useState(+searchQuery.get('rating') === 1 ? 0 : +searchQuery.get('rating') || 0);
     const [genreIdList, setGenreIdList] = useState(currentGenres ? currentGenres : []);
-    const [searchButton, setSearchButton] = useState(genreIdList.length === 0 && (currentYear == '' || currentYear == null));
+    const [searchButton, setSearchButton] = useState(genreIdList.length === 0 && (currentYear == '' || currentYear == null) && rating === 0);
     const [year, setYear] = useState(currentYear);
     
     const [body, setBody] = useState(null);
@@ -71,6 +73,22 @@ export default function List({ items, total_pages }) {
         <input type="number" placeholder="Enter year" onChange={yearChange} value={year}/>
     );
 
+    let stars = [];
+
+    for (let i = 1; i < 11; i++) {
+        if (i <= rating) {
+            stars.push(<FaStar onClick={() => {
+                setRating(i);
+                setSearchButton(false);
+            }}/>);
+        } else {
+            stars.push(<FaRegStar onClick={() => {
+                setRating(i);
+                setSearchButton(false);
+            }}/>);
+        }
+    }
+
     function createBody() {
         if (total_pages == -1) {
             setBody(<div>Failed to fetch. Try again later</div>);
@@ -105,7 +123,7 @@ export default function List({ items, total_pages }) {
     return (
         <div>
             <Navigation />
-            <Accordion defaultActiveKey={genreIdList.length == 0 && (year == '' || year == null) ? '' : '0'}>
+            <Accordion defaultActiveKey={genreIdList.length === 0 && (currentYear == '' || currentYear == null) && rating === 0 ? '' : '0'}>
                 <Accordion.Item eventKey="0">
                     <Accordion.Header><Col className="fs-3">Filters</Col></Accordion.Header>
                     <Accordion.Body>
@@ -125,13 +143,21 @@ export default function List({ items, total_pages }) {
                         <Row className="row-cols-auto">
                             {filterYear}
                         </Row>
+                        <Row className="row-cols-auto">
+                            <Col className="fs-4">
+                                Rating:
+                            </Col>
+                        </Row>
+                        <Row className="row-cols-auto">
+                            <Col className="fs-4">{stars}</Col>
+                        </Row>
                         <Row className="justify-content-center row-cols-auto">
                             <Col>
                                 <Button variant="outline-dark" disabled={searchButton} onClick={() => {
                                     if (condition.includes('tv')) {
-                                        window.location.replace(`/filtered/tv?genres=${genreIdList.join(',')}&year=${year}&page=1`)
+                                        window.location.replace(`/filtered/tv?genres=${genreIdList.join(',')}&year=${year}&rating=${rating}&page=1`)
                                     } else {
-                                        window.location.replace(`/filtered/movie?genres=${genreIdList.join(',')}&year=${year}&page=1`)
+                                        window.location.replace(`/filtered/movie?genres=${genreIdList.join(',')}&year=${year}&rating=${rating}&page=1`)
                                     }
                                 }}>Show results</Button>
                             </Col>

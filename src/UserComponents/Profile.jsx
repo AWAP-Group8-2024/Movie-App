@@ -11,6 +11,7 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
+import AccountDeleteModal from "./AccountDeleteModal.jsx";
 
 export default function Profile() {
   const { user, removeAccount, getUserProfile } = useUser();
@@ -27,15 +28,16 @@ export default function Profile() {
   const [profileData, setProfileData] = useState(null);
 
   // State for handling modal visibility, email, and password inputs
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [userConfirm, setUserConfirm] = useState({
+    email: "",
+    password: "",
+  });
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (profileId) {
       getUserProfile(profileId)
         .then((userProfile) => {
-          console.log(userProfile);
           setProfileData(userProfile);
         })
         .catch((error) => {
@@ -53,7 +55,7 @@ export default function Profile() {
 
   const handleDelete = async () => {
     try {
-      await removeAccount(email, password);
+      await removeAccount(userConfirm.email, userConfirm.password);
       alert("Account deleted successfully.");
     } catch (error) {
       const message =
@@ -61,9 +63,6 @@ export default function Profile() {
       alert(message);
     }
   };
-
-  //   console.log("profileId", profileId);
-  //   console.log("loggedInUserId", loggedInUserId);
 
   return (
     <Container>
@@ -139,7 +138,7 @@ export default function Profile() {
       </Row>
 
       {/* Modal for Account Deletion */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+      {/* <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Account Deletion</Modal.Title>
         </Modal.Header>
@@ -175,7 +174,14 @@ export default function Profile() {
             Cancel
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
+      <AccountDeleteModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        handleDelete={handleDelete}
+        userConfirm={userConfirm}
+        setUserConfirm={setUserConfirm}
+      />
     </Container>
   );
 }

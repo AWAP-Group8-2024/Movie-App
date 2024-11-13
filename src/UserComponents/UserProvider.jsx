@@ -63,7 +63,6 @@ export default function UserProvider({ children }) {
   };
 
   const getUserProfile = async (profileId) => {
-    console.log(profileId);
     try {
       const token = JSON.parse(sessionStorage.getItem("user"))?.token;
       const headers = {

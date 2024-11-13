@@ -11,6 +11,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import List from './components/ListCategories';
 import ListCategories from './components/ListCategories';
 import ListFiltered from './components/ListFiltered';
+import GroupForm from './components/GroupComponents/GroupForm';
 
 function App() {
   // return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/" element={<Home />} /> {/* Set Home as the default route */}
           <Route path="/movie/:id" element={<MovieDetails />} /> {/* Movie Details page */}
           <Route path="/tv/:id" element={<TVShowDetails />} /> {/* TV Show Details page */}
+          <Route path='/group' element={<GroupForm onGroupCreate={() => { /* handle group creation */ }} />} />
           <Route path="/login" element={<Authentication authenticationMode={AuthenticationMode.Login} />} /> {/* Login page */}
           <Route path="/register" element={<Authentication authenticationMode={AuthenticationMode.Register} />} /> {/* Register page */}
           <Route path="/profile/:id" element={<Profile />} /> {/* Profile page */}

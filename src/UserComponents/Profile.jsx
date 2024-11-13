@@ -61,7 +61,7 @@ export default function Profile() {
       <Navigation />
       <Row className="mt-4">
         {/* Profile Card on the left */}
-        <Col md={3} className="d-flex justify-content-center">
+        <Col md={4} className="d-flex justify-content-center">
           <Card style={{ width: "100%" }}>
             <Card.Body>
               {/* Conditional Rendering to avoid null reference error */}
@@ -97,8 +97,24 @@ export default function Profile() {
               >
                 Share
               </Button>
-              {/* Edit button only for own profile */}
-              {isOwnProfile && <Button variant="outline-dark">Edit</Button>}
+              {isOwnProfile && (
+                <div className="d-flex flex-column align-items-start mt-3">
+                  <Button
+                    variant="outline-dark"
+                    onClick={handleLogout}
+                    className="mb-2"
+                  >
+                    Log out
+                  </Button>
+                  <Button
+                    variant="outline-danger"
+                    onClick={() => setShowModal(true)}
+                  >
+                    Delete Account
+                  </Button>
+                  <Button variant="outline-dark">Edit</Button>
+                </div>
+              )}
             </Card.Body>
           </Card>
         </Col>
@@ -108,24 +124,6 @@ export default function Profile() {
           <div className="main-content mb-4">
             {/* Additional content could go here */}
           </div>
-          {/* Logout and Delete Account Buttons */}
-          {isOwnProfile && (
-            <div className="d-flex flex-column align-items-start mt-3">
-              <Button
-                variant="outline-dark"
-                onClick={handleLogout}
-                className="mb-2"
-              >
-                Log out
-              </Button>
-              <Button
-                variant="outline-danger"
-                onClick={() => setShowModal(true)}
-              >
-                Delete Account
-              </Button>
-            </div>
-          )}
         </Col>
       </Row>
 

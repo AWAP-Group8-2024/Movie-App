@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useUser } from "./useUser.jsx";
 import Navigation from "../components/Navigation.jsx";
-import { Card, Container, Button, Row, Col } from "react-bootstrap";
+import { Card, Container, Button, Row, Col, CardFooter } from "react-bootstrap";
 import AccountDeleteModal from "./AccountDeleteModal.jsx";
 
 export default function Profile() {
@@ -30,7 +30,8 @@ export default function Profile() {
     if (profileId) {
       getUserProfile(profileId)
         .then((userProfile) => {
-          setProfileData(userProfile);
+          console.log(userProfile);
+          setProfileData({ ...userProfile, password: "" });
         })
         .catch((error) => {
           console.error("Failed to fetch profile:", error);
@@ -97,12 +98,18 @@ export default function Profile() {
               >
                 Share
               </Button>
+            </Card.Body>
+            <CardFooter>
               {isOwnProfile && (
-                <div className="d-flex flex-column align-items-start mt-3">
+                <div className="d-flex align-item-center">
+                  <Button variant="outline-dark" className="mr-2">
+                    Edit
+                  </Button>
+
                   <Button
                     variant="outline-dark"
                     onClick={handleLogout}
-                    className="mb-2"
+                    className="ml-2"
                   >
                     Log out
                   </Button>
@@ -112,10 +119,9 @@ export default function Profile() {
                   >
                     Delete Account
                   </Button>
-                  <Button variant="outline-dark">Edit</Button>
                 </div>
               )}
-            </Card.Body>
+            </CardFooter>
           </Card>
         </Col>
 

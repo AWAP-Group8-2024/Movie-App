@@ -71,7 +71,6 @@ const getUserProfile = async (req, res, next) => {
     const profile = createProfileObj(
       user.id,
       user.email,
-      user.password,
       user.firstname,
       user.lastname,
       user.address,
@@ -114,13 +113,14 @@ const createUserObj = (id, email, token = undefined) => {
   };
 };
 
-const createProfileObj = (id, email, password, firstname, lastname) => {
+const createProfileObj = (id, email, firstname, lastname, address, phone) => {
   return {
     id: id,
     email: email,
-    password: password,
     firstname: firstname,
     lastname: lastname,
+    address: address,
+    phone: phone,
   };
 };
 

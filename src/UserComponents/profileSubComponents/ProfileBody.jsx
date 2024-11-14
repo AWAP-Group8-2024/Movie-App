@@ -1,8 +1,8 @@
-import { Card, Button, Row, Col, Form, CardBody } from "react-bootstrap";
+import { Card, Row, Col } from "react-bootstrap";
 import PrivateInfo from "./PrivateInfo";
 import PublicInfo from "./PublicInfo";
 import ProfileAction from "./ProfileAction";
-import EditingForm from "./EditingForm";
+
 export default function Body({
   profileData,
   isEditing,
@@ -12,11 +12,7 @@ export default function Body({
   handleSave,
   handleCancel,
   handleLogout,
-  showModal,
   setShowModal,
-  handleDelete,
-  userConfirm,
-  setUserConfirm,
   setIsEditing,
 }) {
   return (
@@ -38,25 +34,21 @@ export default function Body({
                 {profileData ? (
                   <>
                     <PublicInfo profileData={profileData} />
-                    {isEditing ? (
-                      <EditingForm
-                        editData={editData}
-                        handleInputChange={handleInputChange}
-                        handleSave={handleSave}
-                        handleCancel={handleCancel}
-                      />
-                    ) : (
+                    {isOwnProfile && (
                       <>
-                        {isOwnProfile && (
-                          <>
-                            <PrivateInfo profileData={profileData} />
-                            <ProfileAction
-                              handleLogout={handleLogout}
-                              setShowModal={setShowModal}
-                              setIsEditing={setIsEditing}
-                            />
-                          </>
-                        )}
+                        <PrivateInfo
+                          profileData={isEditing ? editData : profileData}
+                          isEditing={isEditing}
+                          handleInputChange={handleInputChange}
+                        />
+                        <ProfileAction
+                          handleLogout={handleLogout}
+                          setShowModal={setShowModal}
+                          setIsEditing={setIsEditing}
+                          isEditing={isEditing}
+                          handleSave={handleSave}
+                          handleCancel={handleCancel}
+                        />
                       </>
                     )}
                   </>
@@ -66,29 +58,6 @@ export default function Body({
               </Row>
             </Card.Body>
           </Card>
-        </Col>
-      </Row>
-
-      {/* Example Rows for Spacing */}
-      <Row className="background-black mt-4">
-        <Col md={3}>
-          <div className="p-3 bg-light">Extra Section 1</div>
-        </Col>
-        <Col md={3}>
-          <div className="p-3 bg-light">Extra Section 2</div>
-        </Col>
-        <Col md={3}>
-          <div className="p-3 bg-light">Extra Section 3</div>
-        </Col>
-      </Row>
-
-      {/* Another Row Example */}
-      <Row md={2} className="mt-3">
-        <Col>
-          <div className="p-3 bg-secondary text-white">Column 1</div>
-        </Col>
-        <Col>
-          <div className="p-3 bg-secondary text-white">Column 2</div>
         </Col>
       </Row>
     </div>

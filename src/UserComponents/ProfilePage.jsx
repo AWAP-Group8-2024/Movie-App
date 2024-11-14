@@ -7,7 +7,7 @@ import AccountDeleteModal from "./profileSubComponents/AccountDeleteModal.jsx";
 import ProfileBody from "./profileSubComponents/ProfileBody.jsx";
 
 export default function Profile() {
-  const { user, removeAccount, getUserProfile } = useUser();
+  const { user, removeAccount, getUserProfile, updateUserProfile } = useUser();
   const navigate = useNavigate();
 
   const currentUrl = window.location.href;
@@ -60,9 +60,18 @@ export default function Profile() {
     }));
   };
 
-  const handleSave = () => {
-    setProfileData(editData);
-    setIsEditing(false);
+  const handleSave = async () => {
+    if (user && editData) {
+      try {
+        await updateUserProfile(editData);
+        alert("Profile updated successfully.");
+        setProfileData(editData);
+        setIsEditing(false);
+      } catch (error) {
+        console.error("Failed to update profile:", error);
+        alert("Failed to update profile.");
+      }
+    }
   };
 
   const handleCancel = () => {

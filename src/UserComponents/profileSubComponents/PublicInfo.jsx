@@ -1,4 +1,4 @@
-import { Card, Row, Col, Form } from "react-bootstrap";
+import { Card, Row, Col } from "react-bootstrap";
 
 export default function PublicInfo({ profileData }) {
   return (

@@ -39,7 +39,7 @@ export default function UserProvider({ children }) {
 
   const removeAccount = async (email, password) => {
     try {
-      const token = JSON.parse(sessionStorage.getItem("user"))?.token;
+      const token = user.token;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -64,7 +64,7 @@ export default function UserProvider({ children }) {
 
   const getUserProfile = async (profileId) => {
     try {
-      const token = JSON.parse(sessionStorage.getItem("user"))?.token;
+      const token = user.token;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -79,10 +79,35 @@ export default function UserProvider({ children }) {
       throw error;
     }
   };
+  const updateUserProfile = async (updatedData) => {
+    try {
+      const token = user.token;
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+      const response = await axios.post(
+        `${url}/user/profile/${user.id}`,
+        { updatedData },
+        { headers }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, signUp, signIn, removeAccount, getUserProfile }}
+      value={{
+        user,
+        setUser,
+        signUp,
+        signIn,
+        removeAccount,
+        getUserProfile,
+        updateUserProfile,
+      }}
     >
       {children}
     </UserContext.Provider>

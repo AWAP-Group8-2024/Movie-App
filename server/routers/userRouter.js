@@ -5,6 +5,7 @@ import {
   login,
   getUserProfile,
   deleteUser,
+  updateUserProfile,
 } from "../controllers/UserController.js";
 
 import { auth } from "../helpers/auth.js";
@@ -17,5 +18,5 @@ router.post("/register", registration);
 router.post("/login", login);
 router.post("/profile/:id", auth, getUserProfile);
 router.delete("/profile/:id", auth, deleteUser);
-
+router.put("/profile/:id", auth, updateUserProfile);
 export default router;

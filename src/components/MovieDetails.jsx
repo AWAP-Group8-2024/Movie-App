@@ -7,6 +7,33 @@ import './MovieDetail.css';
 
 import Navigation from './Navigation';
 
+function formatRuntime(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours} hr ${mins} mins`;
+  }
+
+/*   function fetchCreditsCast(data){
+    const sortedCast = data.cast.sort((a, b) => b.popularity - a.popularity);
+      return(sortedCast.slice(0, 4));
+
+
+  }
+
+  function fetchCreditsCrew(data){
+      const sortedCrew = data.crew
+        .filter(member => ["Director", "Producer", "Screenplay", "Writer"].includes(member.job))
+        .sort((a, b) => b.popularity - a.popularity);
+
+        return sortedCrew;
+
+  } */
+  
+  function renderStars(voteAverage) {
+    const stars = Math.round(voteAverage / 2); 
+    return "★".repeat(stars) + "☆".repeat(5 - stars); 
+  }
+
 export default function MovieDetails() {
     const { id } = useParams();
     const [movie, setMovie] = useState(null);
@@ -59,19 +86,20 @@ export default function MovieDetails() {
 
                             <div className="movie-meta">
                                 <div className="rating-stars">
-                                    {[1, 2, 3, 4, 5].map(star => (
+                                {renderStars(movie.vote_average)} ({movie.vote_average}/10)
+                                   { /* {[1, 2, 3, 4, 5].map(star => (
                                         <span key={star} className="star">★</span>
                                     ))}
                                     <span className="views">
                                         <FaEye /> 38 Views
                                     </span>
-                                    <span className="comments">0</span>
+                                    <span className="comments">0</span>  */}
                                 </div>
 
                                 <div className="cont-movie-details">
                                     <span>{new Date(movie.release_date).getFullYear()}</span>
-                                    <span>1 hr 55 mins</span>
-                                    <span>TV-MA</span>
+                                    <span>{formatRuntime(movie.runtime)}</span>
+                                    <span>{movie.origin_country}</span>
                                 </div>
 
                                 <div className="genres">
@@ -88,6 +116,8 @@ export default function MovieDetails() {
                             <div className="cast-crew">
                                 <p><strong>Cast:</strong> Emma Narburgh, Ricky Aleman</p>
                                 <p><strong>Crew:</strong> Bryan Neill, Tonny Smith</p>
+                                {/* {fetchCreditsCast(movie)}
+                                {fetchCreditsCast(movie)} */}
                             </div>
                         </div>
 

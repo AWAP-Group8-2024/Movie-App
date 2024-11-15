@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { FaEye, FaRegHeart, FaShare, FaRegBookmark } from 'react-icons/fa';
 import RelatedMovies from "./RelatedMovies.jsx";
+import MovieCredits from './MovieCredits.jsx';
 import './MovieDetail.css';
 
 
@@ -14,22 +15,6 @@ function formatRuntime(minutes) {
     const mins = minutes % 60;
     return `${hours} hr ${mins} mins`;
   }
-
-/*   function fetchCreditsCast(data){
-    const sortedCast = data.cast.sort((a, b) => b.popularity - a.popularity);
-      return(sortedCast.slice(0, 4));
-
-
-  }
-
-  function fetchCreditsCrew(data){
-      const sortedCrew = data.crew
-        .filter(member => ["Director", "Producer", "Screenplay", "Writer"].includes(member.job))
-        .sort((a, b) => b.popularity - a.popularity);
-
-        return sortedCrew;
-
-  } */
   
   function renderStars(voteAverage) {
     const stars = Math.round(voteAverage / 2); 
@@ -117,10 +102,7 @@ export default function MovieDetails() {
                             </p>
 
                             <div className="cast-crew">
-                                <p><strong>Cast:</strong> Emma Narburgh, Ricky Aleman</p>
-                                <p><strong>Crew:</strong> Bryan Neill, Tonny Smith</p>
-                                {/* {fetchCreditsCast(movie)}
-                                {fetchCreditsCast(movie)} */}
+                                {<MovieCredits movieId={id} />}
                             </div>
                         </div>
 

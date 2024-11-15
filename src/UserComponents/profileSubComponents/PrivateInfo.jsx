@@ -1,5 +1,4 @@
 import { Form, Row, Col } from "react-bootstrap";
-
 export default function PrivateInfo({
   profileData,
   isEditing,
@@ -58,6 +57,21 @@ export default function PrivateInfo({
               type="text"
               name="address"
               value={profileData.address}
+              onChange={handleInputChange}
+              readOnly={!isEditing}
+              size="sm"
+            />
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row className="my-2">
+        <Col xs className="ms-1">
+          <Form.Group>
+            <Form.Label>Password:</Form.Label>
+            <Form.Control
+              type="text"
+              name="password"
+              value={profileData.password}
               onChange={handleInputChange}
               readOnly={!isEditing}
               size="sm"

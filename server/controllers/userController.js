@@ -109,11 +109,17 @@ export const deleteUser = async (req, res, next) => {
 export const updateUserProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    const updateInfo = req.body;
+    const updateInfo = { ...req.body };
+    console.log(updateInfo);
 
     if (Object.keys(updateInfo).length === 0) {
       return res.status(400).json({ message: "No fields to update" });
     }
+
+    if (updateInfo.password) {
+      updateInfo.password = await hash(updateInfo.password, 10);
+    }
+
     const updatedUser = await updateUserById(id, updateInfo);
 
     if (!updatedUser) {

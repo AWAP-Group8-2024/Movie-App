@@ -86,9 +86,9 @@ export default function UserProvider({ children }) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-      const response = await axios.post(
+      const response = await axios.put(
         `${url}/user/profile/${user.id}`,
-        { updatedData },
+        updatedData,
         { headers }
       );
       return response.data;

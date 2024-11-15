@@ -40,6 +40,7 @@ export const updateUserById = async (id, updateInfo) => {
   const setClause = keys
     .map((key, index) => `${key} = $${index + 1}`)
     .join(", ");
+
   values.push(id);
 
   const query = `

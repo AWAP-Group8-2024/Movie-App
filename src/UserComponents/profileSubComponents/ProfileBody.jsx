@@ -1,7 +1,8 @@
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Button } from "react-bootstrap";
 import PrivateInfo from "./PrivateInfo";
 import PublicInfo from "./PublicInfo";
 import ProfileAction from "./ProfileAction";
+import { EditButton } from "./Button";
 
 export default function Body({
   profileData,
@@ -19,7 +20,6 @@ export default function Body({
     <div className="mt-4">
       {/* Main Profile Area */}
       <Row className="mt-4">
-        {/* Left Column for Profile Details */}
         <Col md={3} className="d-flex justify-content-center">
           <Card style={{ width: "100%" }}>
             <Card.Body>something</Card.Body>
@@ -29,7 +29,10 @@ export default function Body({
         {/* Right Column for Additional Content */}
         <Col md={8}>
           <Card style={{ width: "100%" }}>
-            <Card.Body>
+            <Card.Body className="pt-0">
+              <div className="d-flex justify-content-end pt-3">
+                {isOwnProfile && <EditButton setIsEditing={setIsEditing} />}
+              </div>
               <Row>
                 {profileData ? (
                   <>
@@ -40,11 +43,11 @@ export default function Body({
                           profileData={isEditing ? editData : profileData}
                           isEditing={isEditing}
                           handleInputChange={handleInputChange}
+                          setIsEditing={setIsEditing}
                         />
                         <ProfileAction
                           handleLogout={handleLogout}
                           setShowModal={setShowModal}
-                          setIsEditing={setIsEditing}
                           isEditing={isEditing}
                           handleSave={handleSave}
                           handleCancel={handleCancel}

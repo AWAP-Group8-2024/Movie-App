@@ -1,45 +1,23 @@
-import { Button, Row, Col } from "react-bootstrap";
-
+import { Row } from "react-bootstrap";
+import { DeleteButton, LogoutButton, SaveButton, CancelButton } from "./Button";
 export default function ProfileAction({
   handleLogout,
   setShowModal,
-  setIsEditing,
   isEditing,
   handleSave,
   handleCancel,
 }) {
   return (
-    <Row className="mt-3 ps-3">
+    <Row className="mt-3 ps-3 d-flex">
       {!isEditing ? (
-        <>
-          <Col xs="auto">
-            <Button variant="outline-dark" onClick={handleLogout}>
-              Log out
-            </Button>
-          </Col>
-          <Col xs="auto">
-            <Button variant="outline-danger" onClick={() => setShowModal(true)}>
-              Delete Account
-            </Button>
-          </Col>
-          <Col xs="auto">
-            <Button variant="outline-dark" onClick={() => setIsEditing(true)}>
-              Edit
-            </Button>
-          </Col>
-        </>
+        <div className="d-flex justify-content-between">
+          <DeleteButton setShowModal={setShowModal} />
+          <LogoutButton handleLogout={handleLogout} />
+        </div>
       ) : (
         <>
-          <Col xs="auto">
-            <Button variant="success" onClick={handleSave}>
-              Save
-            </Button>
-          </Col>
-          <Col xs="auto">
-            <Button variant="secondary" onClick={handleCancel}>
-              Cancel
-            </Button>
-          </Col>
+          <SaveButton handleSave={handleSave} />
+          <CancelButton handleCancel={handleCancel} />
         </>
       )}
     </Row>

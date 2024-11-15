@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { FaEye, FaRegHeart, FaShare, FaRegBookmark } from 'react-icons/fa';
+import RelatedMovies from "./RelatedMovies.jsx";
 import './MovieDetail.css';
+
 
 import Navigation from './Navigation';
 
@@ -37,6 +39,7 @@ function formatRuntime(minutes) {
 export default function MovieDetails() {
     const { id } = useParams();
     const [movie, setMovie] = useState(null);
+    const [relatedMovies, setRelatedMovies] = useState([]);
 
     useEffect(() => {
         fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
@@ -122,9 +125,8 @@ export default function MovieDetails() {
                         </div>
 
                         <section className="recommended-section">
-                            <h2>Recommended For You</h2>
                             <div className="recommended-movies">
-                                Recommended movies carousel/grid
+                                <RelatedMovies movieId={id} />
                             </div>
                         </section>
 

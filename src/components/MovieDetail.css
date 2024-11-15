@@ -1,4 +1,7 @@
 /* MovieDetail.css */
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
 .movie-detail-container {
     padding: 2rem;
     min-height: 100vh;

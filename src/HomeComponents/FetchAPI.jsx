@@ -1,5 +1,6 @@
 import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { xml2json } from "xml-js";
 
 function fetchMovieAPI(API, setter) {
     fetch(API)
@@ -97,4 +98,40 @@ function fetchShowAPI(API, setter) {
     })
 }
 
-export { fetchMovieAPI, fetchShowAPI };
+function fetchFinKinoEvents(API, setter) {
+    fetch(API)
+    .then(res => res.text())
+    .then(xml => {
+        const items = JSON.parse(xml2json(xml, {compact: true})).Events.Event;
+        setter(
+            <Row>
+                <Col lg={2} md={3} xs={4} className="text-center p-2 text-decoration-none text-dark" as={Link}>
+                    <img src={items[0].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
+                    {items[0].Title._text}
+                </Col>
+                <Col lg={2} md={3} xs={4} className="text-center p-2 text-decoration-none text-dark" as={Link}>
+                    <img src={items[1].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
+                    {items[1].Title._text}
+                </Col>
+                <Col lg={2} md={3} xs={4} className="text-center p-2 text-decoration-none text-dark" as={Link}>
+                    <img src={items[2].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
+                    {items[2].Title._text}
+                </Col>
+                <Col lg={2} xs={0} md={3} className="text-center p-2 d-none d-md-block text-decoration-none text-dark" as={Link}>
+                    <img src={items[3].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
+                    {items[3].Title._text}
+                </Col>
+                <Col lg={2} xs={0} className="text-center p-2 d-none d-lg-block text-decoration-none text-dark" as={Link}>
+                    <img src={items[4].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
+                    {items[4].Title._text}
+                </Col>
+                <Col lg={2} xs={0} className="text-center p-2 d-none d-lg-block text-decoration-none text-dark" as={Link}>
+                    <img src={items[5].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
+                    {items[5].Title._text}
+                </Col>
+            </Row>
+        )
+    })
+}
+
+export { fetchMovieAPI, fetchShowAPI, fetchFinKinoEvents };

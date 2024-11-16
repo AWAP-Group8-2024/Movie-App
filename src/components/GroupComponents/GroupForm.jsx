@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createNewGroup } from '../../services/GroupServices';
+import { useNavigate } from 'react-router-dom';
+import Navigation from '../Navigation';
+
 const GroupForm = () => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if the user is authenticated
+    const token = JSON.parse(sessionStorage.getItem("user"))?.token;
+    if (!token) {
+      navigate('/login'); // Redirect to login page if not authenticated
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,18 +24,17 @@ const GroupForm = () => {
       return;
     }
     try {
-      const newGroup = await createNewGroup({ name});
+      const newGroup = await createNewGroup({ name });
       setMessage(`Group ${newGroup.name} created!`);
-      
       setName('');
     } catch (error) {
       setError('Error creating group');
     }
   };
 
-
   return (
     <div>
+      <Navigation />
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <form onSubmit={handleSubmit}>

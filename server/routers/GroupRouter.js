@@ -22,7 +22,7 @@ router.get("/all", auth, GroupController.getGroupsByUserId);
 router.get(
   "/:groupId",
   auth,
-  verifyUserInGroup,
+  // verifyUserInGroup,
   GroupController.getGroupByGroupId
 );
 

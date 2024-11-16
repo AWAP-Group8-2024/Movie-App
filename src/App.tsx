@@ -16,7 +16,8 @@ import ListFiltered from "./components/ListFiltered";
 import GroupPage from "./components/GroupComponents/GroupPage";
 import GroupDetail from "./components/GroupComponents/GroupDetails";
 import GroupForm from "./components/GroupComponents/GroupForm";
-
+import GroupList from "./components/GroupComponents/GroupList";
+import JoinGroupForm from "./components/GroupComponents/JoinGroupForm";
 function App() {
   // return (
   //   <div className="App">
@@ -68,7 +69,11 @@ function App() {
           <Route path="/filtered/:condition" element={<ListFiltered />} />
           <Route path="/groups" element={<GroupPage />} />
           <Route path="/groups/create" element={<GroupForm />} />
-          <Route path="/group/:groupId" element={<GroupDetail />} />
+          <Route path="/groups/join" element={<JoinGroupForm />} />
+          
+          <Route path="/groups/:groupId" element={<GroupDetail />} />
+          <Route path="/groups/all" element={<GroupList fetchType="all" />} />
+          <Route path="/groups/user" element={<GroupList fetchType="user" />} />
         </Routes>
       </UserProvider>
     </BrowserRouter>

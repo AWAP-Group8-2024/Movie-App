@@ -9,7 +9,7 @@ import {
   IoNavigate,
 } from "react-icons/io5";
 import { Button } from "react-bootstrap";
-import { useUser } from "./UseUser";
+import { useUser } from "./useUser";
 
 export default function Usersidebar() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -75,7 +75,7 @@ export default function Usersidebar() {
               </Button>
               <Button
                 as={Link}
-                to="/groups"
+                to="/groups/user"
                 variant="outline-success"
                 name="My groups"
                 className="mb-2"

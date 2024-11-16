@@ -11,8 +11,8 @@ import {
   Button,
   ListGroup,
 } from "react-bootstrap";
-import Usersidebar from "../UserComponents/UserSidebar";
-import { useUser } from "../UserComponents/UseUser";
+import Usersidebar from "../UserComponents/Usersidebar";
+import { useUser } from "../UserComponents/useUser";
 
 export default function Navigation() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -114,10 +114,10 @@ export default function Navigation() {
               </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Groups" id="groups-nav-dropdown">
-              <NavDropdown.Item as={Link} to="/groups">
+              <NavDropdown.Item as={Link} to="/groups/all">
                 View All Groups
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/group/join">
+              <NavDropdown.Item as={Link} to="/groups/join">
                 Join Group
               </NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/groups/create">

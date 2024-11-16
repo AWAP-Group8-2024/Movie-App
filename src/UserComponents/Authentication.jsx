@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { useUser } from "./UseUser.jsx";
+import { useUser } from "./useUser";
 import Navigation from "../components/Navigation.jsx";
 import "./Authentication.css";
 import { useState } from "react";

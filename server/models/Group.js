@@ -7,7 +7,7 @@ export const getAllGroups = async () => {
 
 export const getGroupsInfoByUserId = async (id) => {
   const query = `
-  SELECT g.id, g.name, g.description, g.creator_id, COUNT(ga.account_id) AS member_count
+  SELECT g.id, g.name,  g.creator_id, COUNT(ga.account_id) AS member_count
   FROM groups g
   LEFT JOIN group_account ga ON g.id = ga.group_id
   WHERE g.id IN ( SELECT group_id FROM group_account WHERE account_id = $1)

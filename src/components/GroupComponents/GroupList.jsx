@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { getAllGroups, getGroupsByUserId } from '../../services/GroupServices';
+import { useParams, useNavigate } from 'react-router-dom';
+import Navigation from '../Navigation';
 
 const GroupList = ({ fetchType }) => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Function to fetch groups based on fetchType
@@ -27,6 +30,10 @@ const GroupList = ({ fetchType }) => {
         console.log("Fetched groups:", data)
         setGroups(data);
       } catch (err) {
+        if (err.message === 'User not authenticated') {
+          // Redirect to the login page
+          navigate('/login');
+        }
         setError(err.message);
       } finally {
         setLoading(false);
@@ -41,12 +48,13 @@ const GroupList = ({ fetchType }) => {
 
   return (
     <div>
+      <Navigation />
       <h2>{fetchType === 'all' ? 'All Groups' : 'Your Groups'}</h2>
       <ul>
         {groups.map((group, index) => (
           <li key={index}>
             <a href={`/groups/${group.id}`}>
-              {fetchType === 'all' ? `${group.name} - created by ${group.creator_id}` : group.group_name}
+              {fetchType === 'all' ? `${group.name} - created by ${group.creator_id}` : group.name}
             </a>
           </li>
         ))}

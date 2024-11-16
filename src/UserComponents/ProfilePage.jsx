@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useUser } from "./UseUser.jsx";
+import { useUser } from "./useUser";
 import Navigation from "../components/Navigation.jsx";
 import { Container } from "react-bootstrap";
 import AccountDeleteModal from "./ProfileComponents/AccountDeleteModal.jsx";

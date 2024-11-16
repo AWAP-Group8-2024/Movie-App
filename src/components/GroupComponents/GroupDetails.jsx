@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { getGroupByGroupId } from '../../services/GroupServices';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from '../Navigation';
 
 const GroupDetails = () => {
+  const navigate = useNavigate();
   const {groupId} = useParams();
   const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,7 +20,11 @@ const GroupDetails = () => {
           const groupData = await getGroupByGroupId(groupId);
           setGroup(groupData);
         } catch (err) {
-          setError('Error fetching group details');
+          if (err.message === 'User not authenticated') {
+            // Redirect to the login page
+            navigate('/login');
+          }
+          setError(err.message);
           console.error(err);
         } finally {
           setLoading(false);

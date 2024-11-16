@@ -15,7 +15,7 @@ export const getAllGroupsListing = async (req, res, next) => {
 export const getGroupsByUserId = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const result = await GroupModel.getGroupsForUser(id);
+    const result = await GroupModel.getGroupsInfoByUserId(id);
     return res.status(200).json(result.rows || []);
   } catch (error) {
     return next(error);

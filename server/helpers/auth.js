@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { createUserObj } from "../controllers/UserController.js";
-import { getGroupsForUser, getGroupDetailsById } from "../models/Group.js";
+import { getGroupsInfoByUserId, getGroupDetailsById } from "../models/Group.js";
 import { createGroupObj } from "../controllers/GroupController.js";
 
 const { verify } = jwt;
@@ -25,11 +25,13 @@ export const auth = (req, res, next) => {
 
 export const verifyUserInGroup = async (req, res, next) => {
   const { id } = req.user;
+  console.log(req.user);
   const { groupId } = req.params;
   try {
-    const groups = await getGroupsForUser(id);
+    const groups = await getGroupsInfoByUserId(id);
+    console.log(groups);
     const isUserInGroup = groups.rows.some(
-      (group) => group.group_id === parseInt(groupId)
+      (group) => group.id === parseInt(groupId)
     );
     if (!isUserInGroup) {
       return res

@@ -5,12 +5,14 @@ export const getAllGroups = async () => {
   return result;
 };
 
-export const getGroupsForUser = async (id) => {
+export const getGroupsInfoByUserId = async (id) => {
   const query = `
-  SELECT g.id AS group_id, g.name AS group_name
+  SELECT g.id, g.name, g.description, g.creator_id, COUNT(ga.account_id) AS member_count
   FROM groups g
-  JOIN group_account ga ON g.id = ga.group_id
-  WHERE ga.account_id = $1;
+  LEFT JOIN group_account ga ON g.id = ga.group_id
+  WHERE g.id IN ( SELECT group_id FROM group_account WHERE account_id = $1)
+  GROUP BY g.id
+  ORDER BY g.id
 `;
   const result = await pool.query(query, [id]);
   return result;
@@ -66,3 +68,14 @@ export const addUserToGroup = async (groupId, accountId) => {
   const result = await pool.query(query, [groupId, accountId]);
   return result;
 };
+
+// export const checkUserInGroupByUserId = async (id) => {
+//   const query = `
+//   SELECT g.id AS group_id, g.name AS group_name
+//   FROM groups g
+//   JOIN group_account ga ON g.id = ga.group_id
+//   WHERE ga.account_id = $1;
+// `;
+//   const result = await pool.query(query, [id]);
+//   return result;
+// };

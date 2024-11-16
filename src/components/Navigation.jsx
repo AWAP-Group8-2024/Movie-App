@@ -148,7 +148,7 @@ export default function Navigation() {
             </Row>
             {suggestions.length > 0 && (
               <ListGroup
-                className="position-absolute w-100 mt-1"
+                className="position-absolute w-100 mt-5"
                 style={{ zIndex: 1000 }}
               >
                 {suggestions.map((item) => (

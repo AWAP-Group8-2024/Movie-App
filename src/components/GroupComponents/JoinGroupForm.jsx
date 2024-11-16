@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAllGroups, sendJoinRequest } from '../../services/GroupServices'; // Ensure sendJoinRequest is in your services
 import { useNavigate } from 'react-router-dom';
+import Navigation from '../Navigation';
 
 const JoinGroupForm = () => {
   const navigate = useNavigate();
@@ -61,12 +62,13 @@ const JoinGroupForm = () => {
       setMessage('Join request sent to group successfully!');
       navigate(`/group/${groupId}`);
     } catch (error) {
-      setError('Error sending join request');
+      setError(error.message);
     }
   };
 
   return (
     <div>
+      <Navigation />
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {message && <p style={{ color: 'green' }}>{message}</p>}
 

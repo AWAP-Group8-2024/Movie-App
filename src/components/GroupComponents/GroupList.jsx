@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { getAllGroups } from '../../services/GroupServices';
 
 const GroupList = () => {
+  
   const [groups, setGroups] = useState([]);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchGroups = async () => {
       try {
+        
         const data = await getAllGroups();
         setGroups(data);
       } catch (error) {
-        setError('Error fetching groups');
+        if (error.message === 'User not authenticated') {
+          navigate('/login'); // Redirect to the login page
+        } else {
+          setError('Error fetching groups');
+        }
       }
     };
 
@@ -25,7 +33,9 @@ const GroupList = () => {
       <ul>
         {groups.map((group) => (
           <li key={group.id}>
-            {group.name} - Created by {group.creator_id}
+            <Link to={`/groups/${group.id}`}>
+              {group.name} - Created by {group.creator_id}
+            </Link>
           </li>
         ))}
       </ul>

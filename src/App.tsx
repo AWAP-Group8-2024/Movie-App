@@ -15,7 +15,6 @@ import GroupPage from './components/GroupComponents/GroupPage';
 import GroupDetail from './components/GroupComponents/GroupDetails';
 import GroupForm from './components/GroupComponents/GroupForm';
 import JoinGroupForm from './components/GroupComponents/JoinGroupForm';
-import JoinRequestList from './components/GroupComponents/JoinRequestList';
 
 function App() {
   // return (
@@ -48,14 +47,11 @@ function App() {
           <Route path="/profile/:id" element={<Profile />} /> {/* Profile page */}
           <Route path="/list/:condition" element={<ListCategories />}/>
           <Route path="/filtered/:condition" element={<ListFiltered />} />
-          <Route path="/groups" element={<GroupPage />} />
-          <Route path="/group/create" element={<GroupForm />} />
-          <Route path="/group/:groupId" element={<GroupDetail />} />
-          <Route path="/group/join" element={<JoinGroupForm />} />
-          <Route path="/group/:groupId/join-requests" element={<JoinRequestList />} />
+          <Route path='/groups' element={<GroupPage/> } />
+          <Route path='/groups/:groupId' element={<GroupDetail />} />
+          <Route path='/groups/create' element={<GroupForm />} />
+          <Route path='/groups/join' element={<JoinGroupForm />} />
           
-          
-
         </Routes>
       </UserProvider>
     </BrowserRouter>

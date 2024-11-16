@@ -11,8 +11,8 @@ import {
   Button,
   ListGroup,
 } from "react-bootstrap";
-import Usersidebar from "../UserComponents/Usersidebar";
-import { useUser } from "../UserComponents/useUser";
+import Usersidebar from "../UserComponents/UserSidebar";
+import { useUser } from "../UserComponents/UseUser";
 
 export default function Navigation() {
   const [searchQuery, setSearchQuery] = useState("");

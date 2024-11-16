@@ -9,7 +9,7 @@ import {
   IoNavigate,
 } from "react-icons/io5";
 import { Button } from "react-bootstrap";
-import { useUser } from "./useUser";
+import { useUser } from "./UseUser";
 
 export default function Usersidebar() {
   const [showSidebar, setShowSidebar] = useState(false);

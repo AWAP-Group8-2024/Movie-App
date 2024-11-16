@@ -1,78 +1,66 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getGroupByGroupId, sendJoinRequest, deleteGroupByGroupId } from '../../services/GroupServices';
+import React, { useEffect, useState } from 'react';
+import { getGroupByGroupId } from '../../services/GroupServices';
+import { useParams } from 'react-router-dom';
 import Navigation from '../Navigation';
 
-const GroupDetail = () => {
-  const { groupId } = useParams();
-  const navigate = useNavigate();
+const GroupDetails = () => {
+  const {groupId} = useParams();
   const [group, setGroup] = useState(null);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchGroupDetail = async () => {
-      if (!groupId) {
-        setError('Invalid group ID');
-        return;
-      }
-  
-      try {
-        const response = await getGroupByGroupId(groupId);
-        setGroup(response.data);
-      } catch (error) {
-        if (error.message === 'User not authenticated') {
-          navigate('/login'); // Redirect to login page if not authenticated
-        } else {
+    console.log("Group ID:", groupId); // Add this to verify the value
+    if (groupId) {
+      const fetchGroupDetails = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+          const groupData = await getGroupByGroupId(groupId);
+          setGroup(groupData);
+        } catch (err) {
           setError('Error fetching group details');
+          console.error(err);
+        } finally {
+          setLoading(false);
         }
-      }
-    };
+      };
   
-    fetchGroupDetail();
-  }, [groupId, navigate]);
+      fetchGroupDetails();
+    } else {
+      setError("Invalid group ID.");
+    }
+  }, [groupId]);
   
-  const handleJoinGroup = async () => {
-    try {
-      await sendJoinRequest(groupId);
-      alert('You have successfully joined the group!');
-    } catch (error) {
-      setError('Error joining the group');
-    }
-  };
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
-  const handleDeleteGroup = async () => {
-    try {
-      await deleteGroupByGroupId(groupId);
-      alert('Group deleted successfully!');
-      navigate('/groups');
-    } catch (error) {
-      setError('Error deleting the group');
-    }
-  };
-
+  // If group data is available, display it
   return (
     <div>
       <Navigation />
+      <h2>Group Details</h2>
       {group ? (
-        <>
-          <h1>Group Details</h1>
-          <h3>{group.name}</h3>
-          <p>Group ID: {group.id}</p>
-          <p>Creator ID: {group.creator_id}</p>
-          {/* <p>Description: {group.description}</p> */}
+        <div>
+          <h3>{group.name}</h3> 
+          <p><strong>Group ID:</strong> {group.id}</p>
+          <p><strong>Description:</strong> {group.description}</p> 
+          <p><strong>Creator:</strong> {group.creator_id}</p>
+          <p>More details to come...</p>
 
-          <p>More details to come</p>
+          {/* Add a button to delete the group */}
+          <button>Leave Group</button>
+          <button>Join Group</button>
+          <button>Update Group</button>
           <button>Edit</button>
-          <button onClick={handleDeleteGroup}>Delete</button>
-          <button onClick={handleJoinGroup}>Join Group</button>
-        </>
+          <button>Delete Group</button>
+          
+        </div>
       ) : (
-        <>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-        </>
+        <div>No group details found.</div>
       )}
     </div>
   );
 };
 
-export default GroupDetail;
+export default GroupDetails;

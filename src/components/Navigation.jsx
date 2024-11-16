@@ -114,7 +114,7 @@ export default function Navigation() {
               </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Groups" id="groups-nav-dropdown">
-              <NavDropdown.Item as={Link} to="/groups">
+              <NavDropdown.Item as={Link} to="/groups/all">
                 View All Groups
               </NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/groups/join">

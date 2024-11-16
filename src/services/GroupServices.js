@@ -40,10 +40,18 @@ export const getGroupsByUserId = async (id) => {
   const headers = getAuthHeaders();
   if (!headers) return;
 
+  const userId = parseInt(id, 10);
+
+  if (isNaN(userId)) {
+    console.error("Invalid user ID");
+    return;
+  }
+
   try {
-    const response = await axios.get(`${API_URL}/all`,id, { headers });
+    const response = await axios.get(`${API_URL}/all`, {
+      headers,
+    });
     return response.data;
-    
   } catch (error) {
     console.error("Error fetching groups by user ID:", error);
     throw error;
@@ -56,7 +64,9 @@ export const createNewGroup = async (groupData) => {
   if (!headers) return;
 
   try {
-    const response = await axios.post(`${API_URL}/create`, groupData, { headers });
+    const response = await axios.post(`${API_URL}/create`, groupData, {
+      headers,
+    });
     return response.data;
   } catch (error) {
     console.error("Error creating new group:", error);
@@ -71,6 +81,7 @@ export const getGroupByGroupId = async (groupId) => {
 
   try {
     const response = await axios.get(`${API_URL}/${groupId}`, { headers });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(`Error fetching group ${groupId}:`, error);

@@ -67,7 +67,7 @@ export default function Usersidebar() {
 							</Button>
 							<Button
 								as={Link}
-								to="/groups"
+								to="/groups/user"
 								variant="outline-success"
 								name="My groups"
 								className="mb-2"><IoPeopleCircle />My Groups

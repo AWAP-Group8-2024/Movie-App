@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createNewGroup } from '../../services/GroupServices';
 import { useNavigate } from 'react-router-dom';
+import Navigation from '../Navigation';
 
 const GroupForm = () => {
   const [name, setName] = useState('');
@@ -33,6 +34,7 @@ const GroupForm = () => {
 
   return (
     <div>
+      <Navigation />
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <form onSubmit={handleSubmit}>

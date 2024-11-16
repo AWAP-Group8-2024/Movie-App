@@ -95,6 +95,22 @@ export default function Profile() {
   const handleGroupClick = (groupId) => {
     navigate(`/groups/${groupId}`);
   };
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      if (navigator.share) {
+        await navigator.share({
+          title: document.title,
+          text: "Check this out!",
+          url: currentUrl,
+        });
+      } else {
+        alert("URL copied to clipboard");
+      }
+    } catch (error) {
+      alert("Failed to share the URL");
+    }
+  };
 
   return (
     <Container>
@@ -116,6 +132,7 @@ export default function Profile() {
         setIsEditing={setIsEditing}
         groupData={groupData}
         handleGroupClick={handleGroupClick}
+        handleShare={handleShare}
       />
       <AccountDeleteModal
         showModal={showModal}

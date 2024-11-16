@@ -6,6 +6,7 @@ import {
   IoPencil,
   IoCheckmarkOutline,
   IoClose,
+  IoShareSocialSharp,
 } from "react-icons/io5";
 
 export const EditButton = ({ setIsEditing }) => {
@@ -15,8 +16,22 @@ export const EditButton = ({ setIsEditing }) => {
       onClick={() => setIsEditing(true)}
       size="sm"
       name="Edit"
+      className="me-2"
     >
-      <IoPencil className={styles.icon} /> Edit Profile
+      <IoPencil className={styles.icon} /> Edit
+    </Button>
+  );
+};
+
+export const ShareButton = ({ handleShare }) => {
+  return (
+    <Button
+      variant="outline-primary"
+      onClick={handleShare}
+      size="sm"
+      name="Share"
+    >
+      <IoShareSocialSharp className={styles.icon} /> Share
     </Button>
   );
 };

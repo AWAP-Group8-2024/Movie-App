@@ -87,7 +87,7 @@ export default function Usersidebar() {
                 variant="outline-dark"
                 onClick={handleLogout}
                 name="Logout"
-                clasName="mb2"
+                className="mb2"
               >
                 <IoLogOutOutline /> Logout
               </Button>

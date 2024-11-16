@@ -11,6 +11,7 @@ import {
   Button,
   ListGroup,
 } from "react-bootstrap";
+import Usersidebar from "../UserComponents/Usersidebar";
 import { useUser } from "../UserComponents/useUser";
 
 export default function Navigation() {
@@ -206,14 +207,7 @@ export default function Navigation() {
                 Log in
               </Button>
             ) : (
-              <Button
-                as={Link}
-                to={`/profile/${user.id}`}
-                variant="outline-primary"
-                className="ms-0 ms-lg-2 mt-2 mt-lg-0"
-              >
-                Profile
-              </Button>
+              <Usersidebar/>
             )}
           </Form>
         </Navbar.Collapse>

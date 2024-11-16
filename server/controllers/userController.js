@@ -5,12 +5,13 @@ import {
   searchUserById,
   deleteUserById,
   isEmailExisting,
+  updateUserById,
 } from "../models/User.js";
 import { ApiError } from "../helpers/apiError.js";
 import jwt from "jsonwebtoken";
 const { sign } = jwt;
 
-const registration = async (req, res, next) => {
+export const registration = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -39,7 +40,7 @@ const registration = async (req, res, next) => {
   }
 };
 
-const login = async (req, res, next) => {
+export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const result = await searchUserByEmail(email);
@@ -60,7 +61,7 @@ const login = async (req, res, next) => {
   }
 };
 
-const getUserProfile = async (req, res, next) => {
+export const getUserProfile = async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await searchUserById(id);
@@ -82,7 +83,7 @@ const getUserProfile = async (req, res, next) => {
   }
 };
 
-const deleteUser = async (req, res, next) => {
+export const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params; //session user id
     const { email, password } = req.body;
@@ -105,7 +106,32 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-const createUserObj = (id, email, token = undefined) => {
+export const updateUserProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateInfo = { ...req.body };
+    console.log(updateInfo);
+
+    if (Object.keys(updateInfo).length === 0) {
+      return res.status(400).json({ message: "No fields to update" });
+    }
+
+    if (updateInfo.password) {
+      updateInfo.password = await hash(updateInfo.password, 10);
+    }
+
+    const updatedUser = await updateUserById(id, updateInfo);
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    return res.status(500).json({ message: "Error updating profile" });
+  }
+};
+
+export const createUserObj = (id, email, token = undefined) => {
   return {
     id: id,
     email: email,
@@ -113,7 +139,14 @@ const createUserObj = (id, email, token = undefined) => {
   };
 };
 
-const createProfileObj = (id, email, firstname, lastname, address, phone) => {
+export const createProfileObj = (
+  id,
+  email,
+  firstname,
+  lastname,
+  address,
+  phone
+) => {
   return {
     id: id,
     email: email,
@@ -124,13 +157,11 @@ const createProfileObj = (id, email, firstname, lastname, address, phone) => {
   };
 };
 
-const isEmailValid = (email) => {
+export const isEmailValid = (email) => {
   return email && email.trim().length > 0;
 };
 
-const isPasswordValid = (password) => {
+export const isPasswordValid = (password) => {
   const regex = /^(?=.*[A-Z])(?=.*[0-9]).*$/;
   return regex.test(password);
 };
-
-export { registration, login, getUserProfile, deleteUser, createUserObj };

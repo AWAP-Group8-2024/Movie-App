@@ -3,13 +3,31 @@ import { useEffect, useState } from 'react';
 
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { FaEye, FaRegHeart, FaShare, FaRegBookmark } from 'react-icons/fa';
+
+import RelatedMovies from "./RelatedMovies.jsx";
+import MovieCredits from './MovieCredits.jsx';
+import SocialSharing from './SocialSharing.jsx';
 import './MovieDetail.css';
 
+
 import Navigation from './Navigation';
+
+
+function formatRuntime(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours} hr ${mins} mins`;
+}
+
+function renderStars(voteAverage) {
+    const stars = Math.round(voteAverage / 2);
+    return "★".repeat(stars) + "☆".repeat(5 - stars);
+}
 
 export default function MovieDetails() {
     const { id } = useParams();
     const [movie, setMovie] = useState(null);
+    const [showShareOptions, setShowShareOptions] = useState(false);
 
     useEffect(() => {
         fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
@@ -20,10 +38,12 @@ export default function MovieDetails() {
 
     if (!movie) return <Container className="text-dark">Loading...</Container>;
 
+    const shareUrl = `${process.env.REACT_APP_API_URL}/movie/${id}`;
+    const shareMessage = `Check out "${movie.title}" on MovieApp!`;
+
     return (
         <div>
             <Navigation />
-
 
             <Container className="movie-detail-container text-dark my-5">
                 <Row>
@@ -40,38 +60,36 @@ export default function MovieDetails() {
                                     <button className="action-btn">
                                         <FaRegHeart /> <span>0</span>
                                     </button>
-                                    <button className="action-btn">
-                                        <FaShare /> <span>Share</span>
+                                    <button className="action-btn" onClick={() => setShowShareOptions(!showShareOptions)}>
+                                        <FaShare /> <span> Share</span>
                                     </button>
                                     <button className="action-btn">
                                         <FaRegBookmark /> <span>Watchlist</span>
                                     </button>
+                                </div>
+
+                                <div className='social-buttons'>
+                                {showShareOptions && (
+                                    <SocialSharing url={'localhost'} message ={movie.title} />
+                                )}    
                                 </div>
                             </div>
                         </div>
                     </Col>
 
                     <Col md={9}>
-                    {console.log(movie)}
-
                         <div className="movie-info">
-                        <h1>{movie.title} ({new Date(movie.release_date).getFullYear()})</h1>
+                            <h1>{movie.title} ({new Date(movie.release_date).getFullYear()})</h1>
 
                             <div className="movie-meta">
                                 <div className="rating-stars">
-                                    {[1, 2, 3, 4, 5].map(star => (
-                                        <span key={star} className="star">★</span>
-                                    ))}
-                                    <span className="views">
-                                        <FaEye /> 38 Views
-                                    </span>
-                                    <span className="comments">0</span>
+                                    {renderStars(movie.vote_average)} ({movie.vote_average}/10)
                                 </div>
 
                                 <div className="cont-movie-details">
                                     <span>{new Date(movie.release_date).getFullYear()}</span>
-                                    <span>1 hr 55 mins</span>
-                                    <span>TV-MA</span>
+                                    <span>{formatRuntime(movie.runtime)}</span>
+                                    <span>{movie.origin_country}</span>
                                 </div>
 
                                 <div className="genres">
@@ -86,25 +104,19 @@ export default function MovieDetails() {
                             </p>
 
                             <div className="cast-crew">
-                                <p><strong>Cast:</strong> Emma Narburgh, Ricky Aleman</p>
-                                <p><strong>Crew:</strong> Bryan Neill, Tonny Smith</p>
+                                {<MovieCredits movieId={id} />}
                             </div>
                         </div>
 
                         <section className="recommended-section">
-                            <h2>Recommended For You</h2>
                             <div className="recommended-movies">
-                                Recommended movies carousel/grid
+                                <RelatedMovies movieId={id} />
                             </div>
                         </section>
 
                         <section className="review-section">
                             <h3>Be the first to review "{movie.title}"</h3>
                             <Form className="review-form">
-                                <div className="rating-input">
-                                    <p>Your rating</p>
-                                </div>
-
                                 <Form.Group className="mb-3">
                                     <Form.Label>Your review *</Form.Label>
                                     <Form.Control
@@ -151,28 +163,6 @@ export default function MovieDetails() {
                     </Col>
                 </Row>
             </Container>
-
-            {/* <Container className="text-dark my-5">
-                {console.table(movie)}
-                <h1>{movie.title} ({new Date(movie.release_date).getFullYear()})</h1>
-                <Row>
-                    <Col md={4}>
-                        <img
-                            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                            alt={movie.title}
-                            className="img-fluid rounded"
-                        />
-                    </Col>
-                    <Col md={8}>
-                        <p><strong>Release Date:</strong> {movie.release_date}</p>
-                        <p><strong>Overview:</strong> {movie.overview}</p>
-                        <p><strong>Genres:</strong> {movie.genres.map((genre) => genre.name).join(", ")}</p>
-                        <p><strong>Rating:</strong> {movie.vote_average}/10</p>
-                    </Col>
-                </Row>
-            </Container> */}
-
-
         </div>
     );
 }

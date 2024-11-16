@@ -1,4 +1,7 @@
 /* MovieDetail.css */
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
 .movie-detail-container {
     padding: 2rem;
     min-height: 100vh;
@@ -17,7 +20,9 @@
   .action-buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 1rem;
+    background-color: #c3c2c2;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s ease;
   }
   
   .action-btn {
@@ -128,4 +133,15 @@
     .movie-info h1 {
       font-size: 2rem;
     }
+  }
+
+
+  /* Social sharing related CSS */
+  .social-sharing-btn{
+    text-align: center;
+    margin: 10px;
+  }
+
+  .social-sharing-btn .react-share__ShareButton{
+    padding: 0 10px !important;
   }

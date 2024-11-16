@@ -13,7 +13,7 @@ export default function PrivateInfo({
             <Form.Control
               type="text"
               name="firstname"
-              value={profileData.firstname}
+              value={profileData.firstname ?? ""}
               onChange={handleInputChange}
               readOnly={!isEditing}
               size="sm"
@@ -26,7 +26,7 @@ export default function PrivateInfo({
             <Form.Control
               type="text"
               name="lastname"
-              value={profileData.lastname}
+              value={profileData.lastname ?? ""}
               onChange={handleInputChange}
               readOnly={!isEditing}
               size="sm"
@@ -41,7 +41,7 @@ export default function PrivateInfo({
             <Form.Control
               type="text"
               name="phone"
-              value={profileData.phone}
+              value={profileData.phone ?? ""}
               onChange={handleInputChange}
               readOnly={!isEditing}
               size="sm"
@@ -56,7 +56,7 @@ export default function PrivateInfo({
             <Form.Control
               type="text"
               name="address"
-              value={profileData.address}
+              value={profileData.address ?? ""}
               onChange={handleInputChange}
               readOnly={!isEditing}
               size="sm"
@@ -71,7 +71,7 @@ export default function PrivateInfo({
             <Form.Control
               type="text"
               name="password"
-              value={profileData.password}
+              value={profileData.password ?? ""}
               onChange={handleInputChange}
               readOnly={!isEditing}
               size="sm"

@@ -1,5 +1,5 @@
-import styles from "./Profile.module.css";
-import { Card, Row, Col, Button } from "react-bootstrap";
+import styles from "./Button.module.css";
+import { Col, Button } from "react-bootstrap";
 import {
   IoLogOutOutline,
   IoTrashSharp,
@@ -50,6 +50,7 @@ export const LogoutButton = ({ handleLogout }) => {
     </Col>
   );
 };
+
 export const SaveButton = ({ handleSave }) => {
   return (
     <Col xs="auto">
@@ -66,6 +67,21 @@ export const SaveButton = ({ handleSave }) => {
 };
 
 export const CancelButton = ({ handleCancel }) => {
+  return (
+    <Col xs="auto">
+      <Button
+        variant="outline-secondary"
+        onClick={handleCancel}
+        size="sm"
+        name="Cancel"
+      >
+        <IoClose className={styles.icon} /> Cancel
+      </Button>
+    </Col>
+  );
+};
+
+export const GroupButton = ({ handleCancel }) => {
   return (
     <Col xs="auto">
       <Button

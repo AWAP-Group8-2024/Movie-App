@@ -1,13 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useUser } from "./useUser.jsx";
+import { useUser } from "./UseUser.jsx";
 import Navigation from "../components/Navigation.jsx";
 import { Container } from "react-bootstrap";
-import AccountDeleteModal from "./profileSubComponents/AccountDeleteModal.jsx";
-import ProfileBody from "./profileSubComponents/ProfileBody.jsx";
+import AccountDeleteModal from "./ProfileComponents/AccountDeleteModal.jsx";
+import ProfileBody from "./ProfileComponents/ProfileBody.jsx";
 
 export default function Profile() {
-  const { user, removeAccount, getUserProfile, updateUserProfile } = useUser();
+  const {
+    user,
+    removeAccount,
+    getUserProfile,
+    updateUserProfile,
+    getUserGroups,
+  } = useUser();
   const navigate = useNavigate();
 
   const currentUrl = window.location.href;
@@ -16,6 +22,7 @@ export default function Profile() {
   const isOwnProfile = profileId === loggedInUserId;
 
   const [profileData, setProfileData] = useState(null);
+  const [groupData, setGroupData] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
   const [userConfirm, setUserConfirm] = useState({ email: "", password: "" });
@@ -30,10 +37,16 @@ export default function Profile() {
         })
         .catch((error) => {
           console.error("Failed to fetch profile:", error);
-          alert("Unable to fetch profile details.");
+        });
+      getUserGroups()
+        .then((userGroups) => {
+          setGroupData(userGroups);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch groups:", error);
         });
     }
-  }, [getUserProfile, profileId]);
+  }, [getUserProfile, profileId, getUserGroups]);
 
   const handleLogout = () => {
     sessionStorage.removeItem("user");
@@ -79,6 +92,10 @@ export default function Profile() {
     setIsEditing(false);
   };
 
+  const handleGroupClick = (groupId) => {
+    navigate(`/groups/${groupId}`);
+  };
+
   return (
     <Container>
       <Navigation />
@@ -97,6 +114,8 @@ export default function Profile() {
         userConfirm={userConfirm}
         setUserConfirm={setUserConfirm}
         setIsEditing={setIsEditing}
+        groupData={groupData}
+        handleGroupClick={handleGroupClick}
       />
       <AccountDeleteModal
         showModal={showModal}

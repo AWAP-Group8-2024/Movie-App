@@ -11,14 +11,14 @@ import {
   Button,
   ListGroup,
 } from "react-bootstrap";
-import Usersidebar from "../UserComponents/UserSidebar";
 import { useUser } from "../UserComponents/UseUser";
+import { UserDropdown } from "./NavComponents";
 
 export default function Navigation() {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, handleLogout } = useUser();
 
   const handleInputChange = (e) => {
     const query = e.target.value;
@@ -137,10 +137,11 @@ export default function Navigation() {
                   value={searchQuery}
                   onChange={handleInputChange}
                   className="mr-sm-2"
+                  size="sm"
                 />
               </Col>
               <Col xs="auto">
-                <Button type="submit" variant="outline-success">
+                <Button type="submit" variant="outline-success" size="sm">
                   Search
                 </Button>
               </Col>
@@ -196,20 +197,19 @@ export default function Navigation() {
               </ListGroup>
             )}
           </Form>
-          <Form className="d-inline-flex position-relative">
-            {!user || !user.token ? (
-              <Button
-                as={Link}
-                to="/login"
-                variant="outline-dark"
-                className="ms-0 ms-lg-2 mt-2 mt-lg-0"
-              >
-                Log in
-              </Button>
-            ) : (
-              <Usersidebar />
-            )}
-          </Form>
+          {user && user.token ? (
+            <UserDropdown user={user} handleLogout={handleLogout} />
+          ) : (
+            <Button
+              as={Link}
+              to="/login"
+              variant="outline-dark"
+              size="sm"
+              className="ms-4"
+            >
+              Log in
+            </Button>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>

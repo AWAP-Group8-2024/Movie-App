@@ -13,6 +13,7 @@ export default function Profile() {
     getUserProfile,
     updateUserProfile,
     getUserGroups,
+    handleLogout,
   } = useUser();
   const navigate = useNavigate();
 
@@ -47,12 +48,6 @@ export default function Profile() {
         });
     }
   }, [getUserProfile, profileId, getUserGroups]);
-
-  const handleLogout = () => {
-    sessionStorage.removeItem("user");
-    navigate("/");
-    window.location.reload();
-  };
 
   const handleDelete = async () => {
     try {
@@ -95,6 +90,7 @@ export default function Profile() {
   const handleGroupClick = (groupId) => {
     navigate(`/groups/${groupId}`);
   };
+
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(currentUrl);

@@ -37,6 +37,13 @@ export default function UserProvider({ children }) {
     }
   };
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("user");
+    setUser({ id: "", email: "", token: "", password: "" });
+    navigate("/");
+    window.location.reload();
+  };
+
   const removeAccount = async (email, password) => {
     try {
       const token = user.token;
@@ -52,10 +59,7 @@ export default function UserProvider({ children }) {
         headers,
         data: body,
       });
-      sessionStorage.removeItem("user"); // Removes user from session storage after successful deletion
-      setUser({ id: "", email: "", token: "", password: "" });
-      navigate("/");
-      window.location.reload();
+      handleLogout(); // Log out after account deletion
       return response.data;
     } catch (error) {
       throw error;
@@ -121,6 +125,7 @@ export default function UserProvider({ children }) {
         getUserProfile,
         updateUserProfile,
         getUserGroups,
+        handleLogout,
       }}
     >
       {children}

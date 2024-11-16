@@ -13,14 +13,7 @@ import { useUser } from "./UseUser";
 
 export default function Usersidebar() {
   const [showSidebar, setShowSidebar] = useState(false);
-  const { user } = useUser();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    sessionStorage.removeItem("user");
-    navigate("/");
-    window.location.reload();
-  };
+  const { user, handleLogout } = useUser();
 
   return (
     <div

@@ -9,7 +9,7 @@ const GroupPage = () => {
       <Navigation />
       <h1>Group Management</h1>
       <GroupForm />
-      <GroupList />
+      <GroupList fetchType="all" />
     </div>
   );
 };

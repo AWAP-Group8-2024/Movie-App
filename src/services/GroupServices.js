@@ -123,7 +123,7 @@ export const sendJoinRequest = async (groupId) => {
   if (!headers) return;
 
   try {
-    const response = await axios.post(`${API_URL}/join/${groupId}`, {}, { headers });
+    const response = await axios.post(`${API_URL}/${groupId}/join`, {}, { headers });
     return response.data;
   } catch (error) {
     console.error(`Error sending join request to group ${groupId}:`, error);

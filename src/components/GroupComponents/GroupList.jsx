@@ -7,6 +7,7 @@ const GroupList = ({ fetchType }) => {
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,6 +46,8 @@ const GroupList = ({ fetchType }) => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+  if (!groups.length) return <div>No groups found.</div>;
+  if (message) return <div>{message}</div>;
 
   return (
     <div>

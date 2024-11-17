@@ -51,18 +51,27 @@ const JoinGroupForm = () => {
     );
   };
 
-  const handleJoinGroup = async (groupId) => {
-    if (!groupId) {
-      setError('Please select a group to join');
-      return;
-    }
 
+  const handleJoinGroup = async () => {
     try {
-      await sendJoinRequest(groupId);
-      setMessage('Join request sent to group successfully!');
-      navigate(`/group/${groupId}`);
-    } catch (error) {
-      setError(error.message);
+      await sendJoinRequest(selectedGroupId);
+      setMessage('Join request sent successfully.');
+      navigate('/groups/all');
+    } catch (err) {
+      if (err.message === 'User not authenticated') {
+        navigate('/login');
+      } else if (err.message === 'User already in group') {
+        setError('You are already a member of this group.');
+      } else if (err.message === 'Join request already sent') {
+        setError('You have already sent a join request to this group.');
+      }
+      else if (error.message === 'User is the creator of the group') {
+        setError('You are the creator of this group.');
+      }
+      else {
+        setError('Failed to join group.');
+        console.error(err);
+      }
     }
   };
 

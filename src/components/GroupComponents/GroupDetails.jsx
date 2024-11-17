@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Navigation from '../Navigation';
 import { useUser } from "../../UserComponents/useUser"; // Ensure this is the correct path
 import JoinRequestList from './JoinRequestList';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const GroupDetails = () => {
   const navigate = useNavigate();
@@ -17,7 +18,6 @@ const GroupDetails = () => {
   const [showJoinRequest, setShowJoinRequest] = useState(false);
 
   useEffect(() => {
-    console.log("Group ID:", groupId);
     if (groupId) {
       const fetchGroupDetails = async () => {
         try {
@@ -87,39 +87,70 @@ const GroupDetails = () => {
     }
   };
 
-  if (loading || userLoading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-  if (message) return <div>{message}</div>;
+  if (loading || userLoading) return <div className="text-center mt-5">Loading...</div>;
+  if (error) return <div className="alert alert-danger mt-5">{error}</div>;
+  if (message) return <div className="alert alert-success mt-5">{message}</div>;
 
   return (
     <div>
       <Navigation />
-    {message && <p style={{ color: 'green' }}>{message}</p>}
-      <h2>Group Details</h2>
-      
-      {group ? (
-        <div>
-        
-          <h3>{group.name}</h3>
-          <p><strong>Group ID:</strong> {group.id}</p>
-          <p><strong>Description:</strong> {group.description}</p>
-          <p><strong>Creator:</strong> {group.creator_id}</p>
-          <p>More details to come...</p>
+      <div className="container mt-5">
+        <h2 className="mb-4">Group Details</h2>
+        {group ? (
+          <div className="card shadow-sm">
+            <div className="card-body">
+              <h3 className="card-title">{group.name}</h3>
+              <p className="card-text"><strong>Group ID:</strong> {group.id}</p>
+              <p className="card-text"><strong>Description:</strong> {group.description}</p>
+              <p className="card-text"><strong>Creator:</strong> {group.creator_id}</p>
+              <p className="card-text">More details to come...</p>
 
-          <button onClick={handleJoinGroup}>Join Group</button>
-          {isOwner && (
-            <>
-              <button onClick={() => setShowJoinRequest(!showJoinRequest)}>
-                {showJoinRequest ? 'Hide Pending Requests' : 'View Pending Requests'}
-              </button>
-              {showJoinRequest && <JoinRequestList groupId={groupId} />}
-              <button onClick={handleDeleteGroup}>Delete Group</button>
-            </>
-          )}
-        </div>
-      ) : (
-        <div>No group details found.</div>
-      )}
+              {/* Buttons for Join Group and Owner Actions */}
+              <div className="d-flex flex-wrap gap-2 mt-3">
+                {/* Show Join Group button only for non-owners */}
+                {!isOwner && (
+                  <button className="btn btn-primary me-2" onClick={handleJoinGroup}>
+                    Join Group
+                  </button>
+                )}
+
+                {/* Show owner buttons */}
+                {isOwner && (
+                  <>
+                    <button
+                      className={`btn ${showJoinRequest ? 'btn-secondary' : 'btn-info'} me-2`}
+                      onClick={() => setShowJoinRequest(!showJoinRequest)}
+                    >
+                      {showJoinRequest ? 'Hide Pending Requests' : 'Show Pending Requests'}
+                    </button>
+                    <button className="btn btn-danger" onClick={handleDeleteGroup}>
+                      Delete Group
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Conditional rendering of the Pending Join Requests table */}
+              {showJoinRequest && isOwner && (
+                <div className="mt-4">
+                  <h4>Pending Join Requests</h4>
+                  <div className="table-responsive mt-3">
+                    <table className="table table-striped table-hover">
+
+                      <tbody>
+                        {/* Add rows for each join request */}
+                        <JoinRequestList groupId={groupId} />
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="alert alert-warning">No group details found.</div>
+        )}
+      </div>
     </div>
   );
 };

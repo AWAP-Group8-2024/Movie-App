@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { viewPendingRequests, updateJoinRequestStatus } from '../../services/GroupServices'; // Ensure the import path is correct
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const JoinRequestList = ({ groupId }) => {
   const [requests, setRequests] = useState([]);
@@ -37,42 +38,67 @@ const JoinRequestList = ({ groupId }) => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <div className="text-center">Loading...</div>;
   }
 
   if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>;
+    return <div className="alert alert-danger">{error}</div>;
   }
 
   return (
     <div>
-      {message && <p style={{ color: 'green' }}>{message}</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <h3>Join Requests</h3>
+      {message && <div className="alert alert-success">{message}</div>}
+      {error && <div className="alert alert-danger">{error}</div>}
+
       {requests.length > 0 ? (
-        <ul>
-          {requests.map((request) => (
-            <li key={request.id}>
-              <p>Email: {request.email}</p>
-              <p>
-                Name: {request.firstname || 'N/A'} {request.lastname || 'N/A'}
-              </p>
-              <p>Request Date: {new Date(request.request_date).toLocaleString()}</p>
-              <select
-                value={requestStatus}
-                onChange={(e) => setRequestStatus(e.target.value)}
-              >
-                <option value="">Select Status</option>
-                <option value="accepted">Accept</option>
-                <option value="rejected">Reject</option>
-              </select>
-              <button onClick={() => handleGroupRequest(request.id)}>Submit</button>
-            </li>
-          ))}
-        </ul>
+        <div className="table-responsive">
+          <table className="table table-striped">
+            <thead className="thead-dark">
+              <tr>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Request Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {requests.map((request) => (
+                <tr key={request.id}>
+                  <td>{request.email}</td>
+                  <td>{request.firstname || 'N/A'} {request.lastname || 'N/A'}</td>
+                  <td>{new Date(request.request_date).toLocaleString()}</td>
+                  <td>
+                    <select
+                      className="form-select mb-2"
+                      value={requestStatus}
+                      onChange={(e) => setRequestStatus(e.target.value)}
+                    >
+                      <option value="">Select Status</option>
+                      <option value="accepted">Accept</option>
+                      <option value="rejected">Reject</option>
+                    </select>
+                    <button 
+                      className="btn btn-primary mt-2 me-2"
+                      onClick={() => handleGroupRequest(request.id)}
+                      disabled={!requestStatus}
+                    >
+                      Submit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <p>No pending join requests.</p>
       )}
+
+      {/* New Section Above Table for More Information or Actions */}
+      <div className="mb-4">
+        <p>Here you can manage the pending join requests for your group. You can accept or reject requests as needed. Please review the request details and make an informed decision.</p>
+        <p><strong>Tip:</strong> Accept requests from users who align with the group’s mission and values.</p>
+      </div>
     </div>
   );
 };

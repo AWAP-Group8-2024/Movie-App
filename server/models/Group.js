@@ -18,10 +18,10 @@ export const getGroupsInfoByUserId = async (id) => {
   return result;
 };
 
-export const insertNewGroup = async (name, creator_id) => {
+export const insertNewGroup = async (name, description, creator_id) => {
   const result = await pool.query(
-    "INSERT INTO groups (name, creator_id) values ($1, $2) returning *",
-    [name, creator_id]
+    "INSERT INTO groups (name, description, creator_id) values ($1, $2, $3) returning *",
+    [name, description, creator_id]
   );
   return result;
 };
@@ -36,7 +36,7 @@ export const insertUserGroupAssociation = async (group_id, user_id) => {
 
 export const getGroupDetailsById = async (groupId) => {
   const result = await pool.query(
-    "SELECT id, name, creator_id FROM groups WHERE id = $1;",
+    "SELECT id, name, description, creator_id FROM groups WHERE id = $1;",
     [groupId]
   );
   return result.rows[0];

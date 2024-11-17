@@ -43,9 +43,9 @@ export const getGroupByGroupId = async (req, res, next) => {
 export const createNewGroup = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const { name } = req.body;
+    const { name, description } = req.body;
     if (!isGroupNameValid) return next(new ApiError("Invalid group name", 400));
-    const groupResult = await GroupModel.insertNewGroup(name, id);
+    const groupResult = await GroupModel.insertNewGroup(name, description, id);
 
     const group = groupResult.rows[0];
     await GroupModel.insertUserGroupAssociation(group.id, id);

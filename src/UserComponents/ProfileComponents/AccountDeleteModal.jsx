@@ -1,8 +1,8 @@
 import { Form, Button, Modal } from "react-bootstrap";
 
 export default function AccountDeleteModal({
-  showModal,
-  setShowModal,
+  showDeleteModal,
+  setShowDeleteModal,
   handleDelete,
   userConfirm,
   setUserConfirm,
@@ -15,7 +15,11 @@ export default function AccountDeleteModal({
     }));
   };
   return (
-    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+    <Modal
+      show={showDeleteModal}
+      onHide={() => setShowDeleteModal(false)}
+      centered
+    >
       <Modal.Header closeButton>
         <Modal.Title>Confirm Account Deletion</Modal.Title>
       </Modal.Header>
@@ -51,7 +55,7 @@ export default function AccountDeleteModal({
         >
           Delete
         </Button>
-        <Button variant="secondary" onClick={() => setShowModal(false)}>
+        <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
           Cancel
         </Button>
       </Modal.Footer>

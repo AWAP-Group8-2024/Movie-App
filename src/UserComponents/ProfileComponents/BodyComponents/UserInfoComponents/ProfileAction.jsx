@@ -2,7 +2,7 @@ import { Row } from "react-bootstrap";
 import { DeleteButton, LogoutButton, SaveButton, CancelButton } from "./Button";
 export default function ProfileAction({
   handleLogout,
-  setShowModal,
+  setShowDeleteModal,
   isEditing,
   handleSave,
   handleCancel,
@@ -11,7 +11,7 @@ export default function ProfileAction({
     <Row className="mt-3 ps-3 d-flex">
       {!isEditing ? (
         <div className="d-flex justify-content-between">
-          <DeleteButton setShowModal={setShowModal} />
+          <DeleteButton setShowDeleteModal={setShowDeleteModal} />
           <LogoutButton handleLogout={handleLogout} />
         </div>
       ) : (

@@ -11,7 +11,7 @@ import {
   Button,
   ListGroup,
 } from "react-bootstrap";
-import { useUser } from "../UserComponents/UseUser";
+import { useUser } from "../UserComponents/useUser";
 import { UserDropdown } from "./NavComponents";
 
 export default function Navigation() {
@@ -120,9 +120,7 @@ export default function Navigation() {
               <NavDropdown.Item as={Link} to="/groups/join">
                 Join Group
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/groups/create">
-                Create Group
-              </NavDropdown.Item>
+             
             </NavDropdown>
           </Nav>
           <Form

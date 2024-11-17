@@ -54,7 +54,7 @@ const GroupDetails = () => {
     try {
       await deleteGroupByGroupId(groupId);
       setMessage('Group deleted successfully.');
-      navigate('/groups');
+      navigate('/groups/user');
     } catch (err) {
       if (err.message === 'User not authenticated') {
         navigate('/login');
@@ -93,8 +93,10 @@ const GroupDetails = () => {
 
   return (
     <div>
+
       <Navigation />
       <div className="container mt-5">
+             
         <h2 className="mb-4">Group Details</h2>
         {group ? (
           <div className="card shadow-sm">

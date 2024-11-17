@@ -67,8 +67,7 @@ function App() {
           {/* Profile page */}
           <Route path="/list/:condition" element={<ListCategories />} />
           <Route path="/filtered/:condition" element={<ListFiltered />} />
-          <Route path="/groups" element={<GroupPage />} />
-          <Route path="/groups/create" element={<GroupForm />} />
+          <Route path="/groups/all" element={<GroupPage fetchType='all'/>} />
           <Route path="/groups/join" element={<JoinGroupForm />} />
           
           <Route path="/groups/:groupId" element={<GroupDetail />} />

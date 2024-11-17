@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { viewPendingRequests, updateJoinRequestStatus } from '../../services/GroupServices'; // Ensure the import path is correct
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
+import Navigation from '../Navigation';
 
 const JoinRequestList = ({ groupId }) => {
+  const navigate = useNavigate();
   const [requests, setRequests] = useState([]);
+  const [filteredRequests, setFilteredRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState('');
   const [requestStatus, setRequestStatus] = useState('');
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
   useEffect(() => {
     const fetchRequests = async () => {
       try {
         const response = await viewPendingRequests(groupId);
         setRequests(response.requests); // Adjusting to use the correct data structure
+        setFilteredRequests(response.requests); // Initialize filtered requests
       } catch (error) {
         setError('Failed to fetch join requests');
         console.error('Error fetching join requests:', error);
@@ -25,12 +31,26 @@ const JoinRequestList = ({ groupId }) => {
     fetchRequests();
   }, [groupId]);
 
+  // Filter the requests based on the group name only
+  useEffect(() => {
+    if (searchQuery) {
+      const filtered = requests.filter(request => {
+        // Filter by group name only (assuming `group.name` is a property)
+        return request.group_name?.toLowerCase().includes(searchQuery.toLowerCase());
+      });
+      setFilteredRequests(filtered);
+    } else {
+      setFilteredRequests(requests);
+    }
+  }, [searchQuery, requests]); // Re-run when searchQuery or requests change
+
   const handleGroupRequest = async (requestId) => {
     try {
       await updateJoinRequestStatus(groupId, requestId, requestStatus);
       const response = await viewPendingRequests(groupId);
       setRequests(response.requests);
-      setMessage(`Request ${requestStatus} successfully`);
+      setMessage('Request status updated successfully');
+      navigate(`/groups/${groupId}`); // Redirect to groups page after updating request status
     } catch (error) {
       setError('Failed to update request status');
       console.error('Error details:', error.response.data);
@@ -50,7 +70,8 @@ const JoinRequestList = ({ groupId }) => {
       {message && <div className="alert alert-success">{message}</div>}
       {error && <div className="alert alert-danger">{error}</div>}
 
-      {requests.length > 0 ? (
+
+      {filteredRequests.length > 0 ? (
         <div className="table-responsive">
           <table className="table table-striped">
             <thead className="thead-dark">
@@ -62,7 +83,7 @@ const JoinRequestList = ({ groupId }) => {
               </tr>
             </thead>
             <tbody>
-              {requests.map((request) => (
+              {filteredRequests.map((request) => (
                 <tr key={request.id}>
                   <td>{request.email}</td>
                   <td>{request.firstname || 'N/A'} {request.lastname || 'N/A'}</td>

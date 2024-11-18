@@ -1,6 +1,7 @@
 import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { xml2json } from "xml-js";
+//test
 
 function fetchMovieAPI(API, setter) {
     fetch(API)

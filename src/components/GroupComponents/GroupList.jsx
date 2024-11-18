@@ -18,7 +18,15 @@ const GroupList = ({ fetchType }) => {
         setLoading(true);
         setError(null);
 
-        let data;
+          let data;
+        const user = JSON.parse(sessionStorage.getItem('user')); // Get user data from sessionStorage
+        const userId = user?.id; // Assuming the user object has the id property
+
+        if (!userId) {
+          // If no user ID, redirect to login
+          navigate('/login');
+          return;
+        }
 
         // Fetch groups based on fetchType
         if (fetchType === 'all') {
@@ -26,7 +34,6 @@ const GroupList = ({ fetchType }) => {
           data = await getAllGroups();
           
           // Fetch the groups the user has joined (for comparison)
-          const userId = 1; // Replace with actual user ID
           const userGroupData = await getGroupsByUserId(userId);
           setUserGroups(userGroupData); // Store the user's joined groups
 

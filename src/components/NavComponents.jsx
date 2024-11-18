@@ -30,7 +30,7 @@ export const UserDropdown = ({ user, handleLogout }) => {
         </span>
         <label htmlFor="">My Profile</label>
       </NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/groups/all" className="dropdown-item">
+      <NavDropdown.Item as={Link} to="/groups/user" className="dropdown-item">
         <span className="me-2">
           <IoPeopleSharp size={16} />
         </span>

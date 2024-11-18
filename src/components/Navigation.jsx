@@ -11,7 +11,7 @@ import {
   Button,
   ListGroup,
 } from "react-bootstrap";
-import { useUser } from "../UserComponents/useUser";
+import { useUser } from "../UserComponents/UseUser";
 import { UserDropdown } from "./NavComponents";
 
 export default function Navigation() {

@@ -1,8 +1,11 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import { FaEye, FaStar } from 'react-icons/fa';
+import { FaEye, FaStar, FaRegHeart, FaShare, FaRegBookmark } from 'react-icons/fa';
 import Navigation from './Navigation';
+import TVShowCredits from './TVShowCredits';
+import RecommendedShows from './RecommendedShows';
+import SocialSharing from './SocialSharing';
 import './TVShowDetails.css';
 
 export default function TVShowDetails() {
@@ -13,6 +16,7 @@ export default function TVShowDetails() {
     const [error, setError] = useState(null);
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
+    const [showShareOptions, setShowShareOptions] = useState(false);
 
     useEffect(() => {
         fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
@@ -44,7 +48,7 @@ export default function TVShowDetails() {
     if (!show) return (
         <div>
             <Navigation />
-            <Container className="loading-container text-dark">
+            <Container className="loading-container">
                 <div className="loader">Loading...</div>
             </Container>
         </div>
@@ -204,7 +208,7 @@ export default function TVShowDetails() {
                                         <div key={episode.id} className="episode-card">
                                             <div className="episode-number">Episode {episode.episode_number}</div>
                                             <h4>{episode.name}</h4>
-                                            <p>{episode.overview ? episode.overview : "No information available for this episode on TMDB."}</p>
+                                            <p>{episode.overview || "No information available for this episode on TMDB."}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -219,7 +223,6 @@ export default function TVShowDetails() {
     return (
         <div className="tvshow-details-page">
             <Navigation />
-
             <Container className="tvshow-detail-container">
                 <Row>
                     <Col md={3} className="sticky-column">
@@ -230,6 +233,22 @@ export default function TVShowDetails() {
                                     alt={show.name}
                                     className="show-poster"
                                 />
+                                <div className="action-buttons">
+                                    <button className="action-btn">
+                                        <FaRegHeart /> <span>0</span>
+                                    </button>
+                                    <button className="action-btn" onClick={() => setShowShareOptions(!showShareOptions)}>
+                                        <FaShare /> <span>Share</span>
+                                    </button>
+                                    <button className="action-btn">
+                                        <FaRegBookmark /> <span>Watchlist</span>
+                                    </button>
+                                </div>
+                                {showShareOptions && (
+                                    <div className="social-buttons">
+                                        <SocialSharing url={window.location.href} message={show.name} />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </Col>
@@ -288,7 +307,15 @@ export default function TVShowDetails() {
                                 </div>
                             </div>
 
+                            <div className="cast-crew">
+                                <TVShowCredits showId={id} />
+                            </div>
+
                             {selectedSeason ? renderSeasonDetails() : renderSeasonsList()}
+
+                            <div className="recommended-section">
+                                <RecommendedShows showId={id} />
+                            </div>
 
                             <section className="review-section">
                                 <h3>Add Your Review</h3>
@@ -304,6 +331,7 @@ export default function TVShowDetails() {
                                             as="textarea"
                                             rows={4}
                                             placeholder="Write your review here..."
+                                            className="dark-textarea"
                                         />
                                     </Form.Group>
 
@@ -314,6 +342,7 @@ export default function TVShowDetails() {
                                                 <Form.Control
                                                     type="text"
                                                     placeholder="Your name"
+                                                    className="dark-input"
                                                 />
                                             </Form.Group>
                                         </Col>
@@ -323,6 +352,7 @@ export default function TVShowDetails() {
                                                 <Form.Control
                                                     type="email"
                                                     placeholder="Your email"
+                                                    className="dark-input"
                                                 />
                                             </Form.Group>
                                         </Col>
@@ -336,7 +366,7 @@ export default function TVShowDetails() {
                                         />
                                     </Form.Group>
 
-                                    <Button variant="primary" className="submit-review-btn">
+                                    <Button variant="primary" className="submit-btn">
                                         Submit Review
                                     </Button>
                                 </Form>

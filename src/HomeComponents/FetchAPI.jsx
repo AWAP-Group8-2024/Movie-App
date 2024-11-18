@@ -2,6 +2,18 @@ import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { xml2json } from "xml-js";
 
+function shuffle(arr) {
+    let storage = null;
+    let randomNumber = null;
+    for (let i = 0; i < arr.length; i++) {
+        randomNumber = Math.floor(Math.random() * arr.length);
+        storage = arr[randomNumber];
+        arr[randomNumber] = arr[i];
+        arr[i] = storage
+    }
+    return arr;
+}
+
 function fetchMovieAPI(API, setter) {
     fetch(API)
     .then(res => res.json())
@@ -102,44 +114,45 @@ function fetchFinKinoEvents(API, setter) {
     fetch(API)
     .then(res => res.text())
     .then(xml => {
-        const items = JSON.parse(xml2json(xml, {compact: true})).Events.Event;
+        const items = shuffle(JSON.parse(xml2json(xml, {compact: true})).Events.Event);
+        console.log(items);
 
-        async function getLink(title) {
-            fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${title}&page=1`)
+        async function getLink(item) {
+            fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${item.OriginalTitle._text}&page=1`)
             .then(res => res.json())
             .then(json => {
                 if (json.results.length > 0) {
                     const id = json.results[0].id;
                     window.location.replace(`/movie/${id}`);
                 } else {
-                    
+                    window.location.replace(`/finnkino/error/${item.ID._text}`);
                 }
             }) 
         }
 
         setter(
             <Row>
-                <Col lg={2} md={3} xs={4} className="text-center p-2 text-decoration-none text-dark" as={Link} onClick={() => {getLink(items[0].OriginalTitle._text)}}>
+                <Col lg={2} md={3} xs={4} className="text-center p-2 text-decoration-none text-dark" as={Link} onClick={() => {getLink(items[0])}}>
                     <img src={items[0].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
                     {items[0].Title._text}
                 </Col>
-                <Col lg={2} md={3} xs={4} className="text-center p-2 text-decoration-none text-dark" as={Link}  onClick={() => {getLink(items[1].OriginalTitle._text)}}>
+                <Col lg={2} md={3} xs={4} className="text-center p-2 text-decoration-none text-dark" as={Link}  onClick={() => {getLink(items[1])}}>
                     <img src={items[1].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
                     {items[1].Title._text}
                 </Col>
-                <Col lg={2} md={3} xs={4} className="text-center p-2 text-decoration-none text-dark" as={Link}  onClick={() => {getLink(items[2].OriginalTitle._text)}}>
+                <Col lg={2} md={3} xs={4} className="text-center p-2 text-decoration-none text-dark" as={Link}  onClick={() => {getLink(items[2])}}>
                     <img src={items[2].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
                     {items[2].Title._text}
                 </Col>
-                <Col lg={2} xs={0} md={3} className="text-center p-2 d-none d-md-block text-decoration-none text-dark" as={Link}  onClick={() => {getLink(items[3].OriginalTitle._text)}}>
+                <Col lg={2} xs={0} md={3} className="text-center p-2 d-none d-md-block text-decoration-none text-dark" as={Link}  onClick={() => {getLink(items[3])}}>
                     <img src={items[3].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
                     {items[3].Title._text}
                 </Col>
-                <Col lg={2} xs={0} className="text-center p-2 d-none d-lg-block text-decoration-none text-dark" as={Link}  onClick={() => {getLink(items[4].OriginalTitle._text)}}>
+                <Col lg={2} xs={0} className="text-center p-2 d-none d-lg-block text-decoration-none text-dark" as={Link}  onClick={() => {getLink(items[4])}}>
                     <img src={items[4].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
                     {items[4].Title._text}
                 </Col>
-                <Col lg={2} xs={0} className="text-center p-2 d-none d-lg-block text-decoration-none text-dark" as={Link}  onClick={() => {getLink(items[5].OriginalTitle._text)}}>
+                <Col lg={2} xs={0} className="text-center p-2 d-none d-lg-block text-decoration-none text-dark" as={Link}  onClick={() => {getLink(items[5])}}>
                     <img src={items[5].Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
                     {items[5].Title._text}
                 </Col>

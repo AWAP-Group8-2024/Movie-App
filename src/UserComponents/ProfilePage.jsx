@@ -4,9 +4,10 @@ import { useUser } from "./UseUser";
 import Navigation from "../components/Navigation.jsx";
 import { Container } from "react-bootstrap";
 import AccountDeleteModal from "./ProfileComponents/AccountDeleteModal.jsx";
+import CreateGroupModal from "./ProfileComponents/CreateGroupModal";
 import ProfileBody from "./ProfileComponents/ProfileBody.jsx";
 
-export default function Profile() {
+export default function ProfilePage() {
   const {
     user,
     removeAccount,
@@ -14,6 +15,7 @@ export default function Profile() {
     updateUserProfile,
     getUserGroups,
     handleLogout,
+    createNewGroup,
   } = useUser();
   const navigate = useNavigate();
 
@@ -27,7 +29,9 @@ export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
   const [userConfirm, setUserConfirm] = useState({ email: "", password: "" });
-  const [showModal, setShowModal] = useState(false);
+  const [newGroup, setNewGroup] = useState({ name: "", description: "" });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
 
   useEffect(() => {
     if (profileId) {
@@ -107,6 +111,20 @@ export default function Profile() {
       alert("Failed to share the URL");
     }
   };
+  const handleGroupSubmit = async () => {
+    console.log(newGroup);
+    if (!newGroup.name.trim()) {
+      alert("Group name is required.");
+      return;
+    }
+    try {
+      await createNewGroup(newGroup);
+      setShowCreateGroupModal(false);
+      alert("Group created successfully!");
+    } catch (error) {
+      alert("Failed to create a group");
+    }
+  };
 
   return (
     <Container>
@@ -120,8 +138,7 @@ export default function Profile() {
         handleSave={handleSave}
         handleCancel={handleCancel}
         handleLogout={handleLogout}
-        showModal={showModal}
-        setShowModal={setShowModal}
+        setShowDeleteModal={setShowDeleteModal}
         handleDelete={handleDelete}
         userConfirm={userConfirm}
         setUserConfirm={setUserConfirm}
@@ -129,13 +146,21 @@ export default function Profile() {
         groupData={groupData}
         handleGroupClick={handleGroupClick}
         handleShare={handleShare}
+        setShowCreateGroupModal={setShowCreateGroupModal}
       />
       <AccountDeleteModal
-        showModal={showModal}
-        setShowModal={setShowModal}
+        showDeleteModal={showDeleteModal}
+        setShowDeleteModal={setShowDeleteModal}
         handleDelete={handleDelete}
         userConfirm={userConfirm}
         setUserConfirm={setUserConfirm}
+      />
+      <CreateGroupModal
+        showCreateGroupModal={showCreateGroupModal}
+        setShowCreateGroupModal={setShowCreateGroupModal}
+        newGroup={newGroup}
+        setNewGroup={setNewGroup}
+        handleGroupSubmit={handleGroupSubmit}
       />
     </Container>
   );

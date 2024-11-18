@@ -10,16 +10,21 @@ export default function ProfileBody({
   handleSave,
   handleCancel,
   handleLogout,
-  setShowModal,
+  setShowDeleteModal,
   setIsEditing,
   groupData,
   handleGroupClick,
   handleShare,
+  setShowCreateGroupModal,
 }) {
   return (
     <div className="mt-4">
       <Row>
-        <GroupCard groupData={groupData} handleGroupClick={handleGroupClick} />
+        <GroupCard
+          groupData={groupData}
+          handleGroupClick={handleGroupClick}
+          setShowCreateGroupModal={setShowCreateGroupModal}
+        />
         <UserInfoCard
           isOwnProfile={isOwnProfile}
           setIsEditing={setIsEditing}
@@ -28,7 +33,7 @@ export default function ProfileBody({
           editData={editData}
           handleInputChange={handleInputChange}
           handleLogout={handleLogout}
-          setShowModal={setShowModal}
+          setShowDeleteModal={setShowDeleteModal}
           handleSave={handleSave}
           handleCancel={handleCancel}
           handleShare={handleShare}

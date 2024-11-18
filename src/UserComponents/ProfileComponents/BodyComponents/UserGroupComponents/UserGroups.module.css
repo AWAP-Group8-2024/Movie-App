@@ -1,0 +1,9 @@
+.groupListContainer {
+  max-height: 330px;
+  overflow-y: auto;
+}
+
+.groupListContainer::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}

@@ -114,6 +114,24 @@ export default function UserProvider({ children }) {
     }
   };
 
+  const createNewGroup = async (newGroup) => {
+    try {
+      const token = user.token;
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await axios.post(`${url}/group/create`, newGroup, {
+        headers,
+      });
+      window.location.reload();
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -126,6 +144,7 @@ export default function UserProvider({ children }) {
         updateUserProfile,
         getUserGroups,
         handleLogout,
+        createNewGroup,
       }}
     >
       {children}

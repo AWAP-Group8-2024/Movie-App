@@ -32,7 +32,21 @@ export const UserGroupViewButton = ({ group, handleGroupClick }) => {
         size="sm"
         onClick={() => handleGroupClick(group.id)}
       >
-        View Group
+        View
+      </Button>
+    </Col>
+  );
+};
+
+export const UserGroupDeleteButton = ({ group, handleGroupClick }) => {
+  return (
+    <Col xs={2} className="d-flex align-items-center p-0">
+      <Button
+        variant="outline-danger"
+        size="sm"
+        onClick={() => handleGroupClick(group.id)}
+      >
+        Delete
       </Button>
     </Col>
   );

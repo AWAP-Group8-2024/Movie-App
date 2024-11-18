@@ -34,7 +34,14 @@ export const getGroupByGroupId = async (req, res, next) => {
 
     return res
       .status(200)
-      .json(createGroupObj(group.id, group.name, group.creator_id));
+      .json(
+        createGroupObj(
+          group.id,
+          group.name,
+          group.description,
+          group.creator_id
+        )
+      );
   } catch (error) {
     return next(error);
   }
@@ -52,7 +59,14 @@ export const createNewGroup = async (req, res, next) => {
 
     return res
       .status(201)
-      .json(createGroupObj(group.id, group.name, group.creator_id));
+      .json(
+        createGroupObj(
+          group.id,
+          group.name,
+          group.description,
+          group.creator_id
+        )
+      );
   } catch (error) {
     return next(error);
   }
@@ -131,10 +145,11 @@ export const updateJoinRequestStatus = async (req, res) => {
   }
 };
 
-export const createGroupObj = (id, name, creator_id) => {
+export const createGroupObj = (id, name, description, creator_id) => {
   return {
     id: id,
     name: name,
+    description: description,
     creator_id: creator_id,
   };
 };

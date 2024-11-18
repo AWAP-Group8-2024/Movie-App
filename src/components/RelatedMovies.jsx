@@ -47,9 +47,9 @@ function RelatedMovies({ movieId }) {
   return (
     <div>
       <h2>Recommended For You</h2>
-      <br/>
+      <br />
       <Slider {...sliderSettings}>
-        {console.log(relatedMovies)}
+        {/* {console.log(relatedMovies)} */}
         {relatedMovies.map((movie) => (
           <div key={movie.id} style={{ padding: "10px", textAlign: "center" }}>
             <img

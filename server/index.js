@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import popularRouter from "./routers/PopularRouter.js";
+import favoriteRouter from "./routers/FavoriteRouter.js";
 import userRouter from "./routers/UserRouter.js";
 import groupRouter from "./routers/GroupRouter.js";
 
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/user", userRouter);
-app.use("/popular", popularRouter);
+app.use("/favorite", favoriteRouter);
 app.use("/group", groupRouter);
 
 // Global Error handling middleware

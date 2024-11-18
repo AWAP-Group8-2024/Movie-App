@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 function MovieCredits({ movieId }) {
   const [topCast, setTopCast] = useState([]);
@@ -6,7 +6,9 @@ function MovieCredits({ movieId }) {
 
   useEffect(() => {
     const fetchCredits = async () => {
-      const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${process.env.REACT_APP_API_KEY}`);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${process.env.REACT_APP_API_KEY}`
+      );
       const data = await response.json();
 
       // Sort cast by popularity and take top 3-4
@@ -15,7 +17,9 @@ function MovieCredits({ movieId }) {
 
       // Sort crew by popularity and filter for main departments, take top 3-4
       const sortedCrew = data.crew
-        .filter(member => ["Director", "Producer", "Screenplay", "Writer"].includes(member.job))
+        .filter((member) =>
+          ["Director", "Producer", "Screenplay", "Writer"].includes(member.job)
+        )
         .sort((a, b) => b.popularity - a.popularity);
       setTopCrew(sortedCrew.slice(0, 4));
     };
@@ -25,17 +29,25 @@ function MovieCredits({ movieId }) {
 
   return (
     <div>
-      <p><strong>Top Cast Members</strong></p>
+      <p>
+        <strong>Top Cast Members</strong>
+      </p>
       <ul>
-        {topCast.map(castMember => (
-          <li key={castMember.id}>{castMember.name} as {castMember.character}</li>
+        {topCast.map((castMember) => (
+          <li key={`cast-${castMember.id}`}>
+            {castMember.name} as {castMember.character}
+          </li>
         ))}
       </ul>
 
-      <p><strong>Key Crew Members</strong></p>
+      <p>
+        <strong>Key Crew Members</strong>
+      </p>
       <ul>
-        {topCrew.map(crewMember => (
-          <li key={crewMember.id}>{crewMember.name} - {crewMember.job}</li>
+        {topCrew.map((crewMember) => (
+          <li key={`crew-${crewMember.id}-${crewMember.job}`}>
+            {crewMember.name} - {crewMember.job}
+          </li>
         ))}
       </ul>
     </div>

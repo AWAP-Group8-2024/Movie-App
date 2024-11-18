@@ -45,7 +45,8 @@ INSERT INTO account (email, password) VALUES ('test4@123.com', '$2b$10$LRr/wfziz
 INSERT INTO account (email, password) VALUES ('test5@123.com', '$2b$10$HqXkzyANdNq0.0CLvqVHWeDSJSuSYyv9y17G8xNs5hZIdIxFK/ZhK');
 INSERT INTO account (email, password) VALUES ('test6@123.com', '$2b$10$yiouJ7CNI1Qf4tswmc8Wr.4gdGXzVmvyTnFwwQDzqsTz/ulynPNuy');
 
-INSERT INTO groups  (name, creator_id) VALUES ('group1', 1), ('group2', 2), ('group3', 3);
+INSERT INTO groups  (name, description, creator_id) 
+VALUES ('group1', 'group1 desc', 1), ('group2','group2 desc', 2), ('group3', 'group1 desc', 3);
 
 INSERT INTO group_account (group_id, account_id) VALUES (1, 1);
 INSERT INTO group_account (group_id, account_id) VALUES (1, 2);

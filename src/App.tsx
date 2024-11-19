@@ -19,6 +19,7 @@ import GroupForm from "./components/GroupComponents/GroupForm";
 import GroupList from "./components/GroupComponents/GroupList";
 import JoinGroupForm from "./components/GroupComponents/JoinGroupForm";
 import FinKinoMovieError from "./components/FinKinoMovieError";
+import ListFinKino from "./components/ListFinKino";
 function App() {
   // return (
   //   <div className="App">
@@ -74,7 +75,9 @@ function App() {
           <Route path="/groups/:groupId" element={<GroupDetail />} />
           <Route path="/groups/all" element={<GroupList fetchType="all" />} />
           <Route path="/groups/user" element={<GroupList fetchType="user" />} />
+
           <Route path="/finnkino/error/:id" element={<FinKinoMovieError />}/>
+          <Route path="/finnkino/list" element={<ListFinKino />}/>
         </Routes>
       </UserProvider>
     </BrowserRouter>

@@ -14,7 +14,7 @@ export default function FinKinoMovies() {
                 <Col className="text-start fw-bold">
                     Watch in FinKino
                 </Col>
-                <Col className="text-end text-decoration-none text-dark" as={Link}>
+                <Col className="text-end text-decoration-none text-dark" as={Link} to={`/finnkino/list?page=1`}>
                     {'View all ->'}
                 </Col>
             </Row>

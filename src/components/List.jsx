@@ -5,9 +5,13 @@ import { Row, Col, Container, Accordion, Button } from "react-bootstrap";
 import { movieGenres } from "./movieGenres.js";
 import { tvGenres } from "./tvGenres";
 import { FaRegStar, FaStar } from "react-icons/fa";
+import { getLink } from "../HomeComponents/FetchAPI";
 
 export default function List({ items, total_pages }) {
-    const { condition } =  useParams();
+    let { condition } = useParams();
+    if (!condition) {
+        condition = '';
+    }
     const location = useLocation();
     const searchQuery = new URLSearchParams(location.search);
     const page = +searchQuery.get('page');
@@ -119,10 +123,40 @@ export default function List({ items, total_pages }) {
         }
     }
 
-    useEffect(createBody, []);
-    return (
-        <div>
-            <Navigation />
+    function createBodyFinKino() {
+        if (total_pages == -1) {
+            setBody(<div>Failed to fetch. Try again later</div>);
+            return;
+        }
+        let setter = [];
+        items.forEach(element => {
+            setter.push(
+                <Col xs={6} md={3} className="p-2" as={Link} onClick={() => {getLink(element)}}>
+                    <div className="text-decoration-none text-dark border border-1 border-dark rounded p-2 text-center">
+                        <img src={element.Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
+                        {element.Title._text}
+                    </div>
+                </Col> 
+            );
+        });
+
+        if (items.length == 0) {
+            setBody(<div>No results were found.</div>);
+        } else {
+            setBody(
+                <Container>
+                    <Row>
+                        {setter}
+                    </Row>
+                </Container>
+            );
+        }
+    }
+
+    let filters = null;
+
+    if (!window.location.href.includes('finnkino')) {
+        filters = (
             <Accordion defaultActiveKey={genreIdList.length === 0 && (currentYear == '' || currentYear == null) && rating === 0 ? '' : '0'}>
                 <Accordion.Item eventKey="0">
                     <Accordion.Header><Col className="fs-3">Filters</Col></Accordion.Header>
@@ -165,6 +199,62 @@ export default function List({ items, total_pages }) {
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
+        )
+    }
+
+    useEffect(() => {
+        if (window.location.href.includes('finnkino')) {
+            createBodyFinKino();
+        } else {
+            createBody();
+        }
+    }, []);
+    return (
+        <div>
+            <Navigation />
+            {/* <Accordion defaultActiveKey={genreIdList.length === 0 && (currentYear == '' || currentYear == null) && rating === 0 ? '' : '0'}>
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header><Col className="fs-3">Filters</Col></Accordion.Header>
+                    <Accordion.Body>
+                        <Row className="row-cols-auto">
+                            <Col className="fs-4">
+                                Genres:
+                            </Col>
+                        </Row>
+                        <Row className="row-cols-auto">
+                            {filterGenres}
+                        </Row>
+                        <Row className="row-cols-auto">
+                            <Col className="fs-4">
+                                Release year:
+                            </Col>
+                        </Row>
+                        <Row className="row-cols-auto">
+                            {filterYear}
+                        </Row>
+                        <Row className="row-cols-auto">
+                            <Col className="fs-4">
+                                Rating:
+                            </Col>
+                        </Row>
+                        <Row className="row-cols-auto">
+                            <Col className="fs-4">{stars}</Col>
+                        </Row>
+                        <Row className="justify-content-center row-cols-auto">
+                            <Col>
+                                <Button variant="outline-dark" disabled={searchButton} onClick={() => {
+                                    if (condition.includes('tv')) {
+                                        window.location.replace(`/filtered/tv?genres=${genreIdList.join(',')}&year=${year}&rating=${rating}&page=1`)
+                                    } else {
+                                        window.location.replace(`/filtered/movie?genres=${genreIdList.join(',')}&year=${year}&rating=${rating}&page=1`)
+                                    }
+                                }}>Show results</Button>
+                            </Col>
+                        </Row>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion> */}
+            {filters}
             {body}
             {turnPage}
         </div>

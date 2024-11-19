@@ -112,6 +112,14 @@ export default function Navigation() {
               >
                 Popular TV shows
               </NavDropdown.Item>
+              <NavDropdown.Item
+                as={Link}
+                onClick={() =>
+                  window.location.replace("/finnkino/list?page=1")
+                }
+              >
+                FinnKino
+              </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Groups" id="groups-nav-dropdown">
               <NavDropdown.Item as={Link} to="/groups/all">

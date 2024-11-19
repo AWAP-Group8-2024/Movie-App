@@ -14,6 +14,19 @@ function shuffle(arr) {
     return arr;
 }
 
+async function getLink(item) {
+    fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${item.OriginalTitle._text}&page=1`)
+    .then(res => res.json())
+    .then(json => {
+        if (json.results.length > 0) {
+            const id = json.results[0].id;
+            window.location.replace(`/movie/${id}`);
+        } else {
+            window.location.replace(`/finnkino/error/${item.ID._text}`);
+        }
+    }) 
+}
+
 function fetchMovieAPI(API, setter) {
     fetch(API)
     .then(res => res.json())
@@ -115,20 +128,6 @@ function fetchFinKinoEvents(API, setter) {
     .then(res => res.text())
     .then(xml => {
         const items = shuffle(JSON.parse(xml2json(xml, {compact: true})).Events.Event);
-        console.log(items);
-
-        async function getLink(item) {
-            fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${item.OriginalTitle._text}&page=1`)
-            .then(res => res.json())
-            .then(json => {
-                if (json.results.length > 0) {
-                    const id = json.results[0].id;
-                    window.location.replace(`/movie/${id}`);
-                } else {
-                    window.location.replace(`/finnkino/error/${item.ID._text}`);
-                }
-            }) 
-        }
 
         setter(
             <Row>
@@ -161,4 +160,4 @@ function fetchFinKinoEvents(API, setter) {
     })
 }
 
-export { fetchMovieAPI, fetchShowAPI, fetchFinKinoEvents };
+export { fetchMovieAPI, fetchShowAPI, fetchFinKinoEvents, getLink };

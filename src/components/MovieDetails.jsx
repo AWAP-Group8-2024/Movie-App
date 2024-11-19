@@ -1,6 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { addToFavorite } from "../Services/favoriteServices.js";
+import {
+  addToFavorite,
+  checkContentById,
+} from "../Services/favoriteServices.js";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { FaEye, FaRegHeart, FaShare, FaRegBookmark } from "react-icons/fa";
 
@@ -8,7 +11,7 @@ import RelatedMovies from "./RelatedMovies.jsx";
 import MovieCredits from "./MovieCredits.jsx";
 import SocialSharing from "./SocialSharing.jsx";
 import "./MovieDetail.css";
-
+import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import Navigation from "./Navigation";
 
 function formatRuntime(minutes) {
@@ -26,25 +29,34 @@ export default function MovieDetails() {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [showShareOptions, setShowShareOptions] = useState(false);
+  const [contentInFavorite, setContentInFavorite] = useState(false);
 
   useEffect(() => {
     fetch(
       `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
     )
       .then((res) => res.json())
-      .then((data) => setMovie(data))
+      .then((data) => {
+        setMovie(data);
+        checkIfContentInFavoriteById(data);
+      })
       .catch((error) => console.error("Error fetching movie details:", error));
   }, [id]);
-
-  if (!movie) return <Container className="text-dark">Loading...</Container>;
 
   const shareUrl = `${process.env.REACT_APP_API_URL}/movie/${id}`;
   const shareMessage = `Check out "${movie.title}" on MovieApp!`;
 
-  const handleAddToFavorites = async () => {
-    await addToFavorite(movie);
+  const checkIfContentInFavoriteById = async (movie) => {
+    const isFavorite = await checkContentById(movie);
+    setContentInFavorite(isFavorite);
   };
 
+  const handleAddToFavorites = async () => {
+    await addToFavorite(movie);
+    setContentInFavorite(true);
+  };
+
+  if (!movie) return <Container className="text-dark">Loading...</Container>;
   return (
     <div>
       <Navigation />
@@ -71,7 +83,15 @@ export default function MovieDetails() {
                     <FaShare /> <span> Share</span>
                   </button>
                   <button className="action-btn" onClick={handleAddToFavorites}>
-                    <FaRegBookmark /> <span>Favorite</span>
+                    {contentInFavorite ? (
+                      <>
+                        <GoBookmarkFill /> <span>Favorites</span>
+                      </>
+                    ) : (
+                      <>
+                        <GoBookmark /> <span>Favorites</span>
+                      </>
+                    )}
                   </button>
                 </div>
 
@@ -92,7 +112,8 @@ export default function MovieDetails() {
 
               <div className="movie-meta">
                 <div className="rating-stars">
-                  {renderStars(movie.vote_average)} ({movie.vote_average}/10)
+                  {renderStars(movie.vote_average)} (
+                  {movie.vote_average.toFixed(1)}/10)
                 </div>
 
                 <div className="cont-movie-details">

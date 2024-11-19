@@ -5,6 +5,6 @@ import * as FavoriteController from "../controllers/FavoriteController.js";
 const router = Router();
 
 router.get("/", auth, FavoriteController.getFavoriteList);
-router.post("/addFavorite", auth, FavoriteController.insertContentToFavorite);
+router.post("/add", auth, FavoriteController.insertContentToFavorite);
 
 export default router;

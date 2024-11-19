@@ -11,8 +11,49 @@ const getUserFromSession = () => {
 export const addToFavorite = async (movie) => {
   try {
     const user = getUserFromSession();
+    if (user.token === "") {
+      alert("Please log in to add movies to your favorites.");
+      return;
+    }
     const token = user.token;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
 
+    const body = {
+      imdb_id: movie.imdb_id,
+      title: movie.title,
+      media_type: "movie",
+      poster_path: movie.poster_path,
+    };
+
+    const response = await axios.post(`${url}/favorite/add`, body, {
+      headers,
+    });
+
+    if (response.status === 200) {
+      alert("Movie added to favorites!");
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      alert("You need to log in to perform this action.");
+    } else if (error.response && error.response.status === 403) {
+      alert("Your session is invalid. Please log in again.");
+    } else {
+      alert("An unexpected error occurred. Please try again later.");
+    }
+    console.error("Error adding to favorites:", error);
+  }
+};
+
+export const checkContentById = async (movie) => {
+  try {
+    const user = getUserFromSession();
+    if (user.token === "") {
+      return false;
+    }
+    const token = user.token;
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -20,22 +61,15 @@ export const addToFavorite = async (movie) => {
 
     const contentBody = {
       imdb_id: movie.imdb_id,
-      title: movie.title,
-      media_type: "movie",
-      poster_path: movie.poster_path,
     };
 
-    const response = await axios.post(
-      `${url}/favorite/addFavorite`,
-      contentBody,
-      { headers }
-    );
-
+    const response = await axios.post(`${url}/favorite/add`, contentBody, {
+      headers,
+    });
     if (response.status === 200) {
-      alert("Movie added to favorites!");
+      return true;
     }
   } catch (error) {
-    console.error("Error adding to favorites:", error);
-    alert("Failed to add movie to favorites");
+    console.error("Error rendering favorite:", error);
   }
 };

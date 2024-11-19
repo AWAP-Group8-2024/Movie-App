@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import {
   addToFavorite,
   checkContentById,
+  removeFromFavorite,
 } from "../Services/favoriteServices.js";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { FaEye, FaRegHeart, FaShare, FaRegBookmark } from "react-icons/fa";
@@ -51,10 +52,29 @@ export default function MovieDetails() {
     setContentInFavorite(isFavorite);
   };
 
-  const handleAddToFavorites = async () => {
-    await addToFavorite(movie);
-    setContentInFavorite(true);
+  const handleToggleFavorite = async () => {
+    if (contentInFavorite) {
+      await removeFromFavorite(movie);
+      setContentInFavorite(false);
+    } else {
+      await addToFavorite(movie);
+      setContentInFavorite(true);
+    }
   };
+
+  // const handleAddToFavorites = async () => {
+  //   if (!contentInFavorite) {
+  //     await addToFavorite(movie);
+  //     setContentInFavorite(true);
+  //     return;
+  //   }
+  // };
+  // const handleRemoveFavorite = async () => {
+  //   if (contentInFavorite) {
+  //     await removeFavorite(movie.id);
+  //     setContentInFavorite(false);
+  //   }
+  // };
 
   if (!movie) return <Container className="text-dark">Loading...</Container>;
   return (
@@ -82,7 +102,7 @@ export default function MovieDetails() {
                   >
                     <FaShare /> <span> Share</span>
                   </button>
-                  <button className="action-btn" onClick={handleAddToFavorites}>
+                  <button className="action-btn" onClick={handleToggleFavorite}>
                     {contentInFavorite ? (
                       <>
                         <GoBookmarkFill /> <span>Favorites</span>

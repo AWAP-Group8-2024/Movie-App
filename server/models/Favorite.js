@@ -24,5 +24,13 @@ export const isFavorite = async (id, imdb_id) => {
     "SELECT * FROM favorite where account_id = $1 and imdb_id = $2",
     [id, imdb_id]
   );
+
   return result.rowCount > 0;
+};
+
+export const deleteFavorite = async (imdb_id) => {
+  const result = await pool.query("DELETE FROM favorite WHERE imdb_id = $1", [
+    imdb_id,
+  ]);
+  return result;
 };

@@ -35,27 +35,34 @@ export const checkFavoriteById = async (req, res) => {
     if (!imdb_id) {
       return res.status(400).json({ message: "imdb_id is required" });
     }
+
     const isFavorite = await FavoriteModel.isFavorite(id, imdb_id);
 
-    if (isFavorite) {
-      return res
-        .status(200)
-        .json({ message: "Content is in favorites", favorite: true });
-    } else {
-      return res
-        .status(404)
-        .json({ message: "Content is not in favorites", favorite: false });
-    }
+    return res.status(200).json({
+      message: isFavorite
+        ? "Content is in favorites"
+        : "Content is not in favorites",
+      favorite: isFavorite,
+    });
   } catch (error) {
     console.error("Error in checkFavoriteById:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-// export const createContentObj = (id, name, creator_id) => {
-//   return {
-//     id: id,
-//     name: name,
-//     creator_id: creator_id,
-//   };
-// };
+export const deleteFavoriteById = async (req, res) => {
+  try {
+    const { imdb_id } = req.body;
+    if (!imdb_id) {
+      return res.status(400).json({ message: "imdb_id is required" });
+    }
+    const result = await FavoriteModel.deleteFavorite(imdb_id);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Favorite not found" });
+    }
+    return res.status(200).json({ message: "Favorite deleted successfully" });
+  } catch (error) {
+    console.error("Error in deleteFavoriteById:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

@@ -4,7 +4,7 @@ import { pool } from "../helpers/db.js";
 
 export const getFavoriteListByUserId = async (id) => {
   const result = await pool.query(
-    "SELECT * from favorites where account_id = $1",
+    "SELECT * FROM favorites where account_id = $1",
     [id]
   );
   return result;
@@ -17,4 +17,12 @@ export const addContentToFavoriteList = async (id, content) => {
     [id, imdb_id, title, media_type, poster_path]
   );
   return result;
+};
+
+export const isFavorite = async (id, imdb_id) => {
+  const result = await pool.query(
+    "SELECT * FROM favorite where account_id = $1 and imdb_id = $2",
+    [id, imdb_id]
+  );
+  return result.rowCount > 0;
 };

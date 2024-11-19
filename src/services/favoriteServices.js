@@ -33,7 +33,7 @@ export const addToFavorite = async (movie) => {
     });
 
     if (response.status === 200) {
-      alert("Movie added to favorites!");
+      return true;
     }
   } catch (error) {
     if (error.response && error.response.status === 401) {
@@ -50,26 +50,22 @@ export const addToFavorite = async (movie) => {
 export const checkContentById = async (movie) => {
   try {
     const user = getUserFromSession();
-    if (user.token === "") {
-      return false;
-    }
+    if (!user.token) return false;
     const token = user.token;
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     };
 
-    const contentBody = {
+    const body = {
       imdb_id: movie.imdb_id,
     };
 
-    const response = await axios.post(`${url}/favorite/add`, contentBody, {
+    const response = await axios.post(`${url}/favorite/check`, body, {
       headers,
     });
-    if (response.status === 200) {
-      return true;
-    }
+    return response.status === 200;
   } catch (error) {
-    console.error("Error rendering favorite:", error);
+    console.error("Error checking favorite status:", error);
   }
 };

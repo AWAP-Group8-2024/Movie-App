@@ -43,8 +43,8 @@ export default function MovieDetails() {
       .catch((error) => console.error("Error fetching movie details:", error));
   }, [id]);
 
-  const shareUrl = `${process.env.REACT_APP_API_URL}/movie/${id}`;
-  const shareMessage = `Check out "${movie.title}" on MovieApp!`;
+  // const shareUrl = `${process.env.REACT_APP_API_URL}/movie/${id}`;
+  // const shareMessage = `Check out "${movie.title}" on MovieApp!`;
 
   const checkIfContentInFavoriteById = async (movie) => {
     const isFavorite = await checkContentById(movie);

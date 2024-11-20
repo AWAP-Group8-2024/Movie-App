@@ -1,7 +1,6 @@
 // src/services/groupService.js
 import axios from 'axios';
 const API_URL = process.env.REACT_APP_API_URL;
-//const API_URL = "http://localhost:5000/group"; where did 5000 came from?
 
 // Retrieves the token and alerts if the user is not authenticated
 const getAuthToken = () => {

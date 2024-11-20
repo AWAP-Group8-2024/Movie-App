@@ -9,11 +9,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import ListCategories from "./components/ListCategories";
 import ListFiltered from "./components/ListFiltered";
-import GroupPage from "./components/GroupComponents/GroupPage";
 import GroupDetail from "./components/GroupComponents/GroupDetails";
-import GroupForm from "./components/GroupComponents/GroupForm";
 import GroupList from "./components/GroupComponents/GroupList";
-import JoinGroupForm from "./components/GroupComponents/JoinGroupForm";
 import FinKinoMovieError from "./components/FinKinoMovieError";
 import ListFinKino from "./components/ListFinKino";
 import ContentDetails from "./components/ContentDetails";
@@ -42,9 +39,7 @@ function App() {
           <Route path="/profile/:profileId" element={<Profile />} />{" "}
           <Route path="/list/:condition" element={<ListCategories />} />
           <Route path="/filtered/:condition" element={<ListFiltered />} />
-          <Route path="/groups/all" element={<GroupPage fetchType="all" />} />
           <Route path="/groups/all" element={<GroupList fetchType="all" />} />
-          <Route path="/groups/join" element={<JoinGroupForm />} />
           <Route path="/groups/:groupId" element={<GroupDetail />} />
           <Route path="/groups/user" element={<GroupList fetchType="user" />} />
           <Route path="/finnkino/error/:id" element={<FinKinoMovieError />} />

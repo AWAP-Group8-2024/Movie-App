@@ -64,7 +64,7 @@ export const createNewGroup = async (groupData) => {
   if (!headers) return;
 
   try {
-    const response = await axios.post(`${API_URL}/create`, groupData, {
+    const response = await axios.post(`${API_URL}/group/create`, groupData, {
       headers,
     });
     return response.data;
@@ -80,7 +80,7 @@ export const getGroupByGroupId = async (groupId) => {
   if (!headers) return;
 
   try {
-    const response = await axios.get(`${API_URL}/${groupId}`, { headers });
+    const response = await axios.get(`${API_URL}/group/${groupId}`, { headers });
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -95,7 +95,7 @@ export const updateGroupByGroupId = async (groupId, updatedData) => {
   if (!headers) return;
 
   try {
-    const response = await axios.put(`${API_URL}/${groupId}`, updatedData, { headers });
+    const response = await axios.put(`${API_URL}/group/${groupId}`, updatedData, { headers });
     return response.data;
   } catch (error) {
     console.error(`Error updating group ${groupId}:`, error);
@@ -109,7 +109,7 @@ export const deleteGroupByGroupId = async (groupId) => {
   if (!headers) return;
 
   try {
-    const response = await axios.delete(`${API_URL}/delete/${groupId}`, { headers });
+    const response = await axios.delete(`${API_URL}/group/delete/${groupId}`, { headers });
     return response.data;
   } catch (error) {
     console.error(`Error deleting group ${groupId}:`, error);
@@ -123,7 +123,7 @@ export const sendJoinRequest = async (groupId) => {
   if (!headers) return;
 
   try {
-    const response = await axios.post(`${API_URL}/${groupId}/join`, {}, { headers });
+    const response = await axios.post(`${API_URL}/group/${groupId}/join`, {}, { headers });
     return response.data;
   } catch (error) {
     console.error(`Error sending join request to group ${groupId}:`, error);
@@ -137,7 +137,7 @@ export const viewPendingRequests = async (groupId) => {
   if (!headers) return;
 
   try {
-    const response = await axios.get(`${API_URL}/${groupId}/requests`, { headers });
+    const response = await axios.get(`${API_URL}/group/${groupId}/requests`, { headers });
     return response.data;
   } catch (error) {
     console.error(`Error fetching pending requests for group ${groupId}:`, error);
@@ -152,7 +152,7 @@ export const updateJoinRequestStatus = async (groupId, requestId, status) => {
 
   try {
     const response = await axios.put(
-      `${API_URL}/${groupId}/requests/${requestId}`,
+      `${API_URL}/group/${groupId}/requests/${requestId}`,
       { status },
       { headers }
     );

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useUser } from "./UseUser";
 import Navigation from "../components/Navigation.jsx";
@@ -18,9 +18,8 @@ export default function ProfilePage() {
     createNewGroup,
   } = useUser();
   const navigate = useNavigate();
-
+  const { profileId } = useParams();
   const currentUrl = window.location.href;
-  const profileId = currentUrl.match(/\/profile\/(\d+)/)?.[1];
   const loggedInUserId = user?.id?.toString();
   const isOwnProfile = profileId === loggedInUserId;
 
@@ -112,7 +111,6 @@ export default function ProfilePage() {
     }
   };
   const handleGroupSubmit = async () => {
-    console.log(newGroup);
     if (!newGroup.name.trim()) {
       alert("Group name is required.");
       return;

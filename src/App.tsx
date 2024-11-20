@@ -39,7 +39,7 @@ function App() {
               />
             }
           />
-          <Route path="/profile/:id" element={<Profile />} />{" "}
+          <Route path="/profile/:profileId" element={<Profile />} />{" "}
           <Route path="/list/:condition" element={<ListCategories />} />
           <Route path="/filtered/:condition" element={<ListFiltered />} />
           <Route path="/groups/all" element={<GroupPage fetchType="all" />} />

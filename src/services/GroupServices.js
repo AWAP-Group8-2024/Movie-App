@@ -1,7 +1,7 @@
 // src/services/groupService.js
 import axios from 'axios';
-
-const API_URL = "http://localhost:5000/group";
+const API_URL = process.env.REACT_APP_API_URL;
+//const API_URL = "http://localhost:5000/group"; where did 5000 came from?
 
 // Retrieves the token and alerts if the user is not authenticated
 const getAuthToken = () => {
@@ -27,7 +27,7 @@ export const getAllGroups = async () => {
   if (!headers) return;
 
   try {
-    const response = await axios.get(`${API_URL}/`, { headers });
+    const response = await axios.get(`${API_URL}/group`, { headers });
     return response.data;
   } catch (error) {
     console.error("Error fetching all groups:", error);
@@ -48,7 +48,7 @@ export const getGroupsByUserId = async (id) => {
   }
 
   try {
-    const response = await axios.get(`${API_URL}/all`, {
+    const response = await axios.get(`${API_URL}/group/all`, {
       headers,
     });
     return response.data;

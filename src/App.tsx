@@ -39,10 +39,11 @@ function App() {
               />
             }
           />
-          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/profile/:id" element={<Profile />} />{" "}
           <Route path="/list/:condition" element={<ListCategories />} />
           <Route path="/filtered/:condition" element={<ListFiltered />} />
           <Route path="/groups/all" element={<GroupPage fetchType="all" />} />
+          <Route path="/groups/all" element={<GroupList fetchType="all" />} />
           <Route path="/groups/join" element={<JoinGroupForm />} />
           <Route path="/groups/:groupId" element={<GroupDetail />} />
           <Route path="/groups/user" element={<GroupList fetchType="user" />} />

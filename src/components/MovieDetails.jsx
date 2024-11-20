@@ -14,6 +14,7 @@ import SocialSharing from "./SocialSharing.jsx";
 import "./MovieDetail.css";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import Navigation from "./Navigation";
+import FinnKinoSchedule from "./FinnKinoSchedule.jsx";
 
 function formatRuntime(minutes) {
   const hours = Math.floor(minutes / 60);
@@ -155,6 +156,8 @@ export default function MovieDetails() {
 
               <div className="cast-crew">{<MovieCredits movieId={id} />}</div>
             </div>
+
+            <FinnKinoSchedule dataTMDB={movie}/>
 
             <section className="recommended-section">
               <div className="recommended-movies">

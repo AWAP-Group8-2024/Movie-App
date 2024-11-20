@@ -6,7 +6,7 @@ import { xml2json } from "xml-js";
 export default function ListFinKino() {
     const location = useLocation();
     const searchQuery = new URLSearchParams(location.search);
-    const page = searchQuery.get('page');
+    const page = searchQuery.get('page') || 1;
 
     const [body, setBody] = useState(null);
 

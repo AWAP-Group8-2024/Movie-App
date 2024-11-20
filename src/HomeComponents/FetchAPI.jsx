@@ -18,10 +18,19 @@ async function getLink(item) {
     fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${item.OriginalTitle._text}&page=1`)
     .then(res => res.json())
     .then(json => {
+        let found = false;
         if (json.results.length > 0) {
-            const id = json.results[0].id;
-            window.location.replace(`/movie/${id}`);
-        } else {
+            json.results.forEach(element => {
+                if (element.release_date.replaceAll(/[-].+/g,'') == item.ProductionYear._text) {
+                    const id = element.id;
+                    if (!found) {
+                        window.location.replace(`/movie/${id}`);
+                    }
+                    found = true;
+                }
+            })
+        }
+        if (!found) {
             window.location.replace(`/finnkino/error/${item.ID._text}`);
         }
     }) 

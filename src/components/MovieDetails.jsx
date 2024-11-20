@@ -17,16 +17,6 @@ import Navigation from "./Navigation";
 import { useUser } from "../UserComponents/UseUser.jsx";
 import { formatRuntime, renderStars, getUserFromSession } from "./utils.js";
 import FinnKinoSchedule from "./FinnKinoSchedule.jsx";
-function formatRuntime(minutes) {
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  return `${hours} hr ${mins} mins`;
-}
-
-function renderStars(voteAverage) {
-  const stars = Math.round(voteAverage / 2);
-  return "★".repeat(stars) + "☆".repeat(5 - stars);
-}
 
 export default function MovieDetails() {
   const { mediaType, id } = useParams();

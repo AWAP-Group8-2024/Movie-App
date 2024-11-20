@@ -6,7 +6,7 @@ import {
   removeFromFavorite,
 } from "../Services/favoriteServices.js";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { FaEye, FaRegHeart, FaShare, FaRegBookmark } from "react-icons/fa";
+import { FaRegHeart, FaShare } from "react-icons/fa";
 
 import RelatedMovies from "./RelatedMovies.jsx";
 import MovieCredits from "./MovieCredits.jsx";
@@ -14,23 +14,15 @@ import SocialSharing from "./SocialSharing.jsx";
 import "./MovieDetail.css";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import Navigation from "./Navigation";
-
-function formatRuntime(minutes) {
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  return `${hours} hr ${mins} mins`;
-}
-
-function renderStars(voteAverage) {
-  const stars = Math.round(voteAverage / 2);
-  return "★".repeat(stars) + "☆".repeat(5 - stars);
-}
+import { useUser } from "../UserComponents/UseUser.jsx";
+import { formatRuntime, renderStars, getUserFromSession } from "./utils.js";
 
 export default function MovieDetails() {
-  const { id } = useParams();
+  const { mediaType, id } = useParams();
   const [movie, setMovie] = useState(null);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [contentInFavorite, setContentInFavorite] = useState(false);
+  const { user } = useUser();
 
   useEffect(() => {
     fetch(
@@ -44,39 +36,43 @@ export default function MovieDetails() {
       .catch((error) => console.error("Error fetching movie details:", error));
   }, [id]);
 
+  useEffect(() => {
+    if (!user) {
+      setContentInFavorite(false);
+    }
+  }, [user]);
+
   // const shareUrl = `${process.env.REACT_APP_API_URL}/movie/${id}`;
   // const shareMessage = `Check out "${movie.title}" on MovieApp!`;
 
   const checkIfContentInFavoriteById = async (movie) => {
     const isFavorite = await checkContentById(movie);
-    setContentInFavorite(isFavorite);
+    setContentInFavorite(!!isFavorite);
   };
 
   const handleToggleFavorite = async () => {
-    if (contentInFavorite) {
-      await removeFromFavorite(movie);
-      setContentInFavorite(false);
-    } else {
-      await addToFavorite(movie);
-      setContentInFavorite(true);
+    const user = getUserFromSession();
+    if (!user.token) {
+      alert("Please log in to add or remove content from your favorites.");
+      return;
+    }
+
+    try {
+      if (contentInFavorite) {
+        await removeFromFavorite(movie);
+        setContentInFavorite(false);
+      } else {
+        await addToFavorite(movie, mediaType);
+        setContentInFavorite(true);
+      }
+    } catch (error) {
+      console.error("Error toggling favorite status:", error);
+      alert("An error occurred. Please try again.");
     }
   };
 
-  // const handleAddToFavorites = async () => {
-  //   if (!contentInFavorite) {
-  //     await addToFavorite(movie);
-  //     setContentInFavorite(true);
-  //     return;
-  //   }
-  // };
-  // const handleRemoveFavorite = async () => {
-  //   if (contentInFavorite) {
-  //     await removeFavorite(movie.id);
-  //     setContentInFavorite(false);
-  //   }
-  // };
-
   if (!movie) return <Container className="text-dark">Loading...</Container>;
+
   return (
     <div>
       <Navigation />

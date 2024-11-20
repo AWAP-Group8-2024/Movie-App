@@ -11,26 +11,27 @@ export const getFavoriteListByUserId = async (id) => {
 };
 
 export const addContentToFavoriteList = async (id, content) => {
-  const { imdb_id, title, media_type, poster_path } = content;
+  const { content_id, title, media_type, poster_path } = content;
   const result = await pool.query(
-    "INSERT INTO favorite (account_id, imdb_id, title, media_type, poster_path, added_date) values ($1, $2, $3, $4, $5, NOW()) returning *",
-    [id, imdb_id, title, media_type, poster_path]
+    "INSERT INTO favorite (account_id, content_id, title, media_type, poster_path, added_date) values ($1, $2, $3, $4, $5, NOW()) returning *",
+    [id, content_id, title, media_type, poster_path]
   );
   return result;
 };
 
-export const isFavorite = async (id, imdb_id) => {
+export const isFavorite = async (id, content_id) => {
   const result = await pool.query(
-    "SELECT * FROM favorite where account_id = $1 and imdb_id = $2",
-    [id, imdb_id]
+    "SELECT * FROM favorite where account_id = $1 and content_id = $2",
+    [id, content_id]
   );
 
   return result.rowCount > 0;
 };
 
-export const deleteFavorite = async (imdb_id) => {
-  const result = await pool.query("DELETE FROM favorite WHERE imdb_id = $1", [
-    imdb_id,
-  ]);
+export const deleteFavorite = async (content_id) => {
+  const result = await pool.query(
+    "DELETE FROM favorite WHERE content_id = $1",
+    [content_id]
+  );
   return result;
 };

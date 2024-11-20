@@ -14,7 +14,7 @@ export const insertContentToFavorite = async (req, res, next) => {
   try {
     const { id } = req.user;
     const content = req.body;
-    if (!content.imdb_id || !content.title || !content.media_type) {
+    if (!content.content_id || !content.title || !content.media_type) {
       return res
         .status(400)
         .json({ message: "All content fields are required" });
@@ -29,14 +29,14 @@ export const insertContentToFavorite = async (req, res, next) => {
 
 export const checkFavoriteById = async (req, res) => {
   try {
-    const { imdb_id } = req.body;
+    const { content_id } = req.body;
     const { id } = req.user;
 
-    if (!imdb_id) {
-      return res.status(400).json({ message: "imdb_id is required" });
+    if (!content_id) {
+      return res.status(400).json({ message: "content_id is required" });
     }
 
-    const isFavorite = await FavoriteModel.isFavorite(id, imdb_id);
+    const isFavorite = await FavoriteModel.isFavorite(id, content_id);
 
     return res.status(200).json({
       message: isFavorite
@@ -52,11 +52,11 @@ export const checkFavoriteById = async (req, res) => {
 
 export const deleteFavoriteById = async (req, res) => {
   try {
-    const { imdb_id } = req.body;
-    if (!imdb_id) {
-      return res.status(400).json({ message: "imdb_id is required" });
+    const { content_id } = req.body;
+    if (!content_id) {
+      return res.status(400).json({ message: "content_id is required" });
     }
-    const result = await FavoriteModel.deleteFavorite(imdb_id);
+    const result = await FavoriteModel.deleteFavorite(content_id);
     if (result.rowCount === 0) {
       return res.status(404).json({ message: "Favorite not found" });
     }

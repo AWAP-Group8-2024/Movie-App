@@ -1,5 +1,7 @@
 import axios from "axios";
+
 const url = process.env.REACT_APP_API_URL;
+if (!url) throw new Error("API URL not defined in environment variables.");
 
 const getUserFromSession = () => {
   const userFromSessionStorage = sessionStorage.getItem("user");
@@ -8,12 +10,32 @@ const getUserFromSession = () => {
     : { id: "", email: "", token: "" };
 };
 
-export const addToFavorite = async (movie) => {
+export const checkContentById = async (content) => {
+  const user = getUserFromSession();
+  if (!user.token) return false;
+  try {
+    const token = user.token;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    const body = { content_id: content.id };
+
+    const response = await axios.post(`${url}/favorite/check`, body, {
+      headers,
+    });
+    return response.data.favorite;
+  } catch (error) {
+    console.error("Error checking favorite status:", error);
+  }
+};
+
+export const addToFavorite = async (content, mediaType) => {
   try {
     const user = getUserFromSession();
     if (user.token === "") {
-      alert("Please log in to add movies to your favorites.");
-      return;
+      alert("Please log in to add content to your favorites.");
+      return false;
     }
     const token = user.token;
     const headers = {
@@ -21,11 +43,13 @@ export const addToFavorite = async (movie) => {
       Authorization: `Bearer ${token}`,
     };
 
+    const title = mediaType === "movie" ? content.title : content.name;
+
     const body = {
-      imdb_id: movie.imdb_id,
-      title: movie.title,
-      media_type: "movie",
-      poster_path: movie.poster_path,
+      content_id: content.id,
+      title: title,
+      media_type: mediaType,
+      poster_path: content.poster_path,
     };
 
     const response = await axios.post(`${url}/favorite/add`, body, {
@@ -47,41 +71,19 @@ export const addToFavorite = async (movie) => {
   }
 };
 
-export const checkContentById = async (movie) => {
+export const removeFromFavorite = async (content) => {
   try {
     const user = getUserFromSession();
-    if (!user.token) return false;
+    if (user.token === "") {
+      alert("Please log in to remove content from your favorites.");
+      return false;
+    }
     const token = user.token;
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     };
-
-    const body = {
-      imdb_id: movie.imdb_id,
-    };
-
-    const response = await axios.post(`${url}/favorite/check`, body, {
-      headers,
-    });
-    return response.data.favorite;
-  } catch (error) {
-    console.error("Error checking favorite status:", error);
-  }
-};
-
-export const removeFromFavorite = async (movie) => {
-  try {
-    const user = getUserFromSession();
-    if (!user.token) return false;
-    const token = user.token;
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
-    const body = {
-      imdb_id: movie.imdb_id,
-    };
+    const body = { content_id: content.id };
     const response = await axios.delete(`${url}/favorite/delete`, {
       headers,
       data: body,

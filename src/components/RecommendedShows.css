@@ -1,0 +1,93 @@
+.recommended-section {
+    margin: 3rem 0;
+    position: relative;
+  }
+  
+  .slider-container .custom-arrow {
+    position: absolute;
+    bottom: -40px; /* Position arrows below posters */
+    z-index: 10;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #666; /* Neutral color */
+    background-color: transparent; /* Match the background */
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
+    transition: color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .slider-container .custom-next {
+    right: 10%;
+  }
+  
+  .slider-container .custom-prev {
+    left: 10%;
+  }
+  
+  .slider-container .custom-arrow:hover {
+    color: #333;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .show-card {
+    cursor: pointer;
+  }
+  
+  .show-poster-container {
+    position: relative;
+    text-align: center;
+    overflow: hidden; /* Ensure overlay doesn't exceed the container */
+  }
+  
+  .show-poster {
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  
+  .show-poster-container:hover .show-poster {
+    transform: scale(1.05); /* Slight zoom effect */
+  }
+  
+  .show-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent overlay */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease;
+    border-radius: 8px; /* Matches poster's rounded corners */
+  }
+  
+  .show-poster-container:hover .show-overlay {
+    opacity: 1; /* Show overlay on hover */
+  }
+  
+  .show-info-content {
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+  
+  .show-title {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .show-rating {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  

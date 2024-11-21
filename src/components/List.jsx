@@ -205,7 +205,7 @@ export default function List({ items, total_pages }) {
 
     const contentType = (
         <div>
-            <h2 className="text-center">Search results for: "{query}"</h2>
+            <h1 className="text-center">Search results for: "{query}"</h1>
             <Container className="mt-2">
                 <Dropdown>
                     <Dropdown.Toggle variant="dark" id="dropdown-basic">

@@ -15,6 +15,8 @@ import FinKinoMovieError from "./components/FinKinoMovieError";
 import ListFinKino from "./components/ListFinKino";
 import ContentDetails from "./components/ContentDetails";
 import { FavoriteProvider } from "./UserComponents/FavoriteProvider";
+import ListGenres from "./components/ListGenres";
+import ListSearchResults from "./components/ListSearchResults";
 
 function App() {
   return (
@@ -49,6 +51,11 @@ function App() {
             />
             <Route path="/finnkino/error/:id" element={<FinKinoMovieError />} />
             <Route path="/finnkino/list" element={<ListFinKino />} />
+            <Route path="/genres/list" element={<ListGenres />} />
+            <Route
+              path="/search/list/:condition"
+              element={<ListSearchResults />}
+            />
           </Routes>
         </FavoriteProvider>
       </UserProvider>

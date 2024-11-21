@@ -47,6 +47,17 @@ export const getGroupByGroupId = async (req, res, next) => {
   }
 };
 
+export const getGroupMembers = async (req, res, next) => {
+  const { groupId } = req.params;
+
+  try {
+    const members = await GroupModel.getGroupMembers(groupId);
+    return res.status(200).json(members.rows || []);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export const createNewGroup = async (req, res, next) => {
   try {
     const { id } = req.user;

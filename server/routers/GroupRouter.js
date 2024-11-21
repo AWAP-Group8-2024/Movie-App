@@ -26,6 +26,12 @@ router.get(
   GroupController.getGroupByGroupId
 );
 
+router.get(
+  "/:groupId/members", 
+  auth,
+  GroupController.getGroupMembers
+);
+
 // delete group if user is the owner
 router.delete(
   "/delete/:groupId",

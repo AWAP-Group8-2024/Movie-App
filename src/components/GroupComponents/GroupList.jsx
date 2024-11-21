@@ -34,11 +34,28 @@ const GroupList = ({ fetchType }) => {
         } else {
           setUserId(user.id);
         }
+	useEffect(() => {
+		const fetchGroups = async () => {
+			try {
+				const user = JSON.parse(sessionStorage.getItem("user")); // Get user data from sessionStorage
+				if (!user?.id) {
+					if (!sessionStorage.getItem("alertShown")) {
+						alert("You have to login to view Groups.");
+						sessionStorage.setItem("alertShown", "true");
+					}
+					navigate("/login"); // Redirect to login page if user is not authenticated
+					return; // Stop further execution
+				}
+				setUserId(user.id);
 
         const groupsData = await getAllGroups();
         setGroups(groupsData);
         const userGroupData = await getGroupsByUserId(userId);
         setUserGroups(userGroupData); // Store the user's joined groups
+				const groupsData = await getAllGroups();
+				setGroups(groupsData);
+				const userGroupData = await getGroupsByUserId(user.id);
+				setUserGroups(userGroupData);
 
         // Filter out groups the user has joined or is the owner of
         const availableGroups = groupsData.filter(
@@ -46,6 +63,12 @@ const GroupList = ({ fetchType }) => {
             !userGroupData.some((userGroup) => userGroup.id === group.id) &&
             group.creator_id !== userId
         );
+				// Filter out groups the user has joined or is the owner of
+				const availableGroups = groupsData.filter(
+					(group) =>
+						!userGroupData.some((userGroup) => userGroup.id === group.id) &&
+						group.creator_id !== user.id
+				);
 
         setFilteredGroups(availableGroups);
       } catch (err) {
@@ -58,6 +81,9 @@ const GroupList = ({ fetchType }) => {
 
     fetchGroups();
   }, []);
+		fetchGroups();
+	}, [navigate]); // Add `navigate` as a dependency
+
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -93,6 +119,21 @@ const GroupList = ({ fetchType }) => {
       setError("Error creating group");
     }
   };
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		if (!name.trim()) {
+			setError("Group name is required");
+			return;
+		}
+		try {
+			const newGroup = await createNewGroup({ name });
+			setMessage(`Group ${newGroup.name} created!`);
+			setName("");
+			// Optionally, you can navigate or update group list after creating
+		} catch (error) {
+			setError("Error creating group");
+		}
+	};
 
   const handleJoinGroup = async (groupId) => {
     try {

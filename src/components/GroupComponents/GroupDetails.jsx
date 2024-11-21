@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
   getGroupByGroupId,
+  getGroupMembersbyGroupId,
   deleteGroupByGroupId,
   sendJoinRequest,
-} from "../../services/GroupServices";
+} from "../../Services/GroupServices";
 import { useParams, useNavigate } from "react-router-dom";
 import Navigation from "../Navigation";
 import { useUser } from "../../UserComponents/useUser"; // Ensure this is the correct path
@@ -15,10 +16,12 @@ const GroupDetails = () => {
   const { groupId } = useParams();
   const { user, isLoading: userLoading } = useUser(); // Get user and loading state from useUser
   const [group, setGroup] = useState(null);
+  const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
   const [isOwner, setIsOwner] = useState(false);
+  const [isMember, setIsMember] = useState(false);
   const [showJoinRequest, setShowJoinRequest] = useState(false);
 
   useEffect(() => {
@@ -29,10 +32,16 @@ const GroupDetails = () => {
           setError(null);
           const groupData = await getGroupByGroupId(groupId);
           setGroup(groupData);
+          const getGroupMembers = await getGroupMembersbyGroupId(groupId);
+          setMembers(getGroupMembers);
 
-          // Check if the logged-in user is the creator of the group
-          if (user && user.id === groupData.creator_id) {
-            setIsOwner(true);
+          // Check if the logged-in user is a member of the group
+          if (user && getGroupMembers.some((member) => member.id === user.id)) {
+            setIsMember(true);
+            // Check if the logged-in user is the creator of the group
+            if (user && user.id === groupData.creator_id) {
+              setIsOwner(true);
+            }
           }
         } catch (err) {
           if (err.message === "User not authenticated") {
@@ -116,12 +125,41 @@ const GroupDetails = () => {
               <p className="card-text">
                 <strong>Creator:</strong> {group.creator_id}
               </p>
+
               <p className="card-text">More details to come...</p>
 
               {/* Buttons for Join Group and Owner Actions */}
               <div className="d-flex flex-wrap gap-2 mt-3">
-                {/* Show Join Group button only for non-owners */}
-                {!isOwner && (
+                {isMember ? (
+                  <>
+                    <h4 className="mt-4">Group Members</h4>
+                    {members.length > 0 ? (
+                      <table className="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {members.map((member) => (
+                            <tr key={member.id}>
+                              <td>{member.id}</td>
+                              <td>{member.email}</td>
+                              <td>{member.firstname}</td>
+                              <td>{member.lastname}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <p>No members found.</p>
+                    )}
+                  </>
+                ) : (
+                  // Show Join Group button only for non-members
                   <button
                     className="btn btn-primary me-2"
                     onClick={handleJoinGroup}
@@ -129,7 +167,6 @@ const GroupDetails = () => {
                     Join Group
                   </button>
                 )}
-
                 {/* Show owner buttons */}
                 {isOwner && (
                   <>

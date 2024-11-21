@@ -18,8 +18,8 @@ import {
   addToFavorite,
   checkContentById,
   removeFromFavorite,
-} from "../services/favoriteServices.js";
-import { useUser } from "../UserComponents/useUser.jsx";
+} from "../Services/favoriteServices.js";
+import { useUser } from "../UserComponents/UseUser.jsx";
 import { formatRuntime, renderStars, getUserFromSession } from "./utils.js";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 

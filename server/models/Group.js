@@ -42,16 +42,13 @@ export const getGroupDetailsById = async (groupId) => {
   return result.rows[0];
 };
 
-// export const getGroupMembers = async (groupId) => {
-//   const query = `
-//     SELECT a.id, a.email, a.firstname, a.lastname
-//     FROM group_account ga
-//     JOIN account a ON ga.account_id = a.id
-//     WHERE ga.group_id = $1;
-//   `;
-//   const { result } = await pool.query(query, [groupId]);
-//   return result;
-// };
+export const getGroupMembers = async (groupId) => {
+  const result= await pool.query (
+    "SELECT a.id, a.email, a.firstname, a.lastname FROM group_account ga JOIN account a ON ga.account_id = a.id WHERE ga.group_id = $1;",
+    [groupId]
+  );
+  return result;
+};
 
 export const deleteGroupById = async (groupId) => {
   const result = await pool.query("DELETE FROM groups WHERE id = $1", [

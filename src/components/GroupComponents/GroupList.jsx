@@ -21,7 +21,6 @@ const GroupList = ({ fetchType }) => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		// Fetch all groups and the user's joined groups when the component mounts
 		const fetchGroups = async () => {
 			try {
 				const user = JSON.parse(sessionStorage.getItem("user")); // Get user data from sessionStorage
@@ -31,20 +30,20 @@ const GroupList = ({ fetchType }) => {
 						sessionStorage.setItem("alertShown", "true");
 					}
 					navigate("/login"); // Redirect to login page if user is not authenticated
-				} else {
-					setUserId(user.id);
+					return; // Stop further execution
 				}
+				setUserId(user.id);
 
 				const groupsData = await getAllGroups();
 				setGroups(groupsData);
-				const userGroupData = await getGroupsByUserId(userId);
-				setUserGroups(userGroupData); // Store the user's joined groups
+				const userGroupData = await getGroupsByUserId(user.id);
+				setUserGroups(userGroupData);
 
 				// Filter out groups the user has joined or is the owner of
 				const availableGroups = groupsData.filter(
 					(group) =>
 						!userGroupData.some((userGroup) => userGroup.id === group.id) &&
-						group.creator_id !== userId
+						group.creator_id !== user.id
 				);
 
 				setFilteredGroups(availableGroups);
@@ -57,7 +56,8 @@ const GroupList = ({ fetchType }) => {
 		};
 
 		fetchGroups();
-	}, []);
+	}, [navigate]); // Add `navigate` as a dependency
+
 
 	const handleSearch = (e) => {
 		setSearchTerm(e.target.value);
@@ -87,7 +87,6 @@ const GroupList = ({ fetchType }) => {
 			const newGroup = await createNewGroup({ name });
 			setMessage(`Group ${newGroup.name} created!`);
 			setName("");
-
 			// Optionally, you can navigate or update group list after creating
 		} catch (error) {
 			setError("Error creating group");

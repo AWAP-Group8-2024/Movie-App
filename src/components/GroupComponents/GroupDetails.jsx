@@ -4,17 +4,17 @@ import {
   getGroupMembersbyGroupId,
   deleteGroupByGroupId,
   sendJoinRequest,
-} from "../../Services/GroupServices";
+} from "../../services/GroupServices";
 import { useParams, useNavigate } from "react-router-dom";
 import Navigation from "../Navigation";
-import { useUser } from "../../UserComponents/useUser"; // Ensure this is the correct path
+import { useUser } from "../../UserComponents/UseUser";
 import JoinRequestList from "./JoinRequestList";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const GroupDetails = () => {
   const navigate = useNavigate();
   const { groupId } = useParams();
-  const { user, isLoading: userLoading } = useUser(); // Get user and loading state from useUser
+  const { user, isLoading: userLoading } = useUser();
   const [group, setGroup] = useState(null);
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);

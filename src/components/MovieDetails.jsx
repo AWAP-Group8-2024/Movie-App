@@ -14,7 +14,7 @@ import SocialSharing from "./SocialSharing.jsx";
 import "./MovieDetail.css";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import Navigation from "./Navigation";
-import { useUser } from "../UserComponents/useUser.jsx";
+import { useUser } from "../UserComponents/UseUser.jsx";
 import { formatRuntime, renderStars, getUserFromSession } from "./utils.js";
 import FinnKinoSchedule from "./FinnKinoSchedule.jsx";
 

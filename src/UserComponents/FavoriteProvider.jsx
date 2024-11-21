@@ -1,6 +1,6 @@
 import { createContext, useState, useContext } from "react";
 import axios from "axios";
-import { useUser } from "./useUser";
+import { useUser } from "./UseUser";
 
 const url = process.env.REACT_APP_API_URL;
 const FavoriteContext = createContext();

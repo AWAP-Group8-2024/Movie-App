@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useUser } from "./useUser";
+import { useUser } from "./UseUser";
 import { useFavorite } from "./FavoriteProvider";
 import Navigation from "../components/Navigation.jsx";
 import { Container } from "react-bootstrap";

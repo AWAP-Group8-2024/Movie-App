@@ -14,6 +14,7 @@ import GroupList from "./components/GroupComponents/GroupList";
 import FinKinoMovieError from "./components/FinKinoMovieError";
 import ListFinKino from "./components/ListFinKino";
 import ContentDetails from "./components/ContentDetails";
+import ListGenres from "./components/ListGenres";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="/groups/user" element={<GroupList fetchType="user" />} />
           <Route path="/finnkino/error/:id" element={<FinKinoMovieError />} />
           <Route path="/finnkino/list" element={<ListFinKino />} />
+          <Route path="/genres/list" element={<ListGenres />} />
         </Routes>
       </UserProvider>
     </BrowserRouter>

@@ -77,14 +77,24 @@ export default function Navigation() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <NavDropdown title="Genres" id="basic-nav-dropdown">
-              <NavDropdown.Item as={Link} to="#">
-                Genre 1
+              <NavDropdown.Item as={Link} onClick={()=>{window.location.replace('/filtered/movie?genres=12&page=1')}}>
+                Adventure
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="#">
-                Genre 2
+              <NavDropdown.Item as={Link} onClick={()=>{window.location.replace('/filtered/movie?genres=35&page=1')}}>
+                Comedy
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="#">
-                Genre 3
+              <NavDropdown.Item as={Link} onClick={()=>{window.location.replace('/filtered/movie?genres=18&page=1')}}>
+                Drama
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} onClick={()=>{window.location.replace('/filtered/movie?genres=27&page=1')}}>
+                Horror
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} onClick={()=>{window.location.replace('/filtered/movie?genres=10749&page=1')}}>
+                Romance
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item as={Link} onClick={()=>{window.location.replace('/genres/list')}}>
+                View more
               </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Categories" id="basic-nav-dropdown">

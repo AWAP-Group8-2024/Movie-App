@@ -101,10 +101,10 @@ export default function List({ items, total_pages }) {
         let setter = [];
         items.forEach(element => {
             setter.push(
-                <Col xs={6} md={3} className="p-2" as={Link} to={element.title ? `/movie/${element.id}` : `/tv/${element.id}`}>
-                    <div className="text-decoration-none text-dark border border-1 border-dark rounded p-2 text-center">
+                <Col xs={6} md={3} className="text-decoration-none text-dark p-2" as={Link} to={element.title ? `/movie/${element.id}` : `/tv/${element.id}`}>
+                    <div className="border border-1 border-dark rounded p-2 text-center h-100 d-flex flex-column">
                         <img src={`https://image.tmdb.org/t/p/w500${element.poster_path}`} className="img-fluid p-1"/>
-                        {element.title ? element.title : element.name}
+                        <div className="mt-auto">{element.title ? element.title : element.name}</div>
                     </div>
                 </Col> 
             );
@@ -115,7 +115,7 @@ export default function List({ items, total_pages }) {
         } else {
             setBody(
                 <Container>
-                    <Row>
+                    <Row className="d-flex align-items-stretch">
                         {setter}
                     </Row>
                 </Container>
@@ -131,8 +131,8 @@ export default function List({ items, total_pages }) {
         let setter = [];
         items.forEach(element => {
             setter.push(
-                <Col xs={6} md={3} className="p-2" as={Link} onClick={() => {getLink(element)}}>
-                    <div className="text-decoration-none text-dark border border-1 border-dark rounded p-2 text-center">
+                <Col xs={6} md={3} className="text-decoration-none text-dark p-2" as={Link} onClick={() => {getLink(element)}}>
+                    <div className="border border-1 border-dark rounded p-2 text-center h-100 d-flex flex-column">
                         <img src={element.Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
                         {element.Title._text}
                     </div>
@@ -145,7 +145,7 @@ export default function List({ items, total_pages }) {
         } else {
             setBody(
                 <Container>
-                    <Row>
+                    <Row className="d-flex align-items-stretch">
                         {setter}
                     </Row>
                 </Container>
@@ -212,48 +212,7 @@ export default function List({ items, total_pages }) {
     return (
         <div>
             <Navigation />
-            {/* <Accordion defaultActiveKey={genreIdList.length === 0 && (currentYear == '' || currentYear == null) && rating === 0 ? '' : '0'}>
-                <Accordion.Item eventKey="0">
-                    <Accordion.Header><Col className="fs-3">Filters</Col></Accordion.Header>
-                    <Accordion.Body>
-                        <Row className="row-cols-auto">
-                            <Col className="fs-4">
-                                Genres:
-                            </Col>
-                        </Row>
-                        <Row className="row-cols-auto">
-                            {filterGenres}
-                        </Row>
-                        <Row className="row-cols-auto">
-                            <Col className="fs-4">
-                                Release year:
-                            </Col>
-                        </Row>
-                        <Row className="row-cols-auto">
-                            {filterYear}
-                        </Row>
-                        <Row className="row-cols-auto">
-                            <Col className="fs-4">
-                                Rating:
-                            </Col>
-                        </Row>
-                        <Row className="row-cols-auto">
-                            <Col className="fs-4">{stars}</Col>
-                        </Row>
-                        <Row className="justify-content-center row-cols-auto">
-                            <Col>
-                                <Button variant="outline-dark" disabled={searchButton} onClick={() => {
-                                    if (condition.includes('tv')) {
-                                        window.location.replace(`/filtered/tv?genres=${genreIdList.join(',')}&year=${year}&rating=${rating}&page=1`)
-                                    } else {
-                                        window.location.replace(`/filtered/movie?genres=${genreIdList.join(',')}&year=${year}&rating=${rating}&page=1`)
-                                    }
-                                }}>Show results</Button>
-                            </Col>
-                        </Row>
-                    </Accordion.Body>
-                </Accordion.Item>
-            </Accordion> */}
+            
             {filters}
             {body}
             {turnPage}

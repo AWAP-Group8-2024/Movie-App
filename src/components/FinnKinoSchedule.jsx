@@ -82,7 +82,7 @@ export default function FinnKinoSchedule({dataTMDB}) {
                         setter.push(
                             <Row className="row-cols-auto">
                                 <Col>
-                                    {weekdays[date.getDay()]}, {date.getDate()} {months[date.getMonth()]}, {date.getHours()}:{date.getMinutes()};
+                                    {weekdays[date.getDay()]}, {date.getDate()} {months[date.getMonth()]}, {date.getHours()}:{date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()};
                                     {' '}{Math.floor(+element.LengthInMinutes._text / 60)} h {+element.LengthInMinutes._text % 60} min;
                                     {' '}{element.TheatreAndAuditorium._text}
                                 </Col>

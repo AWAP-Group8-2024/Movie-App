@@ -3,10 +3,10 @@ import {
   getGroupByGroupId,
   deleteGroupByGroupId,
   sendJoinRequest,
-} from "../../Services/GroupServices";
+} from "../../services/GroupServices";
 import { useParams, useNavigate } from "react-router-dom";
 import Navigation from "../Navigation";
-import { useUser } from "../../UserComponents/UseUser"; // Ensure this is the correct path
+import { useUser } from "../../UserComponents/useUser"; // Ensure this is the correct path
 import JoinRequestList from "./JoinRequestList";
 import "bootstrap/dist/css/bootstrap.min.css";
 

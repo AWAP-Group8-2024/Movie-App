@@ -1,4 +1,4 @@
-import { Card, Row } from "react-bootstrap";
+import { Card, Row, Col } from "react-bootstrap";
 import {
   UserGroupIcon,
   UserGroupInfo,
@@ -15,13 +15,22 @@ export default function UserGroups({ groupData, handleGroupClick }) {
           {groupData.map((group, i) => (
             <Card key={i} className="mb-3">
               <Card.Body>
-                <Row>
+                <Row className="d-flex align-items-center">
                   <UserGroupIcon />
                   <UserGroupInfo group={group} />
-                  <UserGroupViewButton
-                    group={group}
-                    handleGroupClick={handleGroupClick}
-                  />
+                  <Col
+                    xs={5}
+                    className="d-flex flex-column align-items-center p-0"
+                  >
+                    <UserGroupViewButton
+                      group={group}
+                      handleGroupClick={handleGroupClick}
+                    />
+                    <UserGroupDeleteButton
+                      group={group}
+                      handleGroupClick={handleGroupClick}
+                    />
+                  </Col>
                 </Row>
               </Card.Body>
             </Card>

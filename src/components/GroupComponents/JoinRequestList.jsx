@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   viewPendingRequests,
   updateJoinRequestStatus,
-} from "../../Services/GroupServices"; // Ensure the import path is correct
+} from "../../services/GroupServices"; // Ensure the import path is correct
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../Navigation";

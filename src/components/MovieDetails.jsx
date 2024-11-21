@@ -4,7 +4,7 @@ import {
   addToFavorite,
   checkContentById,
   removeFromFavorite,
-} from "../Services/favoriteServices.js";
+} from "../services/favoriteServices.js";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { FaRegHeart, FaShare } from "react-icons/fa";
 
@@ -14,7 +14,7 @@ import SocialSharing from "./SocialSharing.jsx";
 import "./MovieDetail.css";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import Navigation from "./Navigation";
-import { useUser } from "../UserComponents/UseUser.jsx";
+import { useUser } from "../UserComponents/useUser.jsx";
 import { formatRuntime, renderStars, getUserFromSession } from "./utils.js";
 import FinnKinoSchedule from "./FinnKinoSchedule.jsx";
 

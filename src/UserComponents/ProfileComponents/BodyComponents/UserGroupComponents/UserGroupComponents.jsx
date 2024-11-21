@@ -1,4 +1,4 @@
-import { IoPeopleOutline } from "react-icons/io5";
+import { IoPeopleOutline, IoEyeSharp, IoTrashBin } from "react-icons/io5";
 import { Card, Col, Button } from "react-bootstrap";
 
 export const UserGroupIcon = () => {
@@ -14,40 +14,42 @@ export const UserGroupIcon = () => {
 
 export const UserGroupInfo = ({ group }) => {
   return (
-    <Col xs={5} className="p-0">
-      <Card.Title>{group.name}</Card.Title>
+    <Col xs={4} className="p-0">
+      <Card.Title className="d-flex align-items-center justify-content-center">
+        {group.name}
+      </Card.Title>
       {group.description && (
         <Card.Text className="text-muted">{group.description}</Card.Text>
       )}
-      <small className="text-muted">{group.member_count} members</small>
+      <small className="text-muted d-flex align-items-center justify-content-center">
+        {group.member_count} members
+      </small>
     </Col>
   );
 };
 
 export const UserGroupViewButton = ({ group, handleGroupClick }) => {
   return (
-    <Col xs={2} className="d-flex align-items-center p-0">
-      <Button
-        variant="outline-primary"
-        size="sm"
-        onClick={() => handleGroupClick(group.id)}
-      >
-        View
-      </Button>
-    </Col>
+    <Button
+      variant="outline-primary"
+      size="sm"
+      onClick={() => handleGroupClick(group.id)}
+      className="mb-2 ms-5"
+    >
+      <IoEyeSharp />
+    </Button>
   );
 };
 
 export const UserGroupDeleteButton = ({ group, handleGroupClick }) => {
   return (
-    <Col xs={2} className="d-flex align-items-center p-0">
-      <Button
-        variant="outline-danger"
-        size="sm"
-        onClick={() => handleGroupClick(group.id)}
-      >
-        Delete
-      </Button>
-    </Col>
+    <Button
+      variant="outline-danger"
+      size="sm"
+      onClick={() => handleGroupClick(group.id)}
+      className="ms-5"
+    >
+      <IoTrashBin />
+    </Button>
   );
 };

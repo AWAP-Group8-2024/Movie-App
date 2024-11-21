@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useUser } from "./UseUser";
+import { useUser } from "./useUser";
+import { useFavorite } from "./FavoriteProvider";
 import Navigation from "../components/Navigation.jsx";
 import { Container } from "react-bootstrap";
 import AccountDeleteModal from "./ProfileComponents/AccountDeleteModal.jsx";
@@ -17,6 +18,14 @@ export default function ProfilePage() {
     handleLogout,
     createNewGroup,
   } = useUser();
+  const {
+    favorites,
+    getUserFavorites,
+    addFavorite,
+    removeFavorite,
+    getFavoritesByType,
+  } = useFavorite();
+
   const navigate = useNavigate();
   const { profileId } = useParams();
   const currentUrl = window.location.href;
@@ -42,10 +51,17 @@ export default function ProfilePage() {
         .catch((error) => {
           console.error("Failed to fetch profile:", error);
         });
+
       getUserGroups()
         .then((userGroups) => {
           setGroupData(userGroups);
         })
+        .catch((error) => {
+          console.error("Failed to fetch groups:", error);
+        });
+
+      getUserFavorites()
+        .then(() => console.log("Favorites fetched successfully"))
         .catch((error) => {
           console.error("Failed to fetch groups:", error);
         });
@@ -110,6 +126,7 @@ export default function ProfilePage() {
       alert("Failed to share the URL");
     }
   };
+
   const handleGroupSubmit = async () => {
     if (!newGroup.name.trim()) {
       alert("Group name is required.");

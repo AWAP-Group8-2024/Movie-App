@@ -1,6 +1,7 @@
 import { Row } from "react-bootstrap";
-import { FavoriteCard, GroupCard, UserInfoCard } from "./BodyComponents/Cards";
-
+import { GroupCard } from "./BodyComponents/GroupCard";
+import { FavoriteCard } from "./BodyComponents/FavoriteCard";
+import { UserInfoCard } from "./BodyComponents/UserInfoCard";
 export default function ProfileBody({
   profileData,
   isEditing,
@@ -18,7 +19,7 @@ export default function ProfileBody({
   setShowCreateGroupModal,
 }) {
   return (
-    <div className="mt-4">
+    <div className="mt-2">
       <Row>
         <GroupCard
           groupData={groupData}
@@ -39,7 +40,7 @@ export default function ProfileBody({
           handleShare={handleShare}
         />
       </Row>
-      <Row className="mt-4">
+      <Row>
         <FavoriteCard />
       </Row>
     </div>

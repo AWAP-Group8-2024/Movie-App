@@ -4,7 +4,7 @@ import { pool } from "../helpers/db.js";
 
 export const getFavoriteListByUserId = async (id) => {
   const result = await pool.query(
-    "SELECT * FROM favorites where account_id = $1",
+    "SELECT * FROM favorite where account_id = $1",
     [id]
   );
   return result;

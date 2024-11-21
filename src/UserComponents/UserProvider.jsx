@@ -83,6 +83,7 @@ export default function UserProvider({ children }) {
       throw error;
     }
   };
+
   const updateUserProfile = async (updatedData) => {
     try {
       const token = user.token;

@@ -59,12 +59,14 @@ export default function Navigation() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (suggestions.length > 0) {
-      const firstResult = suggestions[0];
-      navigate(`/${firstResult.mediaType}/${firstResult.id}`);
-    } else {
-      alert("No results found");
-    }
+    // if (suggestions.length > 0) {
+    //   const firstResult = suggestions[0];
+    //   navigate(`/${firstResult.mediaType}/${firstResult.id}`);
+    // } else {
+    //   alert("No results found");
+    // }
+
+    window.location.replace(`/search/list/movie?query=${searchQuery}&page=1`);
   };
 
   return (

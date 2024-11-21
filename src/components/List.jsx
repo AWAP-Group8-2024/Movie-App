@@ -1,7 +1,7 @@
 import Navigation from "./Navigation"
 import { useParams, useLocation, Link } from "react-router-dom"
 import { useState, useEffect } from "react";
-import { Row, Col, Container, Accordion, Button } from "react-bootstrap";
+import { Row, Col, Container, Accordion, Button, Dropdown } from "react-bootstrap";
 import { movieGenres } from "./movieGenres.js";
 import { tvGenres } from "./tvGenres";
 import { FaRegStar, FaStar } from "react-icons/fa";
@@ -20,11 +20,12 @@ export default function List({ items, total_pages }) {
     if (currentGenres) {
         currentGenres = currentGenres.split(',');
     }
+    const query = searchQuery.get('query');
+
     const [rating, setRating] = useState(+searchQuery.get('rating') === 1 ? 0 : +searchQuery.get('rating') || 0);
     const [genreIdList, setGenreIdList] = useState(currentGenres ? currentGenres : []);
     const [searchButton, setSearchButton] = useState(genreIdList.length === 0 && (currentYear == '' || currentYear == null) && rating === 0);
     const [year, setYear] = useState(currentYear);
-    
     const [body, setBody] = useState(null);
 
     let turnPage = (
@@ -111,7 +112,7 @@ export default function List({ items, total_pages }) {
         });
 
         if (items.length == 0) {
-            setBody(<div>No results were found.</div>);
+            setBody(<Container>No results were found.</Container>);
         } else {
             setBody(
                 <Container>
@@ -141,7 +142,7 @@ export default function List({ items, total_pages }) {
         });
 
         if (items.length == 0) {
-            setBody(<div>No results were found.</div>);
+            setBody(<Container>No results were found.</Container>);
         } else {
             setBody(
                 <Container>
@@ -155,7 +156,7 @@ export default function List({ items, total_pages }) {
 
     let filters = null;
 
-    if (!window.location.href.includes('finnkino')) {
+    if (!window.location.href.includes('finnkino') && !window.location.href.includes('search')) {
         filters = (
             <Accordion defaultActiveKey={genreIdList.length === 0 && (currentYear == '' || currentYear == null) && rating === 0 ? '' : '0'}>
                 <Accordion.Item eventKey="0">
@@ -202,6 +203,28 @@ export default function List({ items, total_pages }) {
         )
     }
 
+    const contentType = (
+        <div>
+            <h2 className="text-center">Search results for: "{query}"</h2>
+            <Container className="mt-2">
+                <Dropdown>
+                    <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                        {condition == 'tv' ? 'TV shows' : 'Movies'}
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => {window.location.replace(`/search/list/movie?query=${query}&page=1`)}}>
+                            Movies
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => {window.location.replace(`/search/list/tv?query=${query}&page=1`)}}>
+                            TV shows
+                        </Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+            </Container>
+        </div>
+    )
+
     useEffect(() => {
         if (window.location.href.includes('finnkino')) {
             createBodyFinKino();
@@ -209,11 +232,13 @@ export default function List({ items, total_pages }) {
             createBody();
         }
     }, []);
+
     return (
         <div>
             <Navigation />
             
             {filters}
+            {window.location.href.includes('search') ? contentType : null}
             {body}
             {turnPage}
         </div>

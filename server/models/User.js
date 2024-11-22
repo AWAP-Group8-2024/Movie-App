@@ -25,6 +25,14 @@ export const deleteUserById = async (id) => {
   return result;
 };
 
+export const getGroupPendingRequestsById = async (id) => {
+  const result = await pool.query(
+    "SELECT * FROM join_requests WHERE account_id = $1",
+    [id]
+  );
+  return result.rows;
+};
+
 export const isEmailExisting = async (email) => {
   const emailCheck = await pool.query(
     "SELECT id FROM account WHERE email = $1",

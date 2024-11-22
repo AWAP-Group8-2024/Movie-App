@@ -1,12 +1,5 @@
 import { hash, compare } from "bcrypt";
-import {
-  insertUser,
-  searchUserByEmail,
-  searchUserById,
-  deleteUserById,
-  isEmailExisting,
-  updateUserById,
-} from "../models/User.js";
+import * as UserModel from "../models/User.js";
 import { ApiError } from "../helpers/apiError.js";
 import jwt from "jsonwebtoken";
 const { sign } = jwt;
@@ -26,7 +19,7 @@ export const registration = async (req, res, next) => {
         )
       );
     }
-    const emailExists = await isEmailExisting(email);
+    const emailExists = await UserModel.isEmailExisting(email);
     if (emailExists) {
       return next(new ApiError("Email already exists", 409));
     }
@@ -43,7 +36,7 @@ export const registration = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const result = await searchUserByEmail(email);
+    const result = await UserModel.searchUserByEmail(email);
 
     if (result.rowCount === 0)
       return next(new ApiError("Invalid credentials", 400));
@@ -64,7 +57,7 @@ export const login = async (req, res, next) => {
 export const getUserProfile = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await searchUserById(id);
+    const result = await UserModel.searchUserById(id);
     if (result.rowCount === 0) {
       return next(new ApiError("User not found", 404));
     }
@@ -85,17 +78,17 @@ export const getUserProfile = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
   try {
-    const { id } = req.params; //session user id
+    const { id } = req.params; //user profile id
     const { email, password } = req.body;
 
-    const result = await searchUserByEmail(email);
+    const result = await UserModel.searchUserByEmail(email);
     if (result.rowCount === 0)
       return next(new ApiError("Invalid credentials", 400));
 
     const user = result.rows[0];
-    const isPasswordValid = await compare(password, user.password); //compare password from account delete form with session user password
+    const isPasswordValid = await compare(password, user.password);
     if (!isPasswordValid) return next(new ApiError("Invalid password", 401));
-    await deleteUserById(id);
+    await UserModel.deleteUserById(id);
     const response = {
       user: req.user,
       message: `User ID ${req.user.id} deleted successfully.`,
@@ -110,7 +103,6 @@ export const updateUserProfile = async (req, res) => {
   try {
     const { id } = req.params;
     const updateInfo = { ...req.body };
-    console.log(updateInfo);
 
     if (Object.keys(updateInfo).length === 0) {
       return res.status(400).json({ message: "No fields to update" });
@@ -120,7 +112,7 @@ export const updateUserProfile = async (req, res) => {
       updateInfo.password = await hash(updateInfo.password, 10);
     }
 
-    const updatedUser = await updateUserById(id, updateInfo);
+    const updatedUser = await UserModel.updateUserById(id, updateInfo);
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
@@ -128,6 +120,23 @@ export const updateUserProfile = async (req, res) => {
     return res.status(200).json(updatedUser);
   } catch (error) {
     return res.status(500).json({ message: "Error updating profile" });
+  }
+};
+
+export const getGroupPendingRequests = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const result = await UserModel.getGroupPendingRequestsById(id);
+    console.log(result);
+    if (result.rowCount == 0) {
+      return res.status(404).json({ message: "No group pending requests" });
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error get group pending requests" });
   }
 };
 

@@ -132,8 +132,23 @@ export const sendJoinRequest = async (groupId) => {
   if (!headers) return;
 
   try {
-    const response = await axios.post(`${API_URL}/group/${groupId}/join`, {}, { headers });
-    return response.data;
+    const userReqests = await getUserJoinRequests();
+    let alreadyExists = false;
+
+    userReqests.forEach(element => {
+      if (element.group_id == groupId && element.status == 'pending') {
+        alreadyExists = true;
+      }
+    });
+
+    if (alreadyExists) {
+      alert(`Request has already been sent and is pending.  You can see all your requests in user profile`);
+      return;
+    } else {
+      alert(`Request sent! You can see all your requests in user profile`);
+      const response = await axios.post(`${API_URL}/group/${groupId}/join`, {}, { headers });
+      return response.data;
+    }
   } catch (error) {
     console.error(`Error sending join request to group ${groupId}:`, error);
     throw error;

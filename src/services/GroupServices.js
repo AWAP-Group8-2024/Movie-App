@@ -185,3 +185,15 @@ export const leaveGroupByGroupId = async (groupId) => {
     throw error;
   }
 };
+
+export const getUserJoinRequests = async() => {
+  const headers = getAuthHeaders();
+  if (!headers) return;
+  try {
+    const response = await axios.get(`${API_URL}/user/groupPendingRequests`, { headers });
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting join requests:`, error);
+    throw error;
+  }
+}

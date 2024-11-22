@@ -1,6 +1,7 @@
 import { Card, Col, CardText, CardHeader } from "react-bootstrap";
 import { CreateGroupButton } from "./UserInfoComponents/Button";
 import UserGroups from "./UserGroupComponents/UserGroups";
+import ViewJoinRequests from "./UserGroupComponents/ViewJoinRequests";
 
 export const GroupCard = ({
   groupData,
@@ -17,6 +18,7 @@ export const GroupCard = ({
                 Group List
               </CardText>
             </CardHeader>
+            <ViewJoinRequests />
             <UserGroups
               groupData={groupData}
               handleGroupClick={handleGroupClick}

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import './TVShowCredits.css';
 
 function TVShowCredits({ showId }) {
   const [topCast, setTopCast] = useState([]);
   const [topCrew, setTopCrew] = useState([]);
+  const placeholderImage = 'https://via.placeholder.com/80?text=No+Photo';
 
   useEffect(() => {
     const fetchCredits = async () => {
@@ -15,26 +17,25 @@ function TVShowCredits({ showId }) {
         if (data.cast && data.crew) {
           // Filter and sort cast members
           const sortedCast = data.cast
-            .filter(cast => cast.name && cast.character && cast.profile_path)
+            .filter((cast) => cast.name && cast.character)
             .sort((a, b) => b.popularity - a.popularity)
-            .slice(0, 4);
+            .slice(0, 5);
           setTopCast(sortedCast);
 
           // Filter and sort crew members
           const sortedCrew = data.crew
-            .filter(member => 
-              member.name && 
-              member.job && 
-              ["Executive Producer", "Creator", "Producer", "Director", "Writer"].includes(member.job)
+            .filter(
+              (member) =>
+                member.name &&
+                member.job &&
+                ['Director', 'Producer', 'Writer'].includes(member.job)
             )
             .sort((a, b) => b.popularity - a.popularity)
-            .slice(0, 4);
+            .slice(0, 5);
           setTopCrew(sortedCrew);
         }
       } catch (error) {
-        console.error('Error fetching credits:', error);
-        setTopCast([]);
-        setTopCrew([]);
+        console.error('Error fetching TV show credits:', error);
       }
     };
 
@@ -43,7 +44,9 @@ function TVShowCredits({ showId }) {
     }
   }, [showId]);
 
-  // Don't render anything if no cast and crew data
+  const getProfileImageUrl = (path) =>
+    path ? `https://image.tmdb.org/t/p/w200${path}` : placeholderImage;
+
   if (!topCast.length && !topCrew.length) {
     return null;
   }
@@ -52,27 +55,43 @@ function TVShowCredits({ showId }) {
     <div className="credits-container">
       {topCast.length > 0 && (
         <>
-          <h3 className="credits-title">Top Cast Members</h3>
-          <ul className="credits-list">
-            {topCast.map(castMember => (
-              <li key={`${castMember.id}-${castMember.character}`} className="credits-item">
-                {castMember.name} <span className="role">as {castMember.character}</span>
-              </li>
+          <h3 className="credits-title">Top Cast</h3>
+          <div className="credits-row">
+            {topCast.map((castMember) => (
+              <div key={castMember.id} className="credits-item">
+                <img
+                  src={getProfileImageUrl(castMember.profile_path)}
+                  alt={castMember.name}
+                  className="profile-photo"
+                />
+                <div className="profile-details">
+                  <strong>{castMember.name}</strong>
+                  <span className="role">as {castMember.character}</span>
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         </>
       )}
 
       {topCrew.length > 0 && (
         <>
-          <h3 className="credits-title">Key Crew Members</h3>
-          <ul className="credits-list">
-            {topCrew.map(crewMember => (
-              <li key={`${crewMember.id}-${crewMember.job}`} className="credits-item">
-                {crewMember.name} <span className="role">- {crewMember.job}</span>
-              </li>
+          <h3 className="credits-title">Key Crew</h3>
+          <div className="credits-row">
+            {topCrew.map((crewMember) => (
+              <div key={crewMember.id} className="credits-item">
+                <img
+                  src={getProfileImageUrl(crewMember.profile_path)}
+                  alt={crewMember.name}
+                  className="profile-photo"
+                />
+                <div className="profile-details">
+                  <strong>{crewMember.name}</strong>
+                  <span className="role">{crewMember.job}</span>
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         </>
       )}
     </div>

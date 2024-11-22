@@ -21,8 +21,8 @@ const JoinRequestList = ({ groupId }) => {
     const fetchRequests = async () => {
       try {
         const response = await viewPendingRequests(groupId);
-        setRequests(response.requests); // Adjusting to use the correct data structure
-        setFilteredRequests(response.requests); // Initialize filtered requests
+        setRequests(response); // Adjusting to use the correct data structure
+        setFilteredRequests(response); // Initialize filtered requests
       } catch (error) {
         setError("Failed to fetch join requests");
         console.error("Error fetching join requests:", error);
@@ -53,7 +53,7 @@ const JoinRequestList = ({ groupId }) => {
     try {
       await updateJoinRequestStatus(groupId, requestId, requestStatus);
       const response = await viewPendingRequests(groupId);
-      setRequests(response.requests);
+      setRequests(response);
       setMessage("Request status updated successfully");
       navigate(`/groups/${groupId}`); // Redirect to groups page after updating request status
     } catch (error) {

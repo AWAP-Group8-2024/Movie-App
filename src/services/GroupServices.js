@@ -1,5 +1,7 @@
 // src/services/groupService.js
-import axios from 'axios';
+import axios from "axios";
+import { getUserFromSession } from "../components/utils.js";
+
 const API_URL = process.env.REACT_APP_API_URL;
 
 // Retrieves the token and alerts if the user is not authenticated
@@ -14,10 +16,12 @@ const getAuthToken = () => {
 // Sets common headers for authorized requests
 const getAuthHeaders = () => {
   const token = getAuthToken();
-  return token ? {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  } : null;
+  return token
+    ? {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    : null;
 };
 
 // Fetches all groups
@@ -27,7 +31,6 @@ export const getAllGroups = async () => {
 
   try {
     const response = await axios.get(`${API_URL}/group`, { headers });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching all groups:", error);
@@ -48,7 +51,7 @@ export const getGroupsByUserId = async (id) => {
   }
 
   try {
-    const response = await axios.get(`${API_URL}/group/all`, {headers});
+    const response = await axios.get(`${API_URL}/group/all`, { headers });
     return response.data;
   } catch (error) {
     console.error("Error fetching groups by user ID:", error);
@@ -60,13 +63,15 @@ export const getGroupMembersbyGroupId = async (groupId) => {
   const headers = getAuthHeaders();
   if (!headers) return;
   try {
-    const response = await axios.get(`${API_URL}/group/${groupId}/members`, { headers });
+    const response = await axios.get(`${API_URL}/group/${groupId}/members`, {
+      headers,
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching group members by group ID:", error);
     throw error;
   }
-}
+};
 
 // Creates a new group
 export const createNewGroup = async (groupData) => {
@@ -90,7 +95,9 @@ export const getGroupByGroupId = async (groupId) => {
   if (!headers) return;
 
   try {
-    const response = await axios.get(`${API_URL}/group/${groupId}`, { headers });
+    const response = await axios.get(`${API_URL}/group/${groupId}`, {
+      headers,
+    });
     return response.data;
   } catch (error) {
     console.error(`Error fetching group ${groupId}:`, error);
@@ -104,7 +111,11 @@ export const updateGroupByGroupId = async (groupId, updatedData) => {
   if (!headers) return;
 
   try {
-    const response = await axios.put(`${API_URL}/group/${groupId}`, updatedData, { headers });
+    const response = await axios.put(
+      `${API_URL}/group/${groupId}`,
+      updatedData,
+      { headers }
+    );
     return response.data;
   } catch (error) {
     console.error(`Error updating group ${groupId}:`, error);
@@ -118,7 +129,9 @@ export const deleteGroupByGroupId = async (groupId) => {
   if (!headers) return;
 
   try {
-    const response = await axios.delete(`${API_URL}/group/delete/${groupId}`, { headers });
+    const response = await axios.delete(`${API_URL}/group/delete/${groupId}`, {
+      headers,
+    });
     return response.data;
   } catch (error) {
     console.error(`Error deleting group ${groupId}:`, error);
@@ -135,22 +148,48 @@ export const sendJoinRequest = async (groupId) => {
     const userReqests = await getUserJoinRequests();
     let alreadyExists = false;
 
-    userReqests.forEach(element => {
-      if (element.group_id == groupId && element.status == 'pending') {
+    userReqests.forEach((element) => {
+      if (element.group_id == groupId && element.status == "pending") {
         alreadyExists = true;
       }
     });
 
     if (alreadyExists) {
-      alert(`Request has already been sent and is pending.  You can see all your requests in user profile`);
+      alert(
+        `Request has already been sent and is pending.  You can see all your requests in user profile`
+      );
       return;
     } else {
       alert(`Request sent! You can see all your requests in user profile`);
-      const response = await axios.post(`${API_URL}/group/${groupId}/join`, {}, { headers });
+      const response = await axios.post(
+        `${API_URL}/group/${groupId}/join`,
+        {},
+        { headers }
+      );
       return response.data;
     }
   } catch (error) {
     console.error(`Error sending join request to group ${groupId}:`, error);
+    throw error;
+  }
+};
+
+export const cancelJoinRequest = async (groupId) => {
+  console.log("groupId", groupId);
+  try {
+    const user = getUserFromSession();
+    const token = user.token;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    const response = await axios.delete(`${API_URL}/group/${groupId}/cancel`, {
+      headers,
+    });
+    console.log("Join request canceled successfully:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error canceling join request:", error.message);
     throw error;
   }
 };
@@ -161,10 +200,15 @@ export const viewPendingRequests = async (groupId) => {
   if (!headers) return;
 
   try {
-    const response = await axios.get(`${API_URL}/group/${groupId}/requests`, { headers });
+    const response = await axios.get(`${API_URL}/group/${groupId}/requests`, {
+      headers,
+    });
     return response.data;
   } catch (error) {
-    console.error(`Error fetching pending requests for group ${groupId}:`, error);
+    console.error(
+      `Error fetching pending requests for group ${groupId}:`,
+      error
+    );
     throw error;
   }
 };
@@ -182,7 +226,10 @@ export const updateJoinRequestStatus = async (groupId, requestId, status) => {
     );
     return response.data;
   } catch (error) {
-    console.error(`Error updating join request status for group ${groupId}:`, error);
+    console.error(
+      `Error updating join request status for group ${groupId}:`,
+      error
+    );
     throw error;
   }
 };
@@ -193,7 +240,9 @@ export const leaveGroupByGroupId = async (groupId) => {
   if (!headers) return;
 
   try {
-    const response = await axios.delete(`${API_URL}/group/${groupId}/leave`, { headers });
+    const response = await axios.delete(`${API_URL}/group/${groupId}/leave`, {
+      headers,
+    });
     return response.data;
   } catch (error) {
     console.error(`Error leaving group ${groupId}:`, error);
@@ -201,14 +250,30 @@ export const leaveGroupByGroupId = async (groupId) => {
   }
 };
 
-export const getUserJoinRequests = async() => {
+export const getUserJoinRequests = async () => {
   const headers = getAuthHeaders();
   if (!headers) return;
   try {
-    const response = await axios.get(`${API_URL}/user/groupPendingRequests`, { headers });
+    const response = await axios.get(`${API_URL}/user/groupPendingRequests`, {
+      headers,
+    });
     return response.data;
   } catch (error) {
     console.error(`Error getting join requests:`, error);
     throw error;
   }
-}
+};
+
+export const cancelUserJoinRequests = async () => {
+  const headers = getAuthHeaders();
+  if (!headers) return;
+  try {
+    const response = await axios.delete(`${API_URL}/user/PendingRequests`, {
+      headers,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error getting join requests:`, error);
+    throw error;
+  }
+};

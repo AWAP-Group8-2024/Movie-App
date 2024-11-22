@@ -1,14 +1,14 @@
 import axios from "axios";
-
+import getUserFromSession from "../components/utils.js";
 const url = process.env.REACT_APP_API_URL;
 if (!url) throw new Error("API URL not defined in environment variables.");
 
-const getUserFromSession = () => {
-  const userFromSessionStorage = sessionStorage.getItem("user");
-  return userFromSessionStorage
-    ? JSON.parse(userFromSessionStorage)
-    : { id: "", email: "", token: "" };
-};
+// const getUserFromSession = () => {
+//   const userFromSessionStorage = sessionStorage.getItem("user");
+//   return userFromSessionStorage
+//     ? JSON.parse(userFromSessionStorage)
+//     : { id: "", email: "", token: "" };
+// };
 
 export const checkContentById = async (content) => {
   const user = getUserFromSession();

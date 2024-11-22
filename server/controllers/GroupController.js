@@ -1,6 +1,7 @@
 import * as GroupModel from "../models/Group.js";
 import * as JoinRequestModel from "../models/JoinRequest.js";
 import { ApiError } from "../helpers/apiError.js";
+import { request } from "http";
 
 // Listing is available for all user
 export const getAllGroupsListing = async (req, res, next) => {
@@ -111,12 +112,33 @@ export const sendJoinRequest = async (req, res) => {
   }
 };
 
+export const cancelJoinRequest = async (req, res) => {
+  const { groupId } = req.params;
+  const { id } = req.user;
+
+  try {
+    const result = await JoinRequestModel.cancelRequest(groupId, id);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Request not found" });
+    }
+
+    const request = result.rows[0];
+    return res
+      .status(200)
+      .json({ message: "Join request cancel successfully", request });
+  } catch (error) {
+    console.error("Error canceling join request:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 export const viewPendingRequests = async (req, res) => {
   const { groupId } = req.params;
 
   try {
     const requests = await JoinRequestModel.getPendingRequests(groupId);
-    return res.status(200).json({ requests });
+    return res.status(200).json(requests);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

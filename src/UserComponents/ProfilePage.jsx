@@ -18,13 +18,7 @@ export default function ProfilePage() {
     handleLogout,
     createNewGroup,
   } = useUser();
-  const {
-    favorites,
-    getUserFavorites,
-    addFavorite,
-    removeFavorite,
-    getFavoritesByType,
-  } = useFavorite();
+  const { getUserFavorites } = useFavorite();
 
   const navigate = useNavigate();
   const { profileId } = useParams();

@@ -10,6 +10,14 @@ export const createJoinRequest = async (groupId, accountId) => {
   return rows[0];
 };
 
+export const cancelRequest = async (groupId, accountId) => {
+  const query = `
+      DELETE FROM join_requests WHERE group_id = $1 AND account_id = $2 RETURNING *
+    `;
+  const result = await pool.query(query, [groupId, accountId]);
+  return result;
+};
+
 export const getPendingRequests = async (groupId) => {
   const query = `
       SELECT jr.id, a.email, a.firstname, a.lastname, jr.request_date 
@@ -22,6 +30,17 @@ export const getPendingRequests = async (groupId) => {
 };
 
 export const updateJoinRequestStatus = async (requestId, status) => {
+  const query = `
+      UPDATE join_requests 
+      SET status = $1, response_date = CURRENT_TIMESTAMP
+      WHERE id = $2 
+      RETURNING *;
+    `;
+  const { rows } = await pool.query(query, [status, requestId]);
+  return rows[0];
+};
+
+export const deleteJoinRequest = async (requestId, status) => {
   const query = `
       UPDATE join_requests 
       SET status = $1, response_date = CURRENT_TIMESTAMP

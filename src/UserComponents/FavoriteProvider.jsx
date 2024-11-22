@@ -18,12 +18,14 @@ export function FavoriteProvider({ children }) {
   };
 
   const checkContentById = async (content) => {
-    if (token) return false;
+    if (!token) return false;
+
     try {
       const body = { content_id: content.id };
       const response = await axios.post(`${url}/favorite/check`, body, {
         headers,
       });
+
       return response.data.favorite;
     } catch (error) {
       console.error("Error checking favorite status:", error);

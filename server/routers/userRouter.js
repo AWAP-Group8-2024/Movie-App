@@ -21,4 +21,5 @@ router.post("/profile/:id", auth, getUserProfile);
 router.delete("/profile/:id", auth, deleteUser);
 router.put("/profile/:id", auth, updateUserProfile);
 router.get("/groupPendingRequests", auth, getGroupPendingRequests);
+
 export default router;

@@ -58,7 +58,7 @@ export const verifyCreatorIsValid = async (req, res, next) => {
     }
     if (id !== group.creator_id) {
       return res.status(400).json({
-        message: `The user id: ${id} is not the group owner. Only the group owner can proceed this operation`,
+        message: `The user id: ${id} is not the owner of group ${groupId}. Only the group owner can proceed this operation`,
       });
     }
     // Attached group object to req for further uses.

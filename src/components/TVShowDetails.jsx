@@ -8,7 +8,6 @@ import RecommendedShows from "./RecommendedShows";
 import SocialSharing from "./SocialSharing";
 import "./TVShowDetails.css";
 import { useUser } from "../UserComponents/UseUser.jsx";
-
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import { useFavorite } from "../UserComponents/FavoriteProvider";
 
@@ -21,7 +20,6 @@ export default function TVShowDetails() {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [showShareOptions, setShowShareOptions] = useState(false);
-  // const [contentInFavorite, setContentInFavorite] = useState(false);
   const { user } = useUser();
   const {
     checkContentById,
@@ -31,31 +29,6 @@ export default function TVShowDetails() {
     removeFromFavorite,
   } = useFavorite();
 
-  const checkIfContentInFavoriteById = async (show) => {
-    const isFavorite = await checkContentById(show);
-    setContentInFavorite(!!isFavorite);
-  };
-
-  const handleToggleFavorite = async () => {
-    if (!user.token) {
-      alert("Please log in to add or remove content from your favorites.");
-      return;
-    }
-
-    try {
-      if (contentInFavorite) {
-        await removeFromFavorite(show);
-        setContentInFavorite(false);
-      } else {
-        await addToFavorite(show, mediaType);
-        setContentInFavorite(true);
-      }
-    } catch (error) {
-      console.error("Error toggling favorite status:", error);
-      alert("An error occurred. Please try again.");
-    }
-  };
-
   useEffect(() => {
     fetch(
       `https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
@@ -63,19 +36,12 @@ export default function TVShowDetails() {
       .then((res) => res.json())
       .then((data) => {
         setShow(data);
-        checkIfContentInFavoriteById(data);
       })
       .catch((error) => {
         console.error("Error fetching TV show details:", error);
         setError("No details available in TMDB for this show.");
       });
   }, [id]);
-
-  useEffect(() => {
-    if (!user) {
-      setContentInFavorite(false);
-    }
-  }, [user]);
 
   const fetchSeasonDetails = (seasonNumber) => {
     fetch(
@@ -96,6 +62,40 @@ export default function TVShowDetails() {
       });
   };
 
+  const handleToggleFavorite = async () => {
+    if (!user.token) {
+      alert("Please log in to add or remove content from your favorites.");
+      return;
+    }
+    try {
+      if (contentInFavorite) {
+        await removeFromFavorite(show);
+        setContentInFavorite(false);
+      } else {
+        await addToFavorite(show, mediaType);
+        setContentInFavorite(true);
+      }
+    } catch (error) {
+      console.error("Error toggling favorite status:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
+  useEffect(() => {
+    const fetchFavoriteStatus = async () => {
+      if (!user?.token || !show) return;
+
+      try {
+        const isFavorite = await checkContentById(show);
+        setContentInFavorite(!!isFavorite);
+      } catch (error) {
+        console.error("Error fetching favorite status:", error);
+      }
+    };
+
+    fetchFavoriteStatus();
+  }, [user, show, checkContentById, setContentInFavorite]);
+
   if (!show)
     return (
       <div>
@@ -105,7 +105,6 @@ export default function TVShowDetails() {
         </Container>
       </div>
     );
-  console.log("contentInFavorite", contentInFavorite);
 
   const renderRatingStars = () => {
     return (

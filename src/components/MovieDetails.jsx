@@ -35,7 +35,6 @@ export default function MovieDetails() {
       .then((res) => res.json())
       .then((data) => {
         setMovie(data);
-        checkIfContentInFavoriteById(data);
       })
       .catch((error) => console.error("Error fetching movie details:", error));
   }, [id]);
@@ -49,17 +48,11 @@ export default function MovieDetails() {
   // const shareUrl = `${process.env.REACT_APP_API_URL}/movie/${id}`;
   // const shareMessage = `Check out "${movie.title}" on MovieApp!`;
 
-  const checkIfContentInFavoriteById = async (movie) => {
-    const isFavorite = await checkContentById(movie);
-    setContentInFavorite(!!isFavorite);
-  };
-
   const handleToggleFavorite = async () => {
     if (!user.token) {
       alert("Please log in to add or remove content from your favorites.");
       return;
     }
-
     try {
       if (contentInFavorite) {
         await removeFromFavorite(movie);
@@ -73,6 +66,21 @@ export default function MovieDetails() {
       alert("An error occurred. Please try again.");
     }
   };
+
+  useEffect(() => {
+    const fetchFavoriteStatus = async () => {
+      if (!user?.token || !movie) return;
+
+      try {
+        const isFavorite = await checkContentById(movie);
+        setContentInFavorite(!!isFavorite);
+      } catch (error) {
+        console.error("Error fetching favorite status:", error);
+      }
+    };
+
+    fetchFavoriteStatus();
+  }, [user, movie, checkContentById, setContentInFavorite]);
 
   if (!movie) return <Container className="text-dark">Loading...</Container>;
 

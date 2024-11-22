@@ -26,11 +26,7 @@ router.get(
   GroupController.getGroupByGroupId
 );
 
-router.get(
-  "/:groupId/members", 
-  auth,
-  GroupController.getGroupMembers
-);
+router.get("/:groupId/members", auth, GroupController.getGroupMembers);
 
 // delete group if user is the owner
 router.delete(
@@ -41,6 +37,7 @@ router.delete(
 );
 
 router.post("/:groupId/join", auth, GroupController.sendJoinRequest);
+router.delete("/:groupId/cancel", auth, GroupController.cancelJoinRequest);
 
 router.get(
   "/:groupId/requests",
@@ -57,9 +54,5 @@ router.put(
 );
 
 // leave group
-router.delete(
-  "/:groupId/leave",
-  auth,
-  GroupController.leaveGroup
-);
+router.delete("/:groupId/leave", auth, GroupController.leaveGroup);
 export default router;

@@ -1,27 +1,16 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
-import {
-  FaEye,
-  FaStar,
-  FaRegHeart,
-  FaShare,
-  FaRegBookmark,
-} from "react-icons/fa";
+import { FaEye, FaStar, FaRegHeart, FaShare } from "react-icons/fa";
 import Navigation from "./Navigation";
 import TVShowCredits from "./TVShowCredits";
 import RecommendedShows from "./RecommendedShows";
 import SocialSharing from "./SocialSharing";
 import "./TVShowDetails.css";
-
-import {
-  addToFavorite,
-  checkContentById,
-  removeFromFavorite,
-} from "../services/favoriteServices.js";
 import { useUser } from "../UserComponents/UseUser.jsx";
-import { formatRuntime, renderStars, getUserFromSession } from "./utils.js";
+
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
+import { useFavorite } from "../UserComponents/FavoriteProvider";
 
 export default function TVShowDetails() {
   const { mediaType, id } = useParams();
@@ -32,8 +21,17 @@ export default function TVShowDetails() {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [showShareOptions, setShowShareOptions] = useState(false);
-  const [contentInFavorite, setContentInFavorite] = useState(false);
+  // const [contentInFavorite, setContentInFavorite] = useState(false);
   const { user } = useUser();
+  const {
+    favorites,
+    getUserFavorites,
+    checkContentById,
+    contentInFavorite,
+    setContentInFavorite,
+    addToFavorite,
+    removeFromFavorite,
+  } = useFavorite();
 
   const checkIfContentInFavoriteById = async (show) => {
     const isFavorite = await checkContentById(show);
@@ -41,7 +39,6 @@ export default function TVShowDetails() {
   };
 
   const handleToggleFavorite = async () => {
-    const user = getUserFromSession();
     if (!user.token) {
       alert("Please log in to add or remove content from your favorites.");
       return;

@@ -27,7 +27,7 @@ export const deleteUserById = async (id) => {
 
 export const getGroupPendingRequestsById = async (id) => {
   const result = await pool.query(
-    "SELECT * FROM join_requests WHERE account_id = $1",
+    "SELECT * FROM join_requests WHERE account_id = $1 AND status = 'pending'",
     [id]
   );
   return result.rows;

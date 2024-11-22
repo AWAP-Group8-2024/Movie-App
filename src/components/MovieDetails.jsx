@@ -1,10 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-  addToFavorite,
-  checkContentById,
-  removeFromFavorite,
-} from "../services/favoriteServices.js";
+
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { FaRegHeart, FaShare } from "react-icons/fa";
 
@@ -17,14 +13,22 @@ import Navigation from "./Navigation";
 import { useUser } from "../UserComponents/UseUser.jsx";
 import { formatRuntime, renderStars, getUserFromSession } from "./utils.js";
 import FinnKinoSchedule from "./FinnKinoSchedule.jsx";
+import { useFavorite } from "../UserComponents/FavoriteProvider";
 
 export default function MovieDetails() {
   const { mediaType, id } = useParams();
   const [movie, setMovie] = useState(null);
   const [showShareOptions, setShowShareOptions] = useState(false);
-  const [contentInFavorite, setContentInFavorite] = useState(false);
   const { user } = useUser();
-
+  const {
+    favorites,
+    getUserFavorites,
+    checkContentById,
+    contentInFavorite,
+    setContentInFavorite,
+    addToFavorite,
+    removeFromFavorite,
+  } = useFavorite();
   useEffect(() => {
     fetch(
       `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
@@ -52,7 +56,6 @@ export default function MovieDetails() {
   };
 
   const handleToggleFavorite = async () => {
-    const user = getUserFromSession();
     if (!user.token) {
       alert("Please log in to add or remove content from your favorites.");
       return;

@@ -39,7 +39,6 @@ export default function UserProvider({ children }) {
 
   const handleLogout = () => {
     sessionStorage.clear();
-    // sessionStorage.removeItem("user");
     setUser({ id: "", email: "", token: "", password: "" });
     navigate("/");
   };

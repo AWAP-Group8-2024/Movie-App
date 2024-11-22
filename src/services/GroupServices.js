@@ -171,3 +171,17 @@ export const updateJoinRequestStatus = async (groupId, requestId, status) => {
     throw error;
   }
 };
+
+// leave a group by its ID
+export const leaveGroupByGroupId = async (groupId) => {
+  const headers = getAuthHeaders();
+  if (!headers) return;
+
+  try {
+    const response = await axios.delete(`${API_URL}/group/${groupId}/leave`, { headers });
+    return response.data;
+  } catch (error) {
+    console.error(`Error leaving group ${groupId}:`, error);
+    throw error;
+  }
+};

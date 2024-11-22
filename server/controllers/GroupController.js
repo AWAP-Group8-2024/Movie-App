@@ -168,3 +168,16 @@ export const createGroupObj = (id, name, description, creator_id) => {
 export const isGroupNameValid = (groupName) => {
   return groupName && groupName.trim().length > 0;
 };
+
+// leaveGroup
+export const leaveGroup = async (req, res) => {
+  const { groupId } = req.params;
+  const { id } = req.user;
+
+  try {
+    await GroupModel.leaveGroup(groupId, id);
+    return res.status(200).json({ message: "You have left the group" });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};

@@ -14,7 +14,7 @@ const GroupList = ({ fetchType }) => {
   const [userId, setUserId] = useState(0);
   const [filteredGroups, setFilteredGroups] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [userGroups, setUserGroups] = useState([]); // To store the groups the user has joined
+  const [userGroups, setUserGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
@@ -23,14 +23,14 @@ const GroupList = ({ fetchType }) => {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const user = JSON.parse(sessionStorage.getItem("user")); // Get user data from sessionStorage
+        const user = JSON.parse(sessionStorage.getItem("user"));
         if (!user?.id) {
           if (!sessionStorage.getItem("alertShown")) {
             alert("You have to login to view Groups.");
             sessionStorage.setItem("alertShown", "true");
           }
-          navigate("/login"); // Redirect to login page if user is not authenticated
-          return; // Stop further execution
+          navigate("/login");
+          return;
         }
         setUserId(user.id);
 
@@ -39,7 +39,6 @@ const GroupList = ({ fetchType }) => {
         const userGroupData = await getGroupsByUserId(user.id);
         setUserGroups(userGroupData);
 
-        // Filter out groups the user has joined or is the owner of
         const availableGroups = groupsData.filter(
           (group) =>
             !userGroupData.some((userGroup) => userGroup.id === group.id) &&
@@ -56,21 +55,19 @@ const GroupList = ({ fetchType }) => {
     };
 
     fetchGroups();
-  }, [navigate]); // Add `navigate` as a dependency
+  }, [navigate]);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
 
-    // Filter groups based on the search term
     const results = groups.filter((group) =>
       group.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
 
-    // Filter out groups the user has joined or is the owner of
     const filteredResults = results.filter(
       (group) =>
         !userGroups.some((userGroup) => userGroup.id === group.id) &&
-        group.creator_id !== userId // Replace with actual user ID
+        group.creator_id !== userId
     );
 
     setFilteredGroups(filteredResults);
@@ -84,9 +81,8 @@ const GroupList = ({ fetchType }) => {
     }
     try {
       const newGroup = await createNewGroup({ name });
-      setMessage(`Group ${newGroup.name} created!`);
+      setMessage(`Group "${newGroup.name}" created successfully!`);
       setName("");
-      // Optionally, you can navigate or update group list after creating
     } catch (error) {
       setError("Error creating group");
     }
@@ -94,28 +90,16 @@ const GroupList = ({ fetchType }) => {
 
   const handleJoinGroup = async (groupId) => {
     try {
-      await sendJoinRequest(groupId); // Pass groupId directly here
+      await sendJoinRequest(groupId);
       navigate("/groups/all");
       setMessage("Join request sent successfully.");
     } catch (err) {
-      if (err.message === "User not authenticated") {
-        navigate("/login");
-      } else if (err.message === "User already in group") {
-        setError("You are already a member of this group.");
-      } else if (err.message === "Join request already sent") {
-        setError("You have already sent a join request to this group.");
-      } else if (err.message === "User is the creator of the group") {
-        setError("You are the creator of this group.");
-      } else {
-        setError("Failed to join group.");
-        console.error(err);
-      }
+      setError(err.message || "An error occurred while sending join request.");
     }
   };
 
-  if (loading) return <div className="text-center">Loading...</div>;
+  if (loading) return <div className="text-center py-5">Loading...</div>;
   if (error) return <div className="alert alert-danger">{error}</div>;
-  if (message) return <div className="alert alert-success">{message}</div>;
 
   return (
     <div>
@@ -123,22 +107,27 @@ const GroupList = ({ fetchType }) => {
       <div className="container mt-5">
         {fetchType === "user" ? (
           <>
-            <h2>Your Groups</h2>
+            <h2 className="text-center mb-4">Your Groups</h2>
             <div className="row">
               {userGroups.length === 0 ? (
-                <p>You haven't joined any groups yet.</p>
+                <p className="text-center">
+                  You haven't joined any groups yet.
+                </p>
               ) : (
                 userGroups.map((group) => (
-                  <div key={group.id} className="col-md-4 mb-3">
-                    <div className="card">
+                  <div
+                    key={group.id}
+                    className="col-lg-4 col-md-6 col-sm-12 mb-3"
+                  >
+                    <div className="card shadow-sm">
                       <div className="card-body">
                         <h5 className="card-title">{group.name}</h5>
-                        <p className="card-text">
+                        <p className="card-text text-muted">
                           Created by {group.creator_id}
                         </p>
                         <a
                           href={`/groups/${group.id}`}
-                          className="btn btn-dark mt-2 mx-2"
+                          className="btn btn-dark btn-sm"
                         >
                           View Group
                         </a>
@@ -151,52 +140,57 @@ const GroupList = ({ fetchType }) => {
           </>
         ) : (
           <>
-            <h2>Search Groups</h2>
-            {message && <div className="alert alert-success">{message}</div>}
-            {error && <div className="alert alert-danger">{error}</div>}
-
-            <div className="mb-4">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search by group name"
-                value={searchTerm}
-                onChange={handleSearch}
-              />
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h2>Search Groups</h2>
+              <div style={{ maxWidth: "400px" }}>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search by group name"
+                  value={searchTerm}
+                  onChange={handleSearch}
+                />
+              </div>
             </div>
-            <h2>Available Groups</h2>
+
             <div className="row">
               {filteredGroups.length === 0 ? (
-                <p>No available groups found.</p>
+                <p className="text-center">No available groups found.</p>
               ) : (
                 filteredGroups.map((group) => (
-                  <div key={group.id} className="col-md-4 mb-3">
-                    <div className="card">
+                  <div
+                    key={group.id}
+                    className="col-lg-4 col-md-6 col-sm-12 mb-3"
+                  >
+                    <div className="card shadow-sm">
                       <div className="card-body">
                         <h5 className="card-title">{group.name}</h5>
-                        <p className="card-text">
+                        <p className="card-text text-muted">
                           Created by {group.creator_id}
                         </p>
-                        <a
-                          href={`/groups/${group.id}`}
-                          className="btn btn-dark mt-2 mx-2"
-                        >
-                          View Group
-                        </a>
-                        <button
-                          className="btn btn-primary mt-2"
-                          onClick={() => handleJoinGroup(group.id)}
-                        >
-                          Join Group
-                        </button>
+                        <div className="d-flex justify-content-start gap-3 mt-3">
+                          <a
+                            href={`/groups/${group.id}`}
+                            className="btn btn-dark btn-sm"
+                          >
+                            View Group
+                          </a>
+                          <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => handleJoinGroup(group.id)}
+                          >
+                            Join Group
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 ))
               )}
             </div>
-            <h2>Create a New Group</h2>
-            <form onSubmit={handleSubmit}>
+
+            <h2 className="mt-5">Create a New Group</h2>
+            <form onSubmit={handleSubmit} className="mt-3">
               <div className="mb-3">
                 <input
                   type="text"

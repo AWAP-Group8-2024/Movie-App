@@ -76,3 +76,12 @@ export const addUserToGroup = async (groupId, accountId) => {
 //   const result = await pool.query(query, [id]);
 //   return result;
 // };
+
+// leave the group
+export const leaveGroup = async (groupId, accountId) => {
+  const result = await pool.query(
+    "DELETE FROM group_account WHERE group_id = $1 AND account_id = $2",
+    [groupId, accountId]
+  );
+  return result;
+};

@@ -4,10 +4,11 @@ import {
   getGroupMembersbyGroupId,
   deleteGroupByGroupId,
   sendJoinRequest,
+  leaveGroupByGroupId,
 } from "../../services/GroupServices";
 import { useParams, useNavigate } from "react-router-dom";
 import Navigation from "../Navigation";
-import { useUser } from "../../UserComponents/UseUser";
+import { useUser } from "../../UserComponents/UseUser"; // Ensure this is the correct path
 import JoinRequestList from "./JoinRequestList";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -30,16 +31,20 @@ const GroupDetails = () => {
         try {
           setLoading(true);
           setError(null);
-          const groupData = await getGroupByGroupId(groupId);
-          setGroup(groupData);
-          const getGroupMembers = await getGroupMembersbyGroupId(groupId);
-          setMembers(getGroupMembers);
 
-          // Check if the logged-in user is a member of the group
-          if (user && getGroupMembers.some((member) => member.id === user.id)) {
-            setIsMember(true);
-            // Check if the logged-in user is the creator of the group
-            if (user && user.id === groupData.creator_id) {
+          const groupData = await getGroupByGroupId(groupId);
+          const groupMembers = await getGroupMembersbyGroupId(groupId);
+
+          setGroup(groupData);
+          setMembers(groupMembers);
+
+          if (user) {
+            const isGroupMember = groupMembers.some(
+              (member) => member.id === user.id
+            );
+            setIsMember(isGroupMember);
+
+            if (user.id === groupData.creator_id) {
               setIsOwner(true);
             }
           }
@@ -48,13 +53,11 @@ const GroupDetails = () => {
             navigate("/login");
           }
           setError(err.message);
-          console.error(err);
         } finally {
           setLoading(false);
         }
       };
 
-      // Ensure the user is loaded before fetching group details
       if (!userLoading) {
         fetchGroupDetails();
       }
@@ -83,20 +86,45 @@ const GroupDetails = () => {
 
   const handleJoinGroup = async () => {
     try {
+      const existingRequest = members.some(
+        (member) => member.id === user.id && member.status === "Pending"
+      );
+
+      if (existingRequest) {
+        setError("You have already sent a join request to this group.");
+        return;
+      }
+
       await sendJoinRequest(groupId);
       setMessage("Join request sent successfully.");
       navigate("/groups/all");
     } catch (err) {
       if (err.message === "User not authenticated") {
         navigate("/login");
-      } else if (err.message === "User already in group") {
-        setError("You are already a member of this group.");
-      } else if (err.message === "Join request already sent") {
-        setError("You have already sent a join request to this group.");
-      } else if (err.message === "User is the creator of the group") {
-        setError("You are the creator of this group.");
       } else {
-        setError("Failed to join group.");
+        setError(err.message || "Failed to join group.");
+        console.error(err);
+      }
+    }
+  };
+  const handleLeaveGroup = async () => {
+    try {
+      // if the user is the owner of the group, they cannot leave the group
+      if (isOwner) {
+        setError(
+          "You are the owner of this group. You cannot leave the group."
+        );
+        return;
+      }
+      await leaveGroupByGroupId(groupId);
+      setMessage("You have left the group successfully.");
+      navigate("/groups/all");
+      console.log("You have left the group successfully.");
+    } catch (err) {
+      if (err.message === "User not authenticated") {
+        navigate("/login");
+      } else {
+        setError(err.message || "Failed to leave group.");
         console.error(err);
       }
     }
@@ -126,48 +154,19 @@ const GroupDetails = () => {
                 <strong>Creator:</strong> {group.creator_id}
               </p>
 
-              <p className="card-text">More details to come...</p>
-
-              {/* Buttons for Join Group and Owner Actions */}
               <div className="d-flex flex-wrap gap-2 mt-3">
-                {isMember ? (
-                  <>
-                    <h4 className="mt-4">Group Members</h4>
-                    {members.length > 0 ? (
-                      <table className="table table-striped">
-                        <thead>
-                          <tr>
-                            <th>ID</th>
-                            <th>Email</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {members.map((member) => (
-                            <tr key={member.id}>
-                              <td>{member.id}</td>
-                              <td>{member.email}</td>
-                              <td>{member.firstname}</td>
-                              <td>{member.lastname}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    ) : (
-                      <p>No members found.</p>
-                    )}
-                  </>
-                ) : (
-                  // Show Join Group button only for non-members
-                  <button
-                    className="btn btn-primary me-2"
-                    onClick={handleJoinGroup}
-                  >
+                {/* Display the 'Leave Group' button only if the user is a member and not the owner */}
+                {isMember  && !isOwner? (
+                  <button className="btn btn-danger" onClick={handleLeaveGroup}>
+                    Leave Group
+                  </button>
+                ) : !isOwner ? (
+                  <button className="btn btn-primary" onClick={handleJoinGroup}>
                     Join Group
                   </button>
-                )}
-                {/* Show owner buttons */}
+                ) : null}
+
+                {/* Display buttons for the owner to manage the group */}
                 {isOwner && (
                   <>
                     <button
@@ -190,19 +189,41 @@ const GroupDetails = () => {
                 )}
               </div>
 
-              {/* Conditional rendering of the Pending Join Requests table */}
               {showJoinRequest && isOwner && (
                 <div className="mt-4">
                   <h4>Pending Join Requests</h4>
                   <div className="table-responsive mt-3">
                     <table className="table table-striped table-hover">
-                      <tbody>
-                        {/* Add rows for each join request */}
-                        <JoinRequestList groupId={groupId} />
-                      </tbody>
+                      <JoinRequestList groupId={groupId} />
                     </table>
                   </div>
                 </div>
+              )}
+
+              <h4 className="mt-4">Group Members</h4>
+              {members.length > 0 ? (
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Email</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {members.map((member) => (
+                      <tr key={member.id}>
+                        <td>{member.id}</td>
+                        <td>{member.email}</td>
+                        <td>{member.firstname}</td>
+                        <td>{member.lastname}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>No members found.</p>
               )}
             </div>
           </div>

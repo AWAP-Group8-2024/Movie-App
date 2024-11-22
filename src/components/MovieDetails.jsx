@@ -11,7 +11,7 @@ import "./MovieDetail.css";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import Navigation from "./Navigation";
 import { useUser } from "../UserComponents/UseUser.jsx";
-import { formatRuntime, renderStars, getUserFromSession } from "./utils.js";
+import { formatRuntime, renderStars } from "./utils.js";
 import FinnKinoSchedule from "./FinnKinoSchedule.jsx";
 import { useFavorite } from "../UserComponents/FavoriteProvider";
 
@@ -21,14 +21,13 @@ export default function MovieDetails() {
   const [showShareOptions, setShowShareOptions] = useState(false);
   const { user } = useUser();
   const {
-    favorites,
-    getUserFavorites,
     checkContentById,
     contentInFavorite,
     setContentInFavorite,
     addToFavorite,
     removeFromFavorite,
   } = useFavorite();
+
   useEffect(() => {
     fetch(
       `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
@@ -45,7 +44,7 @@ export default function MovieDetails() {
     if (!user) {
       setContentInFavorite(false);
     }
-  }, [user]);
+  }, [user, setContentInFavorite]);
 
   // const shareUrl = `${process.env.REACT_APP_API_URL}/movie/${id}`;
   // const shareMessage = `Check out "${movie.title}" on MovieApp!`;

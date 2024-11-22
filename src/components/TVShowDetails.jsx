@@ -24,8 +24,6 @@ export default function TVShowDetails() {
   // const [contentInFavorite, setContentInFavorite] = useState(false);
   const { user } = useUser();
   const {
-    favorites,
-    getUserFavorites,
     checkContentById,
     contentInFavorite,
     setContentInFavorite,
@@ -107,6 +105,7 @@ export default function TVShowDetails() {
         </Container>
       </div>
     );
+  console.log("contentInFavorite", contentInFavorite);
 
   const renderRatingStars = () => {
     return (

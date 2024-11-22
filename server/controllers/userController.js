@@ -25,7 +25,7 @@ export const registration = async (req, res, next) => {
     }
 
     const hashedPassword = await hash(password, 10);
-    const result = await insertUser(email, hashedPassword);
+    const result = await UserModel.insertUser(email, hashedPassword);
     const user = result.rows[0];
     return res.status(201).json(createUserObj(user.id, user.email));
   } catch (error) {

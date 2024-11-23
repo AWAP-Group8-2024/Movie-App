@@ -112,17 +112,17 @@ export const GroupButton = ({ handleCancel }) => {
   );
 };
 
-export const CreateGroupButton = ({ setShowCreateGroupModal }) => {
-  return (
-    <Col xs="auto">
-      <Button
-        variant="outline-dark"
-        onClick={() => setShowCreateGroupModal(true)}
-        size="sm"
-        name="CreateGroupButton"
-      >
-        <IoAddCircle className={styles.icon} />
-      </Button>
-    </Col>
-  );
-};
+// export const CreateGroupButton = ({ setShowCreateGroupModal }) => {
+//   return (
+//     <Col xs="auto">
+//       <Button
+//         variant="outline-dark"
+//         onClick={() => setShowCreateGroupModal(true)}
+//         size="sm"
+//         name="CreateGroupButton"
+//       >
+//         <IoAddCircle className={styles.icon} />
+//       </Button>
+//     </Col>
+//   );
+// };

@@ -21,22 +21,21 @@ export default function ProfilePage() {
     handleLogout,
   } = useUser();
   const { setFavorites, getUserFavorites } = useFavorite();
-  const { groups, setGroups, getUserGroups, createNewGroup } = useGroup();
+  const { setGroups, getUserGroups, createNewGroup, leaveGroup } = useGroup();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { profileId } = useParams();
   const currentUrl = window.location.href;
   const loggedInUserId = user?.id?.toString();
   const isOwnProfile = profileId === loggedInUserId;
 
   const [profileData, setProfileData] = useState(null);
-  // const [groupData, setGroupData] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
   const [userConfirm, setUserConfirm] = useState({ email: "", password: "" });
   const [newGroup, setNewGroup] = useState({ name: "", description: "" });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+  const [createGroupModalIsOpen, setCreateGroupModalIsOpen] = useState(false);
 
   useEffect(() => {
     if (profileId) {
@@ -105,13 +104,6 @@ export default function ProfilePage() {
     setIsEditing(false);
   };
 
-  const handleGroupViewButton = (groupId) => {
-    navigate(`/groups/${groupId}`);
-  };
-  const handleGroupDeleteButton = (groupId) => {
-    navigate(`/groups/${groupId}`);
-  };
-
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(currentUrl);
@@ -136,7 +128,7 @@ export default function ProfilePage() {
     }
     try {
       await createNewGroup(newGroup);
-      setShowCreateGroupModal(false);
+      setCreateGroupModalIsOpen(false);
       alert("Group created successfully!");
     } catch (error) {
       alert("Failed to create a group");
@@ -160,11 +152,8 @@ export default function ProfilePage() {
         userConfirm={userConfirm}
         setUserConfirm={setUserConfirm}
         setIsEditing={setIsEditing}
-        // groupData={groupData}
-        handleGroupViewButton={handleGroupViewButton}
-        handleGroupDeleteButton={handleGroupDeleteButton}
         handleShare={handleShare}
-        setShowCreateGroupModal={setShowCreateGroupModal}
+        setCreateGroupModalIsOpen={setCreateGroupModalIsOpen}
       />
       <AccountDeleteModal
         showDeleteModal={showDeleteModal}
@@ -174,8 +163,8 @@ export default function ProfilePage() {
         setUserConfirm={setUserConfirm}
       />
       <CreateGroupModal
-        showCreateGroupModal={showCreateGroupModal}
-        setShowCreateGroupModal={setShowCreateGroupModal}
+        showCreateGroupModal={createGroupModalIsOpen}
+        setShowCreateGroupModal={setCreateGroupModalIsOpen}
         newGroup={newGroup}
         setNewGroup={setNewGroup}
         handleGroupSubmit={handleGroupSubmit}

@@ -1,8 +1,8 @@
 import { Card, Row, Col } from "react-bootstrap";
-import PrivateInfo from "./UserInfoComponents/PrivateInfo";
-import PublicInfo from "./UserInfoComponents/PublicInfo";
-import ProfileAction from "./UserInfoComponents/ProfileAction";
-import { EditButton, ShareButton } from "./UserInfoComponents/Button";
+import PrivateInfo from "./UserInfoCardComponents/PrivateInfo";
+import PublicInfo from "./UserInfoCardComponents/PublicInfo";
+import ProfileAction from "./UserInfoCardComponents/ProfileAction";
+import { EditButton, ShareButton } from "./UserInfoCardComponents/Button";
 
 export const UserInfoCard = ({
   isOwnProfile,

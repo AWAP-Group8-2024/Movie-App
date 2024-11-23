@@ -55,4 +55,5 @@ router.put(
 
 // leave group
 router.delete("/:groupId/leave", auth, GroupController.leaveGroup);
+
 export default router;

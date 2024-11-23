@@ -40,6 +40,18 @@ export default function GroupProvider({ children }) {
     }
   };
 
+  const leaveGroup = async (groupId) => {
+    try {
+      const response = await axios.delete(`${url}/group/${groupId}/leave`, {
+        headers,
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to leave the group ${groupId}:`, error);
+      throw error;
+    }
+  };
+
   return (
     <GroupContext.Provider
       value={{
@@ -47,6 +59,7 @@ export default function GroupProvider({ children }) {
         setGroups,
         getUserGroups,
         createNewGroup,
+        leaveGroup,
       }}
     >
       {children}

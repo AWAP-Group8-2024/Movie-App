@@ -8,12 +8,23 @@ import {
 } from "./UserGroupComponents";
 import styles from "./UserGroups.module.css";
 import { useGroup } from "../../../GroupProvider";
+import { useNavigate } from "react-router-dom";
+export default function UserGroups() {
+  const navigate = useNavigate();
+  const { groups, leaveGroup } = useGroup();
 
-export default function UserGroups({
-  handleGroupViewButton,
-  handleGroupDeleteButton,
-}) {
-  const { groups, setGroups, getUserGroups, createNewGroup } = useGroup();
+  const handleGroupViewButton = (groupId) => {
+    navigate(`/groups/${groupId}`);
+  };
+  const handleGroupDeleteButton = async (groupId) => {
+    try {
+      await leaveGroup(groupId);
+      alert("Leave group successfully!");
+      window.location.reload();
+    } catch (error) {
+      alert("Failed to leave a group");
+    }
+  };
   return (
     <>
       {groups.length > 0 ? (
@@ -34,7 +45,9 @@ export default function UserGroups({
                     />
                     <UserGroupDeleteButton
                       group={group}
-                      handleGroupDeleteButton={handleGroupDeleteButton}
+                      handleGroupDeleteButton={() => {
+                        handleGroupDeleteButton(group.id);
+                      }}
                     />
                   </Col>
                 </Row>
@@ -43,7 +56,9 @@ export default function UserGroups({
           ))}
         </div>
       ) : (
-        <Card.Text>No groups joined yet.</Card.Text>
+        <Card.Text className="d-flex flex-column align-items-center mt-2">
+          No groups joined yet.
+        </Card.Text>
       )}
     </>
   );

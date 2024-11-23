@@ -13,21 +13,13 @@ export default function ProfileBody({
   handleLogout,
   setShowDeleteModal,
   setIsEditing,
-  // groupData,
   handleShare,
-  setShowCreateGroupModal,
-  handleGroupViewButton,
-  handleGroupDeleteButton,
+  setCreateGroupModalIsOpen,
 }) {
   return (
     <div className="mt-2">
       <Row>
-        <GroupCard
-          // groupData={groupData}
-          handleGroupViewButton={handleGroupViewButton}
-          handleGroupDeleteButton={handleGroupDeleteButton}
-          setShowCreateGroupModal={setShowCreateGroupModal}
-        />
+        <GroupCard setCreateGroupModalIsOpen={setCreateGroupModalIsOpen} />
         <UserInfoCard
           isOwnProfile={isOwnProfile}
           setIsEditing={setIsEditing}

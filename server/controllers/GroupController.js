@@ -197,7 +197,7 @@ export const leaveGroup = async (req, res) => {
   const { id } = req.user;
 
   try {
-    await GroupModel.leaveGroup(groupId, id);
+    const result = await GroupModel.leaveGroup(groupId, id);
     return res.status(200).json({ message: "You have left the group" });
   } catch (error) {
     return res.status(500).json({ error: error.message });

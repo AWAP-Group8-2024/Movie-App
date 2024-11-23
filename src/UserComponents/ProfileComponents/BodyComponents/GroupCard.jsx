@@ -4,9 +4,10 @@ import UserGroups from "./UserGroupComponents/UserGroups";
 import ViewJoinRequests from "./UserGroupComponents/ViewJoinRequests";
 
 export const GroupCard = ({
-  groupData,
-  handleGroupClick,
+  // groupData,
   setShowCreateGroupModal,
+  handleGroupViewButton,
+  handleGroupDeleteButton,
 }) => {
   return (
     <>
@@ -20,8 +21,9 @@ export const GroupCard = ({
             </CardHeader>
             <ViewJoinRequests />
             <UserGroups
-              groupData={groupData}
-              handleGroupClick={handleGroupClick}
+              // groupData={groupData}
+              handleGroupViewButton={handleGroupViewButton}
+              handleGroupDeleteButton={handleGroupDeleteButton}
             />
             <div className="d-flex justify-content-center align-items-center mt-3">
               <CreateGroupButton

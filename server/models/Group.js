@@ -7,7 +7,7 @@ export const getAllGroups = async () => {
 
 export const getGroupsInfoByUserId = async (id) => {
   const query = `
-  SELECT g.id, g.name,  g.creator_id, COUNT(ga.account_id) AS member_count
+  SELECT g.id, g.name, g.creator_id, COUNT(ga.account_id) AS member_count
   FROM groups g
   LEFT JOIN group_account ga ON g.id = ga.group_id
   WHERE g.id IN ( SELECT group_id FROM group_account WHERE account_id = $1)
@@ -43,7 +43,7 @@ export const getGroupDetailsById = async (groupId) => {
 };
 
 export const getGroupMembers = async (groupId) => {
-  const result= await pool.query (
+  const result = await pool.query(
     "SELECT a.id, a.email, a.firstname, a.lastname FROM group_account ga JOIN account a ON ga.account_id = a.id WHERE ga.group_id = $1;",
     [groupId]
   );

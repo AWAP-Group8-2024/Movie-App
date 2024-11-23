@@ -15,7 +15,7 @@ router.get("/", auth, GroupController.getAllGroupsListing);
 
 router.post("/create", auth, GroupController.createNewGroup);
 
-// list user's groups
+// listing user's groups that user's joined already.
 router.get("/all", auth, GroupController.getGroupsByUserId);
 
 // access group if the user joined the group.

@@ -1,18 +1,24 @@
 import { Card, Row, Col } from "react-bootstrap";
+
 import {
   UserGroupIcon,
   UserGroupInfo,
   UserGroupViewButton,
   UserGroupDeleteButton,
 } from "./UserGroupComponents";
-import styles from "./UserGroups.module.css"; // Import CSS module styles
+import styles from "./UserGroups.module.css";
+import { useGroup } from "../../../GroupProvider";
 
-export default function UserGroups({ groupData, handleGroupClick }) {
+export default function UserGroups({
+  handleGroupViewButton,
+  handleGroupDeleteButton,
+}) {
+  const { groups, setGroups, getUserGroups, createNewGroup } = useGroup();
   return (
     <>
-      {groupData.length > 0 ? (
+      {groups.length > 0 ? (
         <div className={styles.groupListContainer}>
-          {groupData.map((group, i) => (
+          {groups.map((group, i) => (
             <Card key={i} className="mb-3">
               <Card.Body>
                 <Row className="d-flex align-items-center">
@@ -24,11 +30,11 @@ export default function UserGroups({ groupData, handleGroupClick }) {
                   >
                     <UserGroupViewButton
                       group={group}
-                      handleGroupClick={handleGroupClick}
+                      handleGroupViewButton={handleGroupViewButton}
                     />
                     <UserGroupDeleteButton
                       group={group}
-                      handleGroupClick={handleGroupClick}
+                      handleGroupDeleteButton={handleGroupDeleteButton}
                     />
                   </Col>
                 </Row>

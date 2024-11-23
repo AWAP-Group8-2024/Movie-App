@@ -1,12 +1,16 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useUser } from "./UseUser";
-import { useFavorite } from "./FavoriteProvider";
-import Navigation from "../components/Navigation.jsx";
+
 import { Container } from "react-bootstrap";
+
+import Navigation from "../components/Navigation.jsx";
 import AccountDeleteModal from "./ProfileComponents/AccountDeleteModal.jsx";
 import CreateGroupModal from "./ProfileComponents/CreateGroupModal";
 import ProfileBody from "./ProfileComponents/ProfileBody.jsx";
+
+import { useUser } from "./UseUser";
+import { useFavorite } from "./FavoriteProvider";
+import { useGroup } from "./GroupProvider";
 
 export default function ProfilePage() {
   const {
@@ -14,11 +18,10 @@ export default function ProfilePage() {
     removeAccount,
     getUserProfile,
     updateUserProfile,
-    getUserGroups,
     handleLogout,
-    createNewGroup,
   } = useUser();
-  const { getUserFavorites } = useFavorite();
+  const { setFavorites, getUserFavorites } = useFavorite();
+  const { groups, setGroups, getUserGroups, createNewGroup } = useGroup();
 
   const navigate = useNavigate();
   const { profileId } = useParams();
@@ -27,7 +30,7 @@ export default function ProfilePage() {
   const isOwnProfile = profileId === loggedInUserId;
 
   const [profileData, setProfileData] = useState(null);
-  const [groupData, setGroupData] = useState([]);
+  // const [groupData, setGroupData] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
   const [userConfirm, setUserConfirm] = useState({ email: "", password: "" });
@@ -48,19 +51,21 @@ export default function ProfilePage() {
 
       getUserGroups()
         .then((userGroups) => {
-          setGroupData(userGroups);
+          setGroups(userGroups);
         })
         .catch((error) => {
           console.error("Failed to fetch groups:", error);
         });
 
       getUserFavorites()
-        .then(() => console.log("Favorites fetched successfully"))
+        .then((userFavorites) => {
+          setFavorites(userFavorites);
+        })
         .catch((error) => {
-          console.error("Failed to fetch groups:", error);
+          console.error("Failed to fetch favorties:", error);
         });
     }
-  }, [getUserProfile, profileId, getUserGroups]);
+  }, [getUserProfile, profileId]);
 
   const handleDelete = async () => {
     try {
@@ -100,7 +105,10 @@ export default function ProfilePage() {
     setIsEditing(false);
   };
 
-  const handleGroupClick = (groupId) => {
+  const handleGroupViewButton = (groupId) => {
+    navigate(`/groups/${groupId}`);
+  };
+  const handleGroupDeleteButton = (groupId) => {
     navigate(`/groups/${groupId}`);
   };
 
@@ -152,8 +160,9 @@ export default function ProfilePage() {
         userConfirm={userConfirm}
         setUserConfirm={setUserConfirm}
         setIsEditing={setIsEditing}
-        groupData={groupData}
-        handleGroupClick={handleGroupClick}
+        // groupData={groupData}
+        handleGroupViewButton={handleGroupViewButton}
+        handleGroupDeleteButton={handleGroupDeleteButton}
         handleShare={handleShare}
         setShowCreateGroupModal={setShowCreateGroupModal}
       />

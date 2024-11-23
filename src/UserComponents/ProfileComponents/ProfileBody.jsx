@@ -13,17 +13,19 @@ export default function ProfileBody({
   handleLogout,
   setShowDeleteModal,
   setIsEditing,
-  groupData,
-  handleGroupClick,
+  // groupData,
   handleShare,
   setShowCreateGroupModal,
+  handleGroupViewButton,
+  handleGroupDeleteButton,
 }) {
   return (
     <div className="mt-2">
       <Row>
         <GroupCard
-          groupData={groupData}
-          handleGroupClick={handleGroupClick}
+          // groupData={groupData}
+          handleGroupViewButton={handleGroupViewButton}
+          handleGroupDeleteButton={handleGroupDeleteButton}
           setShowCreateGroupModal={setShowCreateGroupModal}
         />
         <UserInfoCard

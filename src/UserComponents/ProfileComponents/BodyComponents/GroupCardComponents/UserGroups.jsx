@@ -16,6 +16,7 @@ export default function UserGroups() {
   const handleGroupViewButton = (groupId) => {
     navigate(`/groups/${groupId}`);
   };
+
   const handleGroupDeleteButton = async (groupId) => {
     try {
       await leaveGroup(groupId);
@@ -25,6 +26,7 @@ export default function UserGroups() {
       alert("Failed to leave a group");
     }
   };
+
   return (
     <>
       {groups.length > 0 ? (

@@ -2,6 +2,7 @@ import { Row } from "react-bootstrap";
 import { GroupCard } from "./BodyComponents/GroupCard";
 import { FavoriteCard } from "./BodyComponents/FavoriteCard";
 import { UserInfoCard } from "./BodyComponents/UserInfoCard";
+
 export default function ProfileBody({
   profileData,
   isEditing,

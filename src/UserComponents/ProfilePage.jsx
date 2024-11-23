@@ -20,10 +20,10 @@ export default function ProfilePage() {
     updateUserProfile,
     handleLogout,
   } = useUser();
-  const { setFavorites, getUserFavorites } = useFavorite();
-  const { setGroups, getUserGroups, createNewGroup, leaveGroup } = useGroup();
 
-  // const navigate = useNavigate();
+  const { setFavorites, getUserFavorites } = useFavorite();
+  const { setGroups, getUserGroups, createNewGroup } = useGroup();
+
   const { profileId } = useParams();
   const currentUrl = window.location.href;
   const loggedInUserId = user?.id?.toString();
@@ -148,9 +148,6 @@ export default function ProfilePage() {
         handleCancel={handleCancel}
         handleLogout={handleLogout}
         setShowDeleteModal={setShowDeleteModal}
-        handleDelete={handleDelete}
-        userConfirm={userConfirm}
-        setUserConfirm={setUserConfirm}
         setIsEditing={setIsEditing}
         handleShare={handleShare}
         setCreateGroupModalIsOpen={setCreateGroupModalIsOpen}

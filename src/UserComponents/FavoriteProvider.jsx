@@ -35,7 +35,7 @@ export function FavoriteProvider({ children }) {
   const getUserFavorites = async () => {
     try {
       const response = await axios.get(`${url}/favorite/`, { headers });
-      setFavorites(response.data);
+      return response.data;
     } catch (error) {
       console.error("Failed to fetch favorites:", error);
       throw error;
@@ -119,6 +119,7 @@ export function FavoriteProvider({ children }) {
     <FavoriteContext.Provider
       value={{
         favorites,
+        setFavorites,
         getUserFavorites,
         checkContentById,
         contentInFavorite,

@@ -28,12 +28,12 @@ export const UserGroupInfo = ({ group }) => {
   );
 };
 
-export const UserGroupViewButton = ({ group, handleGroupClick }) => {
+export const UserGroupViewButton = ({ group, handleGroupViewButton }) => {
   return (
     <Button
       variant="outline-primary"
       size="sm"
-      onClick={() => handleGroupClick(group.id)}
+      onClick={() => handleGroupViewButton(group.id)}
       className="mb-2 ms-5"
     >
       <IoEyeSharp />
@@ -41,12 +41,12 @@ export const UserGroupViewButton = ({ group, handleGroupClick }) => {
   );
 };
 
-export const UserGroupDeleteButton = ({ group, handleGroupClick }) => {
+export const UserGroupDeleteButton = ({ group, handleGroupDeleteButton }) => {
   return (
     <Button
       variant="outline-danger"
       size="sm"
-      onClick={() => handleGroupClick(group.id)}
+      onClick={() => handleGroupDeleteButton(group.id)}
       className="ms-5"
     >
       <IoTrashBin />

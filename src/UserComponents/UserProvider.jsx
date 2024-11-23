@@ -100,37 +100,6 @@ export default function UserProvider({ children }) {
       throw error;
     }
   };
-  const getUserGroups = async () => {
-    try {
-      const token = user.token;
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-      const response = await axios.get(`${url}/group/all`, { headers });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const createNewGroup = async (newGroup) => {
-    try {
-      const token = user.token;
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      const response = await axios.post(`${url}/group/create`, newGroup, {
-        headers,
-      });
-      window.location.reload();
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
 
   return (
     <UserContext.Provider
@@ -142,9 +111,7 @@ export default function UserProvider({ children }) {
         removeAccount,
         getUserProfile,
         updateUserProfile,
-        getUserGroups,
         handleLogout,
-        createNewGroup,
       }}
     >
       {children}

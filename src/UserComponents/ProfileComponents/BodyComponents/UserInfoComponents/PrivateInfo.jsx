@@ -6,7 +6,7 @@ export default function PrivateInfo({
 }) {
   return (
     <>
-      <Row className="my-2">
+      <Row className="my-4">
         <Col xs className="ms-1">
           <Form.Group>
             <Form.Label>Firstname:</Form.Label>

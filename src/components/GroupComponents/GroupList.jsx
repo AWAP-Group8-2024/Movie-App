@@ -18,6 +18,7 @@ const GroupList = ({ fetchType }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
+  const [description, setDescription] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -80,9 +81,15 @@ const GroupList = ({ fetchType }) => {
       return;
     }
     try {
-      const newGroup = await createNewGroup({ name });
+      const newGroup = await createNewGroup({
+        name: name,
+        description: description
+      });
       setMessage(`Group "${newGroup.name}" created successfully!`);
+      alert(`Group "${newGroup.name}" created successfully!`);
       setName("");
+      setDescription('');
+      navigate(`/groups/${newGroup.id}`);
     } catch (error) {
       setError("Error creating group");
     }
@@ -199,6 +206,16 @@ const GroupList = ({ fetchType }) => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
+              </div>
+              <div className="mb-3">
+                <textarea
+                  className="form-control"
+                  placeholder="Enter group description"
+                  value={description}
+                  onChange={(event) => {
+                    setDescription(event.target.value);
+                  }}
+                ></textarea>
               </div>
               <button type="submit" className="btn btn-primary">
                 Create Group

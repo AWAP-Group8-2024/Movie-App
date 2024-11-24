@@ -60,6 +60,9 @@ jobs:
       - name: Build And Deploy
         id: builddeploy
 
+        env:
+          CI: false # Ensure CI is set to false during the build
+
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_WATER_0C1B37C10 }}

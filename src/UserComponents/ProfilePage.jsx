@@ -8,7 +8,7 @@ import AccountDeleteModal from "./ProfileComponents/AccountDeleteModal.jsx";
 import CreateGroupModal from "./ProfileComponents/CreateGroupModal";
 import ProfileBody from "./ProfileComponents/ProfileBody.jsx";
 
-import { useUser } from "./UseUser";
+import { useUser } from "./useUser";
 import { useFavorite } from "./FavoriteProvider";
 import { useGroup } from "./GroupProvider";
 

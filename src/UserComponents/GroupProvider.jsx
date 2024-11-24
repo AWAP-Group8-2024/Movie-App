@@ -1,6 +1,6 @@
 import { createContext, useState, useContext } from "react";
 import axios from "axios";
-import { useUser } from "./UseUser";
+import { useUser } from "./useUser";
 import { getUserFromSession } from "../components/utils.js";
 
 const url = process.env.REACT_APP_API_URL;

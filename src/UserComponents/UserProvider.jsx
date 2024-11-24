@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const url = process.env.REACT_APP_API_URL;
+console.log(url);
 
 export default function UserProvider({ children }) {
   const userFromSessionStorage = sessionStorage.getItem("user");

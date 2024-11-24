@@ -191,6 +191,18 @@ export const isGroupNameValid = (groupName) => {
   return groupName && groupName.trim().length > 0;
 };
 
+export const updateGroupDetails = async (req, res) => {
+  const { groupId } = req.params;
+  const { name, description } = req.body;
+
+  try {
+    const result = await GroupModel.updateGroupDetails(groupId, name, description);
+    return res.status(200).json({ message: "Group details updated", result });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 // leaveGroup
 export const leaveGroup = async (req, res) => {
   const { groupId } = req.params;

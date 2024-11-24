@@ -4,9 +4,11 @@ import {
   getAllGroups,
   getGroupsByUserId,
   sendJoinRequest,
+  updateGroupByGroupId,
 } from "../../services/GroupServices";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../Navigation";
+import EditGroupForm from "./EditGroupForm";
 
 const GroupList = ({ fetchType }) => {
   const [groups, setGroups] = useState([]);
@@ -18,8 +20,9 @@ const GroupList = ({ fetchType }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const navigate = useNavigate();
+  const [editingGroup, setEditingGroup] = useState(null);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -47,6 +50,7 @@ const GroupList = ({ fetchType }) => {
         );
 
         setFilteredGroups(availableGroups);
+        setMessage("");
       } catch (err) {
         setError("Failed to fetch groups");
         console.error("Error fetching groups:", err);
@@ -83,16 +87,35 @@ const GroupList = ({ fetchType }) => {
     try {
       const newGroup = await createNewGroup({
         name: name,
-        description: description
+        description: description,
       });
       setMessage(`Group "${newGroup.name}" created successfully!`);
       alert(`Group "${newGroup.name}" created successfully!`);
       setName("");
-      setDescription('');
+      setDescription("");
       navigate(`/groups/${newGroup.id}`);
     } catch (error) {
       setError("Error creating group");
     }
+  };
+
+  const handleSaveEdit = async (updatedGroup) => {
+    try {
+      await updateGroupByGroupId(updatedGroup.id, updatedGroup);
+      setGroups((prevGroups) =>
+        prevGroups.map((group) =>
+          group.id === updatedGroup.id ? updatedGroup : group
+        )
+      );
+      setEditingGroup(null);
+      setMessage("Group updated successfully.");
+    } catch (err) {
+      setError("Failed to update group. Please try again.");
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingGroup(null);
   };
 
   const handleJoinGroup = async (groupId) => {
@@ -105,17 +128,32 @@ const GroupList = ({ fetchType }) => {
     }
   };
 
-  if (loading) return <div className="text-center py-5">Loading...</div>;
+  if (loading)
+    return (
+      <div className="text-center py-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+
   if (error) return <div className="alert alert-danger">{error}</div>;
 
   return (
     <div>
       <Navigation />
       <div className="container mt-5">
-        {fetchType === "user" ? (
+        {message && <div className="alert alert-success">{message}</div>}
+        {editingGroup ? (
+          <EditGroupForm
+            group={editingGroup}
+            onSave={handleSaveEdit}
+            onCancel={handleCancelEdit}
+          />
+        ) : fetchType === "user" ? (
           <>
-             <h2 className="mt-5">Create a New Group</h2>
-            <form onSubmit={handleSubmit} className="mt-3">
+            <h2 className="text-center mb-4">Create a New Group</h2>
+            <form onSubmit={handleSubmit} className="p-4 bg-light rounded">
               <div className="mb-3">
                 <input
                   type="text"
@@ -130,39 +168,37 @@ const GroupList = ({ fetchType }) => {
                   className="form-control"
                   placeholder="Enter group description"
                   value={description}
-                  onChange={(event) => {
-                    setDescription(event.target.value);
-                  }}
-                ></textarea>
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </div>
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-primary w-100">
                 Create Group
               </button>
             </form>
-            <h2 className="text-center mb-4">Your Groups</h2>
+            <h2 className="text-center mt-5 mb-4">Your Groups</h2>
             <div className="row">
               {userGroups.length === 0 ? (
-                <p className="text-center">
-                  You haven't joined any groups yet.
-                </p>
+                <p className="text-center">You haven't joined any groups yet.</p>
               ) : (
                 userGroups.map((group) => (
-                  <div
-                    key={group.id}
-                    className="col-lg-4 col-md-6 col-sm-12 mb-3"
-                  >
-                    <div className="card shadow-sm">
+                  <div key={group.id} className="col-lg-4 col-md-6 col-sm-12 mb-3">
+                    <div className="card h-100 shadow-sm">
                       <div className="card-body">
                         <h5 className="card-title">{group.name}</h5>
                         <p className="card-text text-muted">
                           Created by {group.creator_id}
                         </p>
-                        <a
-                          href={`/groups/${group.id}`}
-                          className="btn btn-dark btn-sm"
-                        >
-                          View Group
-                        </a>
+                        <div className="d-flex justify-content-between">
+                          <a href={`/groups/${group.id}`} className="btn btn-dark btn-sm">
+                            View Group
+                          </a>
+                          <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => setEditingGroup(group)}
+                          >
+                            Edit Group
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -190,21 +226,15 @@ const GroupList = ({ fetchType }) => {
                 <p className="text-center">No available groups found.</p>
               ) : (
                 filteredGroups.map((group) => (
-                  <div
-                    key={group.id}
-                    className="col-lg-4 col-md-6 col-sm-12 mb-3"
-                  >
-                    <div className="card shadow-sm">
+                  <div key={group.id} className="col-lg-4 col-md-6 col-sm-12 mb-3">
+                    <div className="card h-100 shadow-sm">
                       <div className="card-body">
                         <h5 className="card-title">{group.name}</h5>
                         <p className="card-text text-muted">
                           Created by {group.creator_id}
                         </p>
-                        <div className="d-flex justify-content-start gap-3 mt-3">
-                          <a
-                            href={`/groups/${group.id}`}
-                            className="btn btn-dark btn-sm"
-                          >
+                        <div className="d-flex justify-content-between mt-3">
+                          <a href={`/groups/${group.id}`} className="btn btn-dark btn-sm">
                             View Group
                           </a>
                           <button
@@ -220,8 +250,6 @@ const GroupList = ({ fetchType }) => {
                 ))
               )}
             </div>
-
-           
           </>
         )}
       </div>

@@ -53,6 +53,10 @@ router.put(
   GroupController.updateJoinRequestStatus
 );
 
+// update group details
+router.put("/:groupId", auth, GroupController.updateGroupDetails);
+
+
 // leave group
 router.delete("/:groupId/leave", auth, GroupController.leaveGroup);
 

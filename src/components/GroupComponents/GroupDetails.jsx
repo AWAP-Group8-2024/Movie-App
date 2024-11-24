@@ -8,7 +8,7 @@ import {
 } from "../../services/GroupServices";
 import { useParams, useNavigate } from "react-router-dom";
 import Navigation from "../Navigation";
-import { useUser } from "../../UserComponents/UseUser"; // Ensure this is the correct path
+import { useUser } from "../../UserComponents/useUser.js";
 import JoinRequestList from "./JoinRequestList";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -156,7 +156,7 @@ const GroupDetails = () => {
 
               <div className="d-flex flex-wrap gap-2 mt-3">
                 {/* Display the 'Leave Group' button only if the user is a member and not the owner */}
-                {isMember  && !isOwner? (
+                {isMember && !isOwner ? (
                   <button className="btn btn-danger" onClick={handleLeaveGroup}>
                     Leave Group
                   </button>

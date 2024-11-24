@@ -24,10 +24,9 @@ jobs:
         env:
           REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-          
+
           API_KEY: ${{ secrets.API_KEY }}
           API_URL: ${{ secrets.API_URL }}
-          API_TOKEN: ${{ secrets.API_TOKEN }}
           API_TOKEN: ${{ secrets.API_TOKEN }}
 
           JWT_SECRET: ${{ secrets.JWT_SECRET }}

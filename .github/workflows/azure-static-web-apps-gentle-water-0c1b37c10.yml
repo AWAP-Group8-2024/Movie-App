@@ -13,12 +13,14 @@ jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
+    environment: production
     name: Build and Deploy Job
     steps:
       - name: Debug Secrets
         run: |
           echo "REACT_APP_API_KEY=${REACT_APP_API_KEY}"
           echo "DB_USER=${DB_USER}"
+          echo "API_KEY=${API_KEY}"
         env:
           REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
           DB_USER: ${{ secrets.DB_USER }}

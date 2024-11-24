@@ -114,6 +114,31 @@ const GroupList = ({ fetchType }) => {
       <div className="container mt-5">
         {fetchType === "user" ? (
           <>
+             <h2 className="mt-5">Create a New Group</h2>
+            <form onSubmit={handleSubmit} className="mt-3">
+              <div className="mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter group name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <textarea
+                  className="form-control"
+                  placeholder="Enter group description"
+                  value={description}
+                  onChange={(event) => {
+                    setDescription(event.target.value);
+                  }}
+                ></textarea>
+              </div>
+              <button type="submit" className="btn btn-primary">
+                Create Group
+              </button>
+            </form>
             <h2 className="text-center mb-4">Your Groups</h2>
             <div className="row">
               {userGroups.length === 0 ? (
@@ -196,31 +221,7 @@ const GroupList = ({ fetchType }) => {
               )}
             </div>
 
-            <h2 className="mt-5">Create a New Group</h2>
-            <form onSubmit={handleSubmit} className="mt-3">
-              <div className="mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter group name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <textarea
-                  className="form-control"
-                  placeholder="Enter group description"
-                  value={description}
-                  onChange={(event) => {
-                    setDescription(event.target.value);
-                  }}
-                ></textarea>
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Create Group
-              </button>
-            </form>
+           
           </>
         )}
       </div>

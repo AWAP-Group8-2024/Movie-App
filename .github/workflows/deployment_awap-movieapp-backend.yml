@@ -39,22 +39,13 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: node-app
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_92B1F2FCE3E443F59006A08BD1170A5A }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2D931CD518824F3EBF3AD6F6278AD1A1 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FDAC5C24B6B3402B9A03D468F8A74AB6 }}
-
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
@@ -62,4 +53,4 @@ jobs:
           app-name: 'AWAP-MovieApp-Backend'
           slot-name: 'Production'
           package: .
-          
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_441215FEC3FD4CAC93BA8B57CFB1C9A9 }}

@@ -2,8 +2,11 @@
   "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
   "configurations": {
     "movie-app": {
-      "appLocation": ".",
+      "appLocation": "./src",
+      "apiLocation": "./server",
       "outputLocation": "build",
+      "apiLanguage": "node",
+      "apiVersion": "20",
       "appBuildCommand": "npm run build",
       "run": "npm start",
       "appDevserverUrl": "http://localhost:3000"

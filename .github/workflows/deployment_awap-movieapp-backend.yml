@@ -41,8 +41,6 @@ jobs:
     environment:
       name: "development"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -63,4 +61,4 @@ jobs:
         with:
           app-name: "AWAP-MovieApp-Backend"
           slot-name: "Production"
-          package: server # Specifies the server folder as the package
+          package: .

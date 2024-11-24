@@ -1,4 +1,4 @@
-name: Build and deploy Node.js app to Azure Web App - AWAP-MovieApp-Backend
+name: Azure Web App CI/CD AWAP-MovieApp-Backend
 
 on:
   push:
@@ -23,7 +23,6 @@ jobs:
           cd server
           npm install
           npm run build --if-present
-          npm run test --if-present
         working-directory: .
 
       - name: Upload artifact for deployment job

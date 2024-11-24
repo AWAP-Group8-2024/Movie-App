@@ -2,7 +2,6 @@ import { initializeTestDb, insertTestUser, getToken } from "./helpers/test.js";
 import { expect } from "chai";
 
 const url = process.env.SERVER_URL;
-console.log("Server URL:", url);
 
 describe("GET function test", () => {
   it("should get all tasks", async () => {

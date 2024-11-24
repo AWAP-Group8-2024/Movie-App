@@ -15,10 +15,19 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
+      - name: Debug Secrets
+        run: |
+          echo "REACT_APP_API_KEY=${REACT_APP_API_KEY}"
+          echo "DB_USER=${DB_USER}"
+        env:
+          REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
+          DB_USER: ${{ secrets.DB_USER }}
+
       - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
+
       - name: Build And Deploy
         id: builddeploy
         env:

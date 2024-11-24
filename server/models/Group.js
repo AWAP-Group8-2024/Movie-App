@@ -76,6 +76,14 @@ export const addUserToGroup = async (groupId, accountId) => {
 //   const result = await pool.query(query, [id]);
 //   return result;
 // };
+// update group details by group id
+export const updateGroupDetails = async (groupId, name, description) => {
+  const result = await pool.query(
+    "UPDATE groups SET name = $1, description = $2 WHERE id = $3 RETURNING *",
+    [name, description, groupId]
+  );
+  return result;
+};
 
 // leave the group
 export const leaveGroup = async (groupId, accountId) => {

@@ -7,7 +7,7 @@ import TVShowCredits from "./TVShowCredits";
 import RecommendedShows from "./RecommendedShows";
 import SocialSharing from "./SocialSharing";
 import "./TVShowDetails.css";
-import { useUser } from "../UserComponents/UseUser.jsx";
+import { useUser } from "../UserComponents/UserProvider";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import { useFavorite } from "../UserComponents/FavoriteProvider";
 

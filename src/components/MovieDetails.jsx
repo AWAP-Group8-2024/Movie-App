@@ -10,7 +10,7 @@ import SocialSharing from "./SocialSharing.jsx";
 import "./MovieDetail.css";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import Navigation from "./Navigation";
-import { useUser } from "../UserComponents/UseUser.jsx";
+import { useUser } from "../UserComponents/UserProvider";
 import { formatRuntime, renderStars } from "./utils.js";
 import FinnKinoSchedule from "./FinnKinoSchedule.jsx";
 import { useFavorite } from "../UserComponents/FavoriteProvider";

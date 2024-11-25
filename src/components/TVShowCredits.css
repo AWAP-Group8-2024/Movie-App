@@ -29,6 +29,12 @@
   align-items: center;
   text-align: center;
   max-width: 80px;
+  cursor: pointer; /* Added for clickable items */
+  transition: transform 0.2s ease; /* Added for hover effect */
+}
+
+.credits-item:hover {
+  transform: scale(1.05); /* Added for hover effect */
 }
 
 /* Profile photo styling: Circular and responsive */
@@ -78,4 +84,17 @@
   .credits-title {
     font-size: 1.3em;
   }
+}
+
+/* Modal specific styles - Added only these new styles */
+.cast-profile-modal .modal-content {
+  border-radius: 8px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.cast-profile-modal .modal-body {
+  padding: 20px;
+  max-height: 80vh;
+  overflow-y: auto;
 }

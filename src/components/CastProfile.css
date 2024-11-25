@@ -1,0 +1,146 @@
+/* CastProfile.css */
+
+.cast-profile-modal .modal-content {
+    background-color: #ffffff;
+    border-radius: 12px;
+  }
+  
+  .cast-profile-modal .modal-dialog {
+    max-width: 800px;
+  }
+  
+  /* Profile Container */
+  .profile-container {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+  }
+  
+  .profile-image {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-info {
+    flex: 1;
+  }
+  
+  .profile-info h4 {
+    margin-bottom: 1rem;
+    color: #333;
+    font-size: 1.5rem;
+  }
+  
+  .biography {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    color: #555;
+    font-size: 0.95rem;
+  }
+  
+  .personal-details {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .personal-details p {
+    margin-bottom: 0.5rem;
+    color: #666;
+  }
+  
+  .personal-details strong {
+    color: #333;
+    margin-right: 0.5rem;
+  }
+  
+  /* Works Section */
+  .works-section {
+    padding: 1rem;
+  }
+  
+  .works-section h5 {
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-size: 1.2rem;
+  }
+  
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+  
+  .work-item {
+    position: relative;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .work-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .work-poster {
+    width: 100%;
+    height: 225px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .work-info {
+    padding: 0.5rem;
+    text-align: center;
+  }
+  
+  .work-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+    color: #333;
+  }
+  
+  .work-character {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .profile-container {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+  
+    .profile-image {
+      width: 180px;
+      height: 270px;
+    }
+  
+    .profile-info {
+      text-align: center;
+    }
+  
+    .works-grid {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+  
+    .work-poster {
+      height: 180px;
+    }
+  }
+  
+  /* Loading State */
+  .modal-body.text-center {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

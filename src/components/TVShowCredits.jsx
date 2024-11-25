@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './TVShowCredits.css';
+import CastProfileModal from './CastProfileModal';
 
 function TVShowCredits({ showId }) {
   const [topCast, setTopCast] = useState([]);
   const [topCrew, setTopCrew] = useState([]);
+  const [selectedPerson, setSelectedPerson] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const placeholderImage = 'https://via.placeholder.com/80?text=No+Photo';
 
   useEffect(() => {
@@ -47,6 +50,11 @@ function TVShowCredits({ showId }) {
   const getProfileImageUrl = (path) =>
     path ? `https://image.tmdb.org/t/p/w200${path}` : placeholderImage;
 
+  const handlePersonClick = (person) => {
+    setSelectedPerson(person.id);
+    setShowModal(true);
+  };
+
   if (!topCast.length && !topCrew.length) {
     return null;
   }
@@ -58,7 +66,13 @@ function TVShowCredits({ showId }) {
           <h3 className="credits-title">Top Cast</h3>
           <div className="credits-row">
             {topCast.map((castMember) => (
-              <div key={castMember.id} className="credits-item">
+              <div 
+                key={castMember.id} 
+                className="credits-item"
+                onClick={() => handlePersonClick(castMember)}
+                role="button"
+                tabIndex={0}
+              >
                 <img
                   src={getProfileImageUrl(castMember.profile_path)}
                   alt={castMember.name}
@@ -79,7 +93,13 @@ function TVShowCredits({ showId }) {
           <h3 className="credits-title">Key Crew</h3>
           <div className="credits-row">
             {topCrew.map((crewMember) => (
-              <div key={crewMember.id} className="credits-item">
+              <div 
+                key={crewMember.id} 
+                className="credits-item"
+                onClick={() => handlePersonClick(crewMember)}
+                role="button"
+                tabIndex={0}
+              >
                 <img
                   src={getProfileImageUrl(crewMember.profile_path)}
                   alt={crewMember.name}
@@ -94,6 +114,15 @@ function TVShowCredits({ showId }) {
           </div>
         </>
       )}
+
+      <CastProfileModal 
+        personId={selectedPerson}
+        show={showModal}
+        onHide={() => {
+          setShowModal(false);
+          setSelectedPerson(null);
+        }}
+      />
     </div>
   );
 }

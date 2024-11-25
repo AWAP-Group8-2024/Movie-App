@@ -1,4 +1,4 @@
-import { Card, Col, CardText, CardHeader } from "react-bootstrap";
+import { Card, Col, CardHeader, CardText } from "react-bootstrap";
 import { CreateGroupButton } from "./GroupCardComponents/CreateGroupButton";
 import UserGroups from "./GroupCardComponents/UserGroups";
 import ViewJoinRequests from "./GroupCardComponents/ViewJoinRequests";
@@ -9,7 +9,10 @@ export const GroupCard = ({ setCreateGroupModalIsOpen, isOwnProfile }) => {
       <Col md={3} className="d-flex justify-content-center mb-2">
         <Card style={{ width: "100%" }}>
           <CardHeader className="rounded">
-            <CardText className="d-flex justify-content-center align-items-center">
+            <CardText
+              className="d-flex justify-content-center align-items-center fw-bolder fs-5"
+              style={{ height: "30px" }}
+            >
               User Group List
             </CardText>
           </CardHeader>

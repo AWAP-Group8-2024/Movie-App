@@ -7,7 +7,6 @@ import {
   IoCheckmarkOutline,
   IoClose,
   IoShareSocialSharp,
-  IoAddCircle,
 } from "react-icons/io5";
 
 export const EditButton = ({ setIsEditing }) => {
@@ -111,18 +110,3 @@ export const GroupButton = ({ handleCancel }) => {
     </Col>
   );
 };
-
-// export const CreateGroupButton = ({ setShowCreateGroupModal }) => {
-//   return (
-//     <Col xs="auto">
-//       <Button
-//         variant="outline-dark"
-//         onClick={() => setShowCreateGroupModal(true)}
-//         size="sm"
-//         name="CreateGroupButton"
-//       >
-//         <IoAddCircle className={styles.icon} />
-//       </Button>
-//     </Col>
-//   );
-// };

@@ -1,0 +1,13 @@
+.favoriteListContainer {
+  max-width: 330px;
+  overflow: auto;
+  display: flex;
+  white-space: nowrap;
+  gap: 1rem;
+  max-width: 100%;
+}
+
+/* .favoriteListContainer::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+} */

@@ -38,7 +38,7 @@ export default function ProfileBody({
           handleShare={handleShare}
         />
       </Row>
-      <Row>
+      <Row className="mb-3">
         <FavoriteCard isOwnProfile={isOwnProfile} />
       </Row>
     </div>

@@ -1,4 +1,4 @@
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, CardHeader, CardText, Row, Col } from "react-bootstrap";
 import PrivateInfo from "./UserInfoCardComponents/PrivateInfo";
 import PublicInfo from "./UserInfoCardComponents/PublicInfo";
 import ProfileAction from "./UserInfoCardComponents/ProfileAction";
@@ -21,11 +21,19 @@ export const UserInfoCard = ({
     <>
       <Col md={9} className="mb-2">
         <Card style={{ width: "100%" }}>
+          <CardHeader className="rounded">
+            <CardText
+              className="d-flex justify-content-between align-items-center fw-bolder fs-5"
+              style={{ height: "30px" }}
+            >
+              User Info
+              <div className="d-flex justify-content-end">
+                {isOwnProfile && <EditButton setIsEditing={setIsEditing} />}
+                <ShareButton handleShare={handleShare} />
+              </div>
+            </CardText>
+          </CardHeader>
           <Card.Body className="pt-0">
-            <div className="d-flex justify-content-end pt-3">
-              {isOwnProfile && <EditButton setIsEditing={setIsEditing} />}
-              <ShareButton handleShare={handleShare} />
-            </div>
             <Row>
               {profileData ? (
                 <>

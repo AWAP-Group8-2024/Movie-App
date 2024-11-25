@@ -1,10 +1,17 @@
-import { useState } from "react";
-import { UserContext } from "./UserContext.jsx";
+import { useState, createContext, useContext } from "react";
+// import { UserContext } from "./UserContext.jsx";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const url = process.env.REACT_APP_API_URL;
 console.log(url);
+
+const initialUserState = { id: "", email: "", token: "", password: "" };
+
+const UserContext = createContext({
+  user: initialUserState,
+  setUser: () => {},
+});
 
 export default function UserProvider({ children }) {
   const userFromSessionStorage = sessionStorage.getItem("user");
@@ -119,3 +126,5 @@ export default function UserProvider({ children }) {
     </UserContext.Provider>
   );
 }
+
+export const useUser = () => useContext(UserContext);

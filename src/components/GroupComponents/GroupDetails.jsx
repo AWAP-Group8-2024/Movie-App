@@ -8,7 +8,7 @@ import {
 } from "../../services/GroupServices";
 import { useParams, useNavigate } from "react-router-dom";
 import Navigation from "../Navigation";
-import { useUser } from "../../UserComponents/useUser.js";
+import { useUser } from "../../UserComponents/UserProvider";
 import JoinRequestList from "./JoinRequestList";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -145,8 +145,6 @@ const GroupDetails = () => {
     }
   };
 
-
-
   if (loading || userLoading)
     return <div className="text-center mt-5">Loading...</div>;
   if (error) return <div className="alert alert-danger mt-5">{error}</div>;
@@ -231,29 +229,30 @@ const GroupDetails = () => {
                     </tr>
                   </thead>
                   <tbody>
-  {members.map((member) => (
-    <tr key={member.id}>
-      <td>{member.id}</td>
-      <td>{member.email}</td>
-      <td>{member.firstname}</td>
-      <td>{member.lastname}</td>
-      <td>{member.id === group.creator_id ? "Owner" : "Member"}</td>
-      <td>
-        {isOwner && member.id !== group.creator_id ? (
-          <button
-            className="btn btn-danger"
-            onClick={() => handleRemoveMember(member.id)}
-          >
-            Remove
-          </button>
-        ) : (
-          ""
-        )}
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+                    {members.map((member) => (
+                      <tr key={member.id}>
+                        <td>{member.id}</td>
+                        <td>{member.email}</td>
+                        <td>{member.firstname}</td>
+                        <td>{member.lastname}</td>
+                        <td>
+                          {member.id === group.creator_id ? "Owner" : "Member"}
+                        </td>
+                        <td>
+                          {isOwner && member.id !== group.creator_id ? (
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => handleRemoveMember(member.id)}
+                            >
+                              Remove
+                            </button>
+                          ) : (
+                            ""
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
               ) : (
                 <p>No members found.</p>

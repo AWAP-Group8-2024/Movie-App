@@ -60,8 +60,8 @@ router.put("/:groupId", auth, GroupController.updateGroupDetails);
 // leave group
 router.delete("/:groupId/leave", auth, GroupController.leaveGroup);
 
-router.get("/:groupId/posts", getAllGroupPosts); // Get all posts
-router.post("/:groupId/posts", createPost); // Create a post
-router.delete("/posts/:postId", deletePost); // Delete a post
+router.get("/:groupId/posts", GroupController.getAllGroupPosts); // Get all posts
+router.post("/:groupId/posts", GroupController.createPost); // Create a post
+router.delete("/posts/:postId", GroupController.deletePost); // Delete a post
 
 export default router;

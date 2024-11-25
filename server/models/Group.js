@@ -101,6 +101,6 @@ export const insertPost = async (groupId, accountId, description) => {
   return await pool.query('INSERT INTO group_post (groupId, accountId, description) VALUES ($1,$2,$3) RETURNING *', [groupId, accountId, description]);
 }
 
-export const deletePost = async (post_id) => {
-  return await pool.query('DELETE FROM group_post WHERE post_id = $1', [post_id]);
+export const deletePost = async (group_id, post_id) => {
+  return await pool.query('DELETE FROM group_post WHERE group_id = $1 AND post_id = $2', [group_id, post_id]);
 }

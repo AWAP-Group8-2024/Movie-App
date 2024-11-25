@@ -1,8 +1,18 @@
 import * as FavoriteModel from "../models/Favorite.js";
 
-export const getFavoriteList = async (req, res, next) => {
+export const getFavoriteListByAuth = async (req, res, next) => {
   try {
     const { id } = req.user;
+    const result = await FavoriteModel.getFavoriteListByUserId(id);
+    return res.status(200).json(result.rows || []);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getFavoriteListById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
     const result = await FavoriteModel.getFavoriteListByUserId(id);
     return res.status(200).json(result.rows || []);
   } catch (error) {

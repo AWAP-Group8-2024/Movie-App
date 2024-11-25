@@ -1,7 +1,6 @@
 import { createContext, useState, useContext } from "react";
 import axios from "axios";
 import { useUser } from "./UserProvider";
-import { getUserFromSession } from "../components/utils.js";
 
 const url = process.env.REACT_APP_API_URL;
 
@@ -9,7 +8,6 @@ const GroupContext = createContext();
 
 export default function GroupProvider({ children }) {
   const [groups, setGroups] = useState([]);
-
   const { user } = useUser();
   const token = user.token;
   const headers = {
@@ -17,9 +15,11 @@ export default function GroupProvider({ children }) {
     Authorization: `Bearer ${token}`,
   };
 
-  const getUserGroups = async () => {
+  const getUserGroups = async (profileId) => {
     try {
-      const response = await axios.get(`${url}/group/all`, { headers });
+      const response = await axios.get(`${url}/group/${profileId}`, {
+        headers,
+      });
       return response.data;
     } catch (error) {
       console.error("Failed to fetch groups:", error);

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import { Container } from "react-bootstrap";
@@ -48,7 +48,15 @@ export default function ProfilePage() {
           console.error("Failed to fetch profile:", error);
         });
 
-      getUserGroups()
+      // getUserGroups()
+      //   .then((userGroups) => {
+      //     setGroups(userGroups);
+      //   })
+      //   .catch((error) => {
+      //     console.error("Failed to fetch groups:", error);
+      //   });
+
+      getUserGroups(profileId)
         .then((userGroups) => {
           setGroups(userGroups);
         })
@@ -56,7 +64,7 @@ export default function ProfilePage() {
           console.error("Failed to fetch groups:", error);
         });
 
-      getUserFavorites()
+      getUserFavorites(profileId)
         .then((userFavorites) => {
           setFavorites(userFavorites);
         })

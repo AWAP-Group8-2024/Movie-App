@@ -32,9 +32,11 @@ export function FavoriteProvider({ children }) {
     }
   };
 
-  const getUserFavorites = async () => {
+  const getUserFavorites = async (profileId) => {
     try {
-      const response = await axios.get(`${url}/favorite/`, { headers });
+      const response = await axios.get(`${url}/favorite/${profileId}`, {
+        headers,
+      });
       return response.data;
     } catch (error) {
       console.error("Failed to fetch favorites:", error);

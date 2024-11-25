@@ -1,5 +1,4 @@
 import { Card, Row, Col } from "react-bootstrap";
-
 import {
   UserGroupIcon,
   UserGroupInfo,

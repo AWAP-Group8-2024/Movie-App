@@ -76,98 +76,104 @@ export const FavoriteCard = () => {
 
   return (
     <Container>
-      <div className="my-3">
-        <h4 className="text-start mb-2">Favorite Movies</h4>
-        <div
-          className="d-flex overflow-auto"
-          style={{
-            whiteSpace: "nowrap",
-            gap: "1rem",
-            maxWidth: "100%",
-          }}
-          name="movie"
-        >
-          {contentDetailsFromAPI.movie.map((contentFromAPI, index) => (
-            <Card
-              key={index}
-              className="d-inline-block"
-              style={{
-                cursor: "pointer",
-                width: "1rem",
-                minWidth: "150px",
-              }}
-              onClick={() =>
-                handleCardClick(contentFromAPI.media_type, contentFromAPI.id)
-              }
-            >
-              <Card.Body>
-                <Card.Img
-                  variant="top"
-                  src={`https://image.tmdb.org/t/p/w500${contentFromAPI.poster_path}`}
-                  alt={contentFromAPI.title || contentFromAPI.name}
-                  style={{
-                    width: "100%",
-                    height: "150px",
-                    objectFit: "cover",
-                    borderRadius: "10px",
-                  }}
-                />
-              </Card.Body>
-              <CardFooter>
-                <CardText className="text-center fs-6 text-truncate">
-                  {contentFromAPI.title || contentFromAPI.name}
-                </CardText>
-              </CardFooter>
-            </Card>
-          ))}
+      <Card className="px-3">
+        <div className="my-3">
+          <div className="d-flex justify-content-between mb-2">
+            <h4 className="text-start">Favorite Movies</h4>
+          </div>
+          <div
+            className="d-flex overflow-auto"
+            style={{
+              whiteSpace: "nowrap",
+              gap: "1rem",
+              maxWidth: "100%",
+            }}
+            name="movie"
+          >
+            {contentDetailsFromAPI.movie.map((contentFromAPI, index) => (
+              <Card
+                key={index}
+                className="d-inline-block"
+                style={{
+                  cursor: "pointer",
+                  width: "1rem",
+                  minWidth: "150px",
+                }}
+                onClick={() =>
+                  handleCardClick(contentFromAPI.media_type, contentFromAPI.id)
+                }
+              >
+                <Card.Body>
+                  <Card.Img
+                    variant="top"
+                    src={`https://image.tmdb.org/t/p/w500${contentFromAPI.poster_path}`}
+                    alt={contentFromAPI.title || contentFromAPI.name}
+                    style={{
+                      width: "100%",
+                      height: "150px",
+                      objectFit: "cover",
+                      borderRadius: "10px",
+                    }}
+                  />
+                </Card.Body>
+                <CardFooter>
+                  <CardText className="text-center fs-6 text-truncate">
+                    {contentFromAPI.title || contentFromAPI.name}
+                  </CardText>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="my-3">
-        <h4 className="text-start mb-2">Favorite TV shows</h4>
-        <div
-          className="d-flex overflow-auto"
-          style={{
-            whiteSpace: "nowrap",
-            gap: "1rem",
-            maxWidth: "100%",
-          }}
-          name="tv"
-        >
-          {contentDetailsFromAPI.tv.map((contentFromAPI, index) => (
-            <Card
-              key={index}
-              className="d-inline-block"
-              style={{
-                cursor: "pointer",
-                width: "1rem",
-                minWidth: "150px",
-              }}
-              onClick={() =>
-                handleCardClick(contentFromAPI.media_type, contentFromAPI.id)
-              }
-            >
-              <Card.Body>
-                <Card.Img
-                  variant="top"
-                  src={`https://image.tmdb.org/t/p/w500${contentFromAPI.poster_path}`}
-                  alt={contentFromAPI.title || contentFromAPI.name}
-                  style={{
-                    width: "100%",
-                    height: "150px",
-                    objectFit: "cover",
-                    borderRadius: "10px",
-                  }}
-                />
-              </Card.Body>
-              <CardFooter>
-                <CardText className="text-center fs-6 text-truncate">
-                  {contentFromAPI.title || contentFromAPI.name}
-                </CardText>
-              </CardFooter>
-            </Card>
-          ))}
+        <div className="my-3">
+          <div className="d-flex justify-content-between mb-2">
+            <h4 className="text-start">Favorite TV Shows</h4>
+          </div>
+          <div
+            className="d-flex overflow-auto"
+            style={{
+              whiteSpace: "nowrap",
+              gap: "1rem",
+              maxWidth: "100%",
+            }}
+            name="movie"
+          >
+            {contentDetailsFromAPI.tv.map((contentFromAPI, index) => (
+              <Card
+                key={index}
+                className="d-inline-block"
+                style={{
+                  cursor: "pointer",
+                  width: "1rem",
+                  minWidth: "150px",
+                }}
+                onClick={() =>
+                  handleCardClick(contentFromAPI.media_type, contentFromAPI.id)
+                }
+              >
+                <Card.Body>
+                  <Card.Img
+                    variant="top"
+                    src={`https://image.tmdb.org/t/p/w500${contentFromAPI.poster_path}`}
+                    alt={contentFromAPI.title || contentFromAPI.name}
+                    style={{
+                      width: "100%",
+                      height: "150px",
+                      objectFit: "cover",
+                      borderRadius: "10px",
+                    }}
+                  />
+                </Card.Body>
+                <CardFooter>
+                  <CardText className="text-center fs-6 text-truncate">
+                    {contentFromAPI.title || contentFromAPI.name}
+                  </CardText>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
         </div>
-      </div>
+      </Card>
     </Container>
   );
 };

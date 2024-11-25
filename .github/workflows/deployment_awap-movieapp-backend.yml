@@ -46,14 +46,13 @@ jobs:
           name: node-app
 
       - name: List files in repository
-        run: ls -R
+        run: ls
 
       - name: Print working directory
         run: pwd
 
       - name: "Create .env file"
         run: |
-          cd server
           echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env
           echo "SERVER_URL=${{ secrets.SERVER_URL }}" >> .env
           echo "DB_USER=${{ secrets.DB_USER }}" >> .env
@@ -77,8 +76,8 @@ jobs:
         with:
           app-name: "AWAP-MovieApp-Backend"
           slot-name: "Production"
-          package: ./server
+          package: .
 
       - name: Clean up .env file
         run: rm .env
-        working-directory: server
+        working-directory: .

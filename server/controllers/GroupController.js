@@ -13,9 +13,20 @@ export const getAllGroupsListing = async (req, res, next) => {
   }
 };
 
-export const getGroupsByUserId = async (req, res, next) => {
+export const getGroupsByAuth = async (req, res, next) => {
   try {
     const { id } = req.user;
+    const result = await GroupModel.getGroupsInfoByUserId(id);
+    return res.status(200).json(result.rows || []);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+// for sharing profile use
+export const getGroupsByUserId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
     const result = await GroupModel.getGroupsInfoByUserId(id);
     return res.status(200).json(result.rows || []);
   } catch (error) {
@@ -196,7 +207,11 @@ export const updateGroupDetails = async (req, res) => {
   const { name, description } = req.body;
 
   try {
-    const result = await GroupModel.updateGroupDetails(groupId, name, description);
+    const result = await GroupModel.updateGroupDetails(
+      groupId,
+      name,
+      description
+    );
     return res.status(200).json({ message: "Group details updated", result });
   } catch (error) {
     return res.status(500).json({ error: error.message });

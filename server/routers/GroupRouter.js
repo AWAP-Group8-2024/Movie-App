@@ -16,8 +16,9 @@ router.get("/", auth, GroupController.getAllGroupsListing);
 router.post("/create", auth, GroupController.createNewGroup);
 
 // listing user's groups that user's joined already.
-router.get("/all", auth, GroupController.getGroupsByUserId);
-
+router.get("/all", auth, GroupController.getGroupsByAuth);
+// for sharing profile use
+router.get("/:id", auth, GroupController.getGroupsByUserId);
 // access group if the user joined the group.
 router.get(
   "/:groupId",
@@ -55,7 +56,6 @@ router.put(
 
 // update group details
 router.put("/:groupId", auth, GroupController.updateGroupDetails);
-
 
 // leave group
 router.delete("/:groupId/leave", auth, GroupController.leaveGroup);

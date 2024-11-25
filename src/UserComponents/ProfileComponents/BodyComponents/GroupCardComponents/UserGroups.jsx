@@ -1,5 +1,4 @@
 import { Card, Row, Col } from "react-bootstrap";
-
 import {
   UserGroupIcon,
   UserGroupInfo,
@@ -9,6 +8,7 @@ import {
 import styles from "./UserGroups.module.css";
 import { useGroup } from "../../../GroupProvider";
 import { useNavigate } from "react-router-dom";
+
 export default function UserGroups() {
   const navigate = useNavigate();
   const { groups, leaveGroup } = useGroup();

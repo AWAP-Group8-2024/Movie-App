@@ -6,8 +6,8 @@ export default function PrivateInfo({
 }) {
   return (
     <>
-      <Row className="my-4">
-        <Col xs className="ms-1">
+      <Row className="my-2">
+        <Col className="ms-1">
           <Form.Group>
             <Form.Label>Firstname:</Form.Label>
             <Form.Control
@@ -17,10 +17,11 @@ export default function PrivateInfo({
               onChange={handleInputChange}
               readOnly={!isEditing}
               size="sm"
+              style={{ width: "150px" }}
             />
           </Form.Group>
         </Col>
-        <Col xs className="ms-1">
+        <Col className="ms-1">
           <Form.Group>
             <Form.Label>Lastname:</Form.Label>
             <Form.Control
@@ -30,12 +31,13 @@ export default function PrivateInfo({
               onChange={handleInputChange}
               readOnly={!isEditing}
               size="sm"
+              style={{ width: "150px" }}
             />
           </Form.Group>
         </Col>
       </Row>
       <Row className="my-2">
-        <Col xs className="ms-1">
+        <Col className="ms-1">
           <Form.Group>
             <Form.Label>Phone:</Form.Label>
             <Form.Control
@@ -45,12 +47,13 @@ export default function PrivateInfo({
               onChange={handleInputChange}
               readOnly={!isEditing}
               size="sm"
+              style={{ width: "150px" }}
             />
           </Form.Group>
         </Col>
       </Row>
       <Row className="my-2">
-        <Col xs className="ms-1">
+        <Col className="ms-1">
           <Form.Group>
             <Form.Label>Address:</Form.Label>
             <Form.Control
@@ -65,7 +68,7 @@ export default function PrivateInfo({
         </Col>
       </Row>
       <Row className="my-2">
-        <Col xs className="ms-1">
+        <Col className="ms-1">
           <Form.Group>
             <Form.Label>Password:</Form.Label>
             <Form.Control

@@ -25,7 +25,7 @@ async function getLink(item) {
       if (json.results.length > 0) {
         json.results.forEach((element) => {
           if (
-            element.release_date.replaceAll(/[-].+/g, "") ==
+            element.release_date.replaceAll(/[-].+/g, "") ===
             item.ProductionYear._text
           ) {
             const id = element.id;
@@ -82,8 +82,9 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[0].id}`}
           >
             <img
-              src={items[0].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[0].poster_path}`}
+              src={items[0].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[0].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[0].title}
           </Col>
@@ -96,8 +97,9 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[1].id}`}
           >
             <img
-              src={items[1].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[1].poster_path}`}
+              src={items[1].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[1].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[1].title}
           </Col>
@@ -110,8 +112,9 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[2].id}`}
           >
             <img
-              src={items[2].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[2].poster_path}`}
+              src={items[2].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[2].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[2].title}
           </Col>
@@ -124,8 +127,9 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[3].id}`}
           >
             <img
-              src={items[3].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[3].poster_path}`}
+              src={items[3].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[3].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[3].title}
           </Col>
@@ -137,8 +141,9 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[4].id}`}
           >
             <img
-              src={items[4].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[4].poster_path}`}
+              src={items[4].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[4].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[4].title}
           </Col>
@@ -150,8 +155,9 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[5].id}`}
           >
             <img
-              src={items[5].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[5].poster_path}`}
+              src={items[5].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[5].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[5].title}
           </Col>
@@ -184,8 +190,9 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[0].id}`}
           >
             <img
-              src={items[0].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[0].poster_path}`}
+              src={items[0].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[0].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[0].name}
           </Col>
@@ -198,8 +205,9 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[1].id}`}
           >
             <img
-              src={items[1].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[1].poster_path}`}
+              src={items[1].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[1].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[1].name}
           </Col>
@@ -212,8 +220,9 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[2].id}`}
           >
             <img
-              src={items[2].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[2].poster_path}`}
+              src={items[2].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[2].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[2].name}
           </Col>
@@ -226,8 +235,9 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[3].id}`}
           >
             <img
-              src={items[3].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[3].poster_path}`}
+              src={items[3].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[3].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[3].name}
           </Col>
@@ -239,8 +249,9 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[4].id}`}
           >
             <img
-              src={items[4].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[4].poster_path}`}
+              src={items[4].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[4].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[4].name}
           </Col>
@@ -252,8 +263,9 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[5].id}`}
           >
             <img
-              src={items[5].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[5].poster_path}`}
+              src={items[5].poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${items[5].poster_path}`}
               className="img-fluid p-1"
+              alt=""
             />
             {items[5].name}
           </Col>
@@ -292,6 +304,7 @@ function fetchFinKinoEvents(API, setter) {
             <img
               src={items[0].Images.EventLargeImagePortrait._text}
               className="img-fluid p-1"
+              alt=""
             />
             {items[0].Title._text}
           </Col>
@@ -308,6 +321,7 @@ function fetchFinKinoEvents(API, setter) {
             <img
               src={items[1].Images.EventLargeImagePortrait._text}
               className="img-fluid p-1"
+              alt=""
             />
             {items[1].Title._text}
           </Col>
@@ -324,6 +338,7 @@ function fetchFinKinoEvents(API, setter) {
             <img
               src={items[2].Images.EventLargeImagePortrait._text}
               className="img-fluid p-1"
+              alt=""
             />
             {items[2].Title._text}
           </Col>
@@ -340,6 +355,7 @@ function fetchFinKinoEvents(API, setter) {
             <img
               src={items[3].Images.EventLargeImagePortrait._text}
               className="img-fluid p-1"
+              alt=""
             />
             {items[3].Title._text}
           </Col>
@@ -355,6 +371,7 @@ function fetchFinKinoEvents(API, setter) {
             <img
               src={items[4].Images.EventLargeImagePortrait._text}
               className="img-fluid p-1"
+              alt=""
             />
             {items[4].Title._text}
           </Col>
@@ -370,6 +387,7 @@ function fetchFinKinoEvents(API, setter) {
             <img
               src={items[5].Images.EventLargeImagePortrait._text}
               className="img-fluid p-1"
+              alt=""
             />
             {items[5].Title._text}
           </Col>

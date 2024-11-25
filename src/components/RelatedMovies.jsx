@@ -1,5 +1,18 @@
-import React, { useEffect, useState } from "react";
-import Slider from "react-slick";
+import React, { useEffect, useState } from 'react';
+import Slider from 'react-slick';
+import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
+
+const CustomNextArrow = ({ onClick }) => (
+  <div className="custom-arrow custom-next" onClick={onClick}>
+    <FaArrowRight />
+  </div>
+);
+
+const CustomPrevArrow = ({ onClick }) => (
+  <div className="custom-arrow custom-prev" onClick={onClick}>
+    <FaArrowLeft />
+  </div>
+);
 
 function RelatedMovies({ movieId }) {
   const [relatedMovies, setRelatedMovies] = useState([]);
@@ -10,18 +23,24 @@ function RelatedMovies({ movieId }) {
         `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${process.env.REACT_APP_API_KEY}`
       );
       const data = await response.json();
-      setRelatedMovies(data.results);
+      setRelatedMovies(data.results || []);
     };
 
     fetchRelatedMovies();
   }, [movieId]);
 
-  const sliderSettings = {
-    dots: true,
-    infinite: false,
-    speed: 500,
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 600,
     slidesToShow: 4,
     slidesToScroll: 1,
+    arrows: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    pauseOnHover: true,
+    nextArrow: <CustomNextArrow />,
+    prevArrow: <CustomPrevArrow />,
     responsive: [
       {
         breakpoint: 1024,
@@ -30,7 +49,7 @@ function RelatedMovies({ movieId }) {
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 768,
         settings: {
           slidesToShow: 2,
         },
@@ -44,24 +63,39 @@ function RelatedMovies({ movieId }) {
     ],
   };
 
+  if (!relatedMovies.length) return null;
+
   return (
-    <div>
+    <div className="recommended-section">
       <h2>Recommended For You</h2>
-      <br />
-      <Slider {...sliderSettings}>
-        {/* {console.log(relatedMovies)} */}
-        {relatedMovies.map((movie) => (
-          <div key={movie.id} style={{ padding: "10px", textAlign: "center" }}>
-            <img
-              src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-              alt={movie.title}
-              style={{ borderRadius: "8px", maxWidth: "100%" }}
-            />
-            <p>{movie.title}</p>
-            <p>{Math.round(movie.vote_average * 10) / 10} / 10</p>
-          </div>
-        ))}
-      </Slider>
+      <div className="slider-container">
+        <Slider {...settings}>
+          {relatedMovies.map((movie) => (
+            <div
+              key={movie.id}
+              className="show-card"
+              onClick={() => window.location.href = `/movie/${movie.id}`}
+            >
+              <div className="show-poster-container">
+                <img
+                  src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                  alt={movie.title}
+                  className="show-poster"
+                />
+                <div className="show-overlay">
+                  <span>View Details</span>
+                </div>
+              </div>
+              <div className="show-info-content">
+                <h3 className="show-title">{movie.title}</h3>
+                <p className="show-rating">
+                  {movie.vote_average.toFixed(1)} / 10
+                </p>
+              </div>
+            </div>
+          ))}
+        </Slider>
+      </div>
     </div>
   );
 }

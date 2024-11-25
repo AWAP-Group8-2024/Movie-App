@@ -20,7 +20,10 @@ export default function ProfileBody({
   return (
     <div className="mt-2">
       <Row>
-        <GroupCard setCreateGroupModalIsOpen={setCreateGroupModalIsOpen} />
+        <GroupCard
+          setCreateGroupModalIsOpen={setCreateGroupModalIsOpen}
+          isOwnProfile={isOwnProfile}
+        />
         <UserInfoCard
           isOwnProfile={isOwnProfile}
           setIsEditing={setIsEditing}
@@ -35,8 +38,8 @@ export default function ProfileBody({
           handleShare={handleShare}
         />
       </Row>
-      <Row>
-        <FavoriteCard />
+      <Row className="mb-3">
+        <FavoriteCard isOwnProfile={isOwnProfile} />
       </Row>
     </div>
   );

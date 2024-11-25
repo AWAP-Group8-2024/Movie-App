@@ -51,7 +51,7 @@ export default function List({ items, total_pages }) {
         }
 
         filterGenres.push(
-            <Col>
+            <Col key={element.id}>
                 <input type="checkbox" className="me-2" onChange={checkClick} defaultChecked={currentGenres ? currentGenres.includes(element.id.toString()) : false}/>
                 <label>{element.name}</label>
             </Col>
@@ -83,12 +83,12 @@ export default function List({ items, total_pages }) {
 
     for (let i = 1; i < 11; i++) {
         if (i <= rating) {
-            stars.push(<FaStar onClick={() => {
+            stars.push(<FaStar  key={i} onClick={() => {
                 setRating(i);
                 setSearchButton(false);
             }}/>);
         } else {
-            stars.push(<FaRegStar onClick={() => {
+            stars.push(<FaRegStar key={i} onClick={() => {
                 setRating(i);
                 setSearchButton(false);
             }}/>);
@@ -101,9 +101,9 @@ export default function List({ items, total_pages }) {
             return;
         }
         let setter = [];
-        items.forEach(element => {
+        items.forEach((element, i) => {
             setter.push(
-                <Col xs={6} md={3} className="text-decoration-none text-dark p-2" as={Link} to={element.title ? `/movie/${element.id}` : `/tv/${element.id}`}>
+                <Col xs={6} md={3} className="text-decoration-none text-dark p-2" as={Link} to={element.title ? `/movie/${element.id}` : `/tv/${element.id}`} key={i}>
                     <div className="border border-1 border-dark rounded p-2 text-center h-100 d-flex flex-column">
                         <img src={element.poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${element.poster_path}`} className="img-fluid p-1"/>
                         <div className="mt-auto">{element.title ? element.title : element.name}</div>

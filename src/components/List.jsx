@@ -6,6 +6,7 @@ import { movieGenres } from "./movieGenres.js";
 import { tvGenres } from "./tvGenres";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { getLink } from "../HomeComponents/FetchAPI";
+import noImage from './images/noImage.png';
 
 export default function List({ items, total_pages }) {
     let { condition } = useParams();
@@ -104,7 +105,7 @@ export default function List({ items, total_pages }) {
             setter.push(
                 <Col xs={6} md={3} className="text-decoration-none text-dark p-2" as={Link} to={element.title ? `/movie/${element.id}` : `/tv/${element.id}`}>
                     <div className="border border-1 border-dark rounded p-2 text-center h-100 d-flex flex-column">
-                        <img src={`https://image.tmdb.org/t/p/w500${element.poster_path}`} className="img-fluid p-1"/>
+                        <img src={element.poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${element.poster_path}`} className="img-fluid p-1"/>
                         <div className="mt-auto">{element.title ? element.title : element.name}</div>
                     </div>
                 </Col> 

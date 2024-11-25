@@ -1,6 +1,7 @@
 import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { xml2json } from "xml-js";
+import noImage from '../components/images/noImage.png'
 
 function shuffle(arr) {
   let storage = null;
@@ -81,7 +82,7 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[0].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[0].poster_path}`}
+              src={items[0].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[0].poster_path}`}
               className="img-fluid p-1"
             />
             {items[0].title}
@@ -95,7 +96,7 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[1].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[1].poster_path}`}
+              src={items[1].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[1].poster_path}`}
               className="img-fluid p-1"
             />
             {items[1].title}
@@ -109,7 +110,7 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[2].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[2].poster_path}`}
+              src={items[2].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[2].poster_path}`}
               className="img-fluid p-1"
             />
             {items[2].title}
@@ -123,7 +124,7 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[3].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[3].poster_path}`}
+              src={items[3].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[3].poster_path}`}
               className="img-fluid p-1"
             />
             {items[3].title}
@@ -136,7 +137,7 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[4].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[4].poster_path}`}
+              src={items[4].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[4].poster_path}`}
               className="img-fluid p-1"
             />
             {items[4].title}
@@ -149,7 +150,7 @@ function fetchMovieAPI(API, setter) {
             to={`/movie/${items[5].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[5].poster_path}`}
+              src={items[5].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[5].poster_path}`}
               className="img-fluid p-1"
             />
             {items[5].title}
@@ -183,7 +184,7 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[0].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[0].poster_path}`}
+              src={items[0].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[0].poster_path}`}
               className="img-fluid p-1"
             />
             {items[0].name}
@@ -197,7 +198,7 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[1].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[1].poster_path}`}
+              src={items[1].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[1].poster_path}`}
               className="img-fluid p-1"
             />
             {items[1].name}
@@ -211,7 +212,7 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[2].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[2].poster_path}`}
+              src={items[2].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[2].poster_path}`}
               className="img-fluid p-1"
             />
             {items[2].name}
@@ -225,7 +226,7 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[3].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[3].poster_path}`}
+              src={items[3].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[3].poster_path}`}
               className="img-fluid p-1"
             />
             {items[3].name}
@@ -238,7 +239,7 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[4].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[4].poster_path}`}
+              src={items[4].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[4].poster_path}`}
               className="img-fluid p-1"
             />
             {items[4].name}
@@ -251,7 +252,7 @@ function fetchShowAPI(API, setter) {
             to={`/tv/${items[5].id}`}
           >
             <img
-              src={`https://image.tmdb.org/t/p/w500${items[5].poster_path}`}
+              src={items[5].poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${items[5].poster_path}`}
               className="img-fluid p-1"
             />
             {items[5].name}

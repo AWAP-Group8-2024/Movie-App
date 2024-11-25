@@ -234,9 +234,7 @@ const GroupList = ({ fetchType }) => {
                           Created by {group.creator_id}
                         </p>
                         <div className="d-flex justify-content-between mt-3">
-                          <a href={`/groups/${group.id}`} className="btn btn-dark btn-sm">
-                            View Group
-                          </a>
+                          
                           <button
                             className="btn btn-primary btn-sm"
                             onClick={() => handleJoinGroup(group.id)}

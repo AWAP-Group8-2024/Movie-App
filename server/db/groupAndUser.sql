@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS join_requests;
 DROP TABLE IF EXISTS group_account;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS account;
+DROP TABLE IF EXISTS group_post;
 
 CREATE TABLE account (
     id SERIAL PRIMARY KEY,
@@ -27,6 +28,13 @@ CREATE TABLE group_account (
     group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
     account_id INTEGER REFERENCES account(id) ON DELETE CASCADE,
     PRIMARY KEY (group_id, account_id)
+);
+
+CREATE TABLE group_post (
+  group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
+  writer_id INTEGER REFERENCES account(id) ON DELETE CASCADE,
+  post_id SERIAL PRIMARY KEY,
+  description varchar(255) not null
 );
 
 CREATE TABLE join_requests (
@@ -61,6 +69,9 @@ INSERT INTO group_account (group_id, account_id) VALUES (3, 4);
 INSERT INTO join_requests (group_id, account_id) VALUES (1, 4);
 INSERT INTO join_requests (group_id, account_id) VALUES (2, 5);
 INSERT INTO join_requests (group_id, account_id) VALUES (3, 6);
+
+INSERT INTO group_post (group_id, description, writer_id) VALUES (1, 'post1', 1);
+INSERT INTO group_post (group_id, description, writer_id) VALUES (2, 'post2', 2);
 
 COMMIT;
 

@@ -106,16 +106,14 @@ export const getGroupByGroupId = async (groupId) => {
 };
 
 // Updates a group by its ID
-export const updateGroupByGroupId = async (groupId, updatedData) => {
+export const updateGroupByGroupId = async (groupId, groupData) => {
   const headers = getAuthHeaders();
   if (!headers) return;
 
   try {
-    const response = await axios.put(
-      `${API_URL}/group/${groupId}`,
-      updatedData,
-      { headers }
-    );
+    const response = await axios.put(`${API_URL}/group/${groupId}`, groupData, {
+      headers,
+    });
     return response.data;
   } catch (error) {
     console.error(`Error updating group ${groupId}:`, error);

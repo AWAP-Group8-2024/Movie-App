@@ -76,6 +76,14 @@ export const addUserToGroup = async (groupId, accountId) => {
 //   const result = await pool.query(query, [id]);
 //   return result;
 // };
+// update group details by group id
+export const updateGroupDetails = async (groupId, name, description) => {
+  const result = await pool.query(
+    "UPDATE groups SET name = $1, description = $2 WHERE id = $3 RETURNING *",
+    [name, description, groupId]
+  );
+  return result;
+};
 
 // leave the group
 export const leaveGroup = async (groupId, accountId) => {
@@ -85,3 +93,14 @@ export const leaveGroup = async (groupId, accountId) => {
   );
   return result;
 };
+export const selectAllPosts = async (group_id) => {
+  return await pool.query('SELECT * FROM group_post WHERE group_id = $1', [groupId]);
+}
+
+export const insertPost = async (groupId, accountId, description) => {
+  return await pool.query('INSERT INTO group_post (groupId, accountId, description) VALUES ($1,$2,$3) RETURNING *', [groupId, accountId, description]);
+}
+
+export const deletePost = async (group_id, post_id) => {
+  return await pool.query('DELETE FROM group_post WHERE group_id = $1 AND post_id = $2', [group_id, post_id]);
+}

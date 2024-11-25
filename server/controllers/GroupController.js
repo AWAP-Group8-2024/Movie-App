@@ -191,6 +191,18 @@ export const isGroupNameValid = (groupName) => {
   return groupName && groupName.trim().length > 0;
 };
 
+export const updateGroupDetails = async (req, res) => {
+  const { groupId } = req.params;
+  const { name, description } = req.body;
+
+  try {
+    const result = await GroupModel.updateGroupDetails(groupId, name, description);
+    return res.status(200).json({ message: "Group details updated", result });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 // leaveGroup
 export const leaveGroup = async (req, res) => {
   const { groupId } = req.params;
@@ -201,5 +213,51 @@ export const leaveGroup = async (req, res) => {
     return res.status(200).json({ message: "You have left the group" });
   } catch (error) {
     return res.status(500).json({ error: error.message });
+  }
+};
+
+export const getAllGroupPosts = async (req, res, next) => {
+  const { groupId } = req.params;
+  try {
+    const result = await GroupModel.selectAllPosts(groupId);
+    return res.status(200).json(result.rows || []);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const createPost = async (req, res, next) => {
+  const { groupId } = req.params;
+  const { description } = req.body;
+  const { id: accountId } = req.user;
+
+  if (!description || description.trim().length === 0) {
+    return res.status(400).json({ message: "Description cannot be empty." });
+  }
+
+  try {
+    const result = await GroupModel.insertPost(groupId, accountId, description);
+    return res.status(201).json({
+      message: "Post created successfully.",
+      post: result.rows[0],
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deletePost = async (req, res, next) => {
+  const { postId } = req.params;
+
+  try {
+    const result = await GroupModel.deletePost(postId);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Post not found." });
+    }
+
+    return res.status(200).json({ message: "Post deleted successfully." });
+  } catch (error) {
+    return next(error);
   }
 };

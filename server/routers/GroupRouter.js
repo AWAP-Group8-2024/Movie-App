@@ -53,7 +53,15 @@ router.put(
   GroupController.updateJoinRequestStatus
 );
 
+// update group details
+router.put("/:groupId", auth, GroupController.updateGroupDetails);
+
+
 // leave group
 router.delete("/:groupId/leave", auth, GroupController.leaveGroup);
+
+router.get("/:groupId/posts", GroupController.getAllGroupPosts); // Get all posts
+router.post("/:groupId/posts", GroupController.createPost); // Create a post
+router.delete("/posts/:postId", GroupController.deletePost); // Delete a post
 
 export default router;

@@ -129,6 +129,23 @@ const GroupDetails = () => {
       }
     }
   };
+  const handleRemoveMember = async (memberId) => {
+    try {
+      // Remove the member from the group
+      await leaveGroupByGroupId(groupId);
+      setMessage("Member removed successfully.");
+      navigate("/groups/all");
+    } catch (err) {
+      if (err.message === "User not authenticated") {
+        navigate("/login");
+      } else {
+        setError(err.message || "Failed to remove member.");
+        console.error(err);
+      }
+    }
+  };
+
+
 
   if (loading || userLoading)
     return <div className="text-center mt-5">Loading...</div>;
@@ -209,18 +226,34 @@ const GroupDetails = () => {
                       <th>Email</th>
                       <th>First Name</th>
                       <th>Last Name</th>
+                      <th>Role</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {members.map((member) => (
-                      <tr key={member.id}>
-                        <td>{member.id}</td>
-                        <td>{member.email}</td>
-                        <td>{member.firstname}</td>
-                        <td>{member.lastname}</td>
-                      </tr>
-                    ))}
-                  </tbody>
+  {members.map((member) => (
+    <tr key={member.id}>
+      <td>{member.id}</td>
+      <td>{member.email}</td>
+      <td>{member.firstname}</td>
+      <td>{member.lastname}</td>
+      <td>{member.id === group.creator_id ? "Owner" : "Member"}</td>
+      <td>
+        {isOwner && member.id !== group.creator_id ? (
+          <button
+            className="btn btn-danger"
+            onClick={() => handleRemoveMember(member.id)}
+          >
+            Remove
+          </button>
+        ) : (
+          ""
+        )}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
                 </table>
               ) : (
                 <p>No members found.</p>

@@ -49,22 +49,46 @@ export default function UserProvider({ children }) {
     navigate("/");
   };
 
+  const verifyIdentity = async (email, password) => {
+    const token = user.token;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+
+    const body = {
+      email,
+      password,
+    };
+    try {
+      const response = await axios.post(`${url}/user/passwordCheck`, body, {
+        headers,
+      });
+      return response.status === 200;
+    } catch (error) {
+      console.error(
+        "Error verifying identity:",
+        error.response?.data || error.message
+      );
+      return false;
+    }
+  };
+
   const removeAccount = async (email, password) => {
     try {
+      const isIdentityCorrect = await verifyIdentity(email, password);
+      if (!isIdentityCorrect) {
+        throw new Error("Incorrect password.");
+      }
       const token = user.token;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-      const body = {
-        email,
-        password,
-      };
-      const response = await axios.delete(`${url}/user/profile/${user.id}`, {
+      const response = await axios.delete(`${url}/user/deleteAccount`, {
         headers,
-        data: body,
       });
-      handleLogout(); // Log out after account deletion
+      handleLogout();
       return response.data;
     } catch (error) {
       throw error;
@@ -78,11 +102,9 @@ export default function UserProvider({ children }) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-      const response = await axios.post(
-        `${url}/user/profile/${profileId}`,
-        {},
-        { headers }
-      );
+      const response = await axios.get(`${url}/user/profile/${profileId}`, {
+        headers,
+      });
       return response.data;
     } catch (error) {
       throw error;

@@ -78,20 +78,32 @@ export const getUserProfile = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
   try {
-    const { id } = req.params; //user profile id
-    const { email, password } = req.body;
+    const { id } = req.user;
+    await UserModel.deleteUserById(id);
+    const response = {
+      user: req.user,
+      message: `User ID ${req.user.id} deleted successfully.`,
+    };
+    return res.status(200).json(response);
+  } catch (error) {
+    return next(error);
+  }
+};
 
+export const passwordCheck = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
     const result = await UserModel.searchUserByEmail(email);
+
     if (result.rowCount === 0)
       return next(new ApiError("Invalid credentials", 400));
 
     const user = result.rows[0];
     const isPasswordValid = await compare(password, user.password);
     if (!isPasswordValid) return next(new ApiError("Invalid password", 401));
-    await UserModel.deleteUserById(id);
     const response = {
       user: req.user,
-      message: `User ID ${req.user.id} deleted successfully.`,
+      message: `ID:${req.user.id} user is confirmed.`,
     };
     return res.status(200).json(response);
   } catch (error) {

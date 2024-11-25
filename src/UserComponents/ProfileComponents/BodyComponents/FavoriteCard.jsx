@@ -1,12 +1,4 @@
-import {
-  Card,
-  Row,
-  Col,
-  CardText,
-  Container,
-  Carousel,
-  CardFooter,
-} from "react-bootstrap";
+import { Card, Row, CardText, Container, CardFooter } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useFavorite } from "../../FavoriteProvider";
 import axios from "axios";
@@ -14,7 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 export const FavoriteCard = () => {
   const { favorites } = useFavorite();
-  const [contentDetailsFromAPI, setContentDetailsFromAPI] = useState([]);
+  const [contentDetailsFromAPI, setContentDetailsFromAPI] = useState({
+    movie: [],
+    tv: [],
+  });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -45,7 +40,14 @@ export const FavoriteCard = () => {
             fetchContentDetails(favorite.content_id, favorite.media_type)
           )
         );
-        setContentDetailsFromAPI(details.filter((detail) => detail !== null));
+        const movies = details.filter(
+          (detail) => detail && detail.media_type === "movie"
+        );
+        const tvShows = details.filter(
+          (detail) => detail && detail.media_type === "tv"
+        );
+
+        setContentDetailsFromAPI({ movie: movies, tv: tvShows });
       } catch (error) {
         console.error("Error fetching favorites:", error);
       } finally {
@@ -74,48 +76,97 @@ export const FavoriteCard = () => {
 
   return (
     <Container>
-      <div
-        className="d-flex overflow-auto"
-        style={{
-          whiteSpace: "nowrap",
-          gap: "2rem",
-          padding: "1rem",
-          maxWidth: "100%",
-        }}
-      >
-        {contentDetailsFromAPI.map((contentFromAPI, index) => (
-          <Card
-            key={index}
-            className="d-inline-block"
-            style={{
-              cursor: "pointer",
-              minWidth: "150px",
-              maxWidth: "200px",
-            }}
-            onClick={() =>
-              handleCardClick(contentFromAPI.media_type, contentFromAPI.id)
-            }
-          >
-            <Card.Body>
-              <Card.Img
-                variant="top"
-                src={`https://image.tmdb.org/t/p/w500${contentFromAPI.poster_path}`}
-                alt={contentFromAPI.title || contentFromAPI.name}
-                style={{
-                  width: "100%",
-                  height: "150px",
-                  objectFit: "cover",
-                  borderRadius: "10px",
-                }}
-              />
-            </Card.Body>
-            <CardFooter>
-              <CardText className="text-center fs-6 text-truncate">
-                {contentFromAPI.title || contentFromAPI.name}
-              </CardText>
-            </CardFooter>
-          </Card>
-        ))}
+      <div className="my-3">
+        <h4 className="text-start mb-2">Favorite Movies</h4>
+        <div
+          className="d-flex overflow-auto"
+          style={{
+            whiteSpace: "nowrap",
+            gap: "1rem",
+            maxWidth: "100%",
+          }}
+          name="movie"
+        >
+          {contentDetailsFromAPI.movie.map((contentFromAPI, index) => (
+            <Card
+              key={index}
+              className="d-inline-block"
+              style={{
+                cursor: "pointer",
+                width: "1rem",
+                minWidth: "150px",
+              }}
+              onClick={() =>
+                handleCardClick(contentFromAPI.media_type, contentFromAPI.id)
+              }
+            >
+              <Card.Body>
+                <Card.Img
+                  variant="top"
+                  src={`https://image.tmdb.org/t/p/w500${contentFromAPI.poster_path}`}
+                  alt={contentFromAPI.title || contentFromAPI.name}
+                  style={{
+                    width: "100%",
+                    height: "150px",
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                  }}
+                />
+              </Card.Body>
+              <CardFooter>
+                <CardText className="text-center fs-6 text-truncate">
+                  {contentFromAPI.title || contentFromAPI.name}
+                </CardText>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      </div>
+      <div className="my-3">
+        <h4 className="text-start mb-2">Favorite TV shows</h4>
+        <div
+          className="d-flex overflow-auto"
+          style={{
+            whiteSpace: "nowrap",
+            gap: "1rem",
+            maxWidth: "100%",
+          }}
+          name="tv"
+        >
+          {contentDetailsFromAPI.tv.map((contentFromAPI, index) => (
+            <Card
+              key={index}
+              className="d-inline-block"
+              style={{
+                cursor: "pointer",
+                width: "1rem",
+                minWidth: "150px",
+              }}
+              onClick={() =>
+                handleCardClick(contentFromAPI.media_type, contentFromAPI.id)
+              }
+            >
+              <Card.Body>
+                <Card.Img
+                  variant="top"
+                  src={`https://image.tmdb.org/t/p/w500${contentFromAPI.poster_path}`}
+                  alt={contentFromAPI.title || contentFromAPI.name}
+                  style={{
+                    width: "100%",
+                    height: "150px",
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                  }}
+                />
+              </Card.Body>
+              <CardFooter>
+                <CardText className="text-center fs-6 text-truncate">
+                  {contentFromAPI.title || contentFromAPI.name}
+                </CardText>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       </div>
     </Container>
   );

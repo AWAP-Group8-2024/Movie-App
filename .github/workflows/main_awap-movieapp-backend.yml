@@ -49,8 +49,12 @@ jobs:
         with:
           name: node-app
 
+      - name: Show current path
+        working-directory: ${{ github.workspace }}
+        run: pwd
+
       - name: List files in repository
-        working-directory: ${{ github.workspace }}/server
+        working-directory: ${{ github.workspace }}
         run: ls
 
       - name: "Create .env file"

@@ -26,6 +26,7 @@ jobs:
       - name: Install backend dependencies and build
         working-directory: ./server
         run: |
+          pwd
           npm install
           npm run build --if-present
 
@@ -49,16 +50,13 @@ jobs:
           name: node-app
 
       - name: List files in repository
-        working-directory: ./server
+        working-directory: server
         run: ls
 
-      - name: Print working directory
-        working-directory: ./server
-        run: pwd
-
       - name: "Create .env file"
-        working-directory: ./server
+        working-directory: server
         run: |
+          pwd
           echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env
           echo "SERVER_URL=${{ secrets.SERVER_URL }}" >> .env
           echo "DB_USER=${{ secrets.DB_USER }}" >> .env

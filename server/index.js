@@ -6,14 +6,15 @@ import groupRouter from "./routers/GroupRouter.js";
 
 const port = process.env.SERVER_PORT;
 
-app.get("/api/message", (req, res) => {
-  res.send({ message: "test message" });
-});
-
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.get("/api/message", (req, res) => {
+  res.json({ message: "test message" });
+});
 
 app.use("/user", userRouter);
 app.use("/favorite", favoriteRouter);

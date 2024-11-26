@@ -177,7 +177,7 @@ const GroupDetails = () => {
                   </button>
                 ) : !isOwner ? (
                   <button className="btn btn-primary" onClick={handleJoinGroup}>
-                    Join Group
+                    Join 
                   </button>
                 ) : null}
 

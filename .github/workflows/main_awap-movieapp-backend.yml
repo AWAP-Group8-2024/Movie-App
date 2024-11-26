@@ -76,5 +76,5 @@ jobs:
         with:
           app-name: "AWAP-MovieApp-Backend"
           slot-name: "Production"
-          package: ${{ github.workspace }}/server
+          package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9CEA865D48884B9CB36CEA7683FD2A86 }}

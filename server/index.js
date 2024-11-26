@@ -22,6 +22,10 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ error: err.message });
 });
 
+app.get("/api/message", (req, res) => {
+  res.send({ message: "test message" });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on ${process.env.SERVER_URL}`);
 });

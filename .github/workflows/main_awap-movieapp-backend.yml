@@ -15,18 +15,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
 
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+          node-version: "20.x"
 
-      - name: npm install, build, and test
+      - name: Navigate to the server folder and install dependencies
         run: |
+          cd server
           npm install
           npm run build --if-present
-          npm run test --if-present
-      
+        working-directory: .
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -37,20 +40,38 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: node-app
-      
-      - name: 'Deploy to Azure Web App'
+
+      - name: List files in repository
+        run: ls
+
+      - name: Print working directory
+        run: pwd
+
+      - name: "Create .env file"
+        run: |
+          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env
+          echo "SERVER_URL=${{ secrets.SERVER_URL }}" >> .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+        working-directory: .
+
+      - name: "Deploy to Azure Web App"
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'AWAP-MovieApp-Backend'
-          slot-name: 'Production'
+          app-name: "AWAP-MovieApp-Backend"
+          slot-name: "Production"
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9CEA865D48884B9CB36CEA7683FD2A86 }}

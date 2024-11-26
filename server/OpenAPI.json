@@ -1,0 +1,504 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Movie API",
+    "description": "API for users to access accounts, profiles, and group interactions.",
+    "contact": { "email": "your-email@example.com" },
+    "license": { "name": "MIT", "url": "https://opensource.org/licenses/MIT" },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://Azure-portal-backend",
+      "description": "azure development server"
+    },
+    {
+      "url": "http://localhost:{port}/",
+      "description": "Local development server",
+      "variables": {
+        "port": {
+          "description": "Port on which the server is running",
+          "default": 3000
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Operations related to user management"
+    },
+    {
+      "name": "Favorites",
+      "description": "Operations related to favorite management"
+    },
+    {
+      "name": "Groups",
+      "description": "Operations related to group management"
+    }
+  ],
+  "paths": {
+    "/user/register": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Register a new user",
+        "description": "Register a new user with an email and password.",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/user_register_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_201"
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid email or password" },
+          "409": { "description": "Email already exists" }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Log in a user",
+        "description": "Authenticate a user and return a JWT token.",
+        "operationId": "loginUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/user_login_body" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid credentials" },
+          "401": { "description": "Invalid password" }
+        }
+      }
+    },
+    "/user/profile/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user profile",
+        "description": "Retrieve a user's profile information.",
+        "operationId": "getUserProfile",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The user's ID.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "string" },
+            "security": [{ "BearerAuth": [] }]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          },
+          "404": { "description": "User not found" }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update user profile",
+        "description": "Update the profile information of a user.",
+        "operationId": "updateUserProfile",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "string" },
+            "security": [{ "BearerAuth": [] }]
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/profile_id_body" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": { "description": "Profile updated successfully" },
+          "400": { "description": "No fields to update" },
+          "404": { "description": "User not found" }
+        }
+      }
+    },
+    "/user/deleteAccount": {
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete user account",
+        "description": "Delete the authenticated user's account.",
+        "operationId": "deleteUserAccount",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_2"
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/user/passwordCheck": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Check user password",
+        "description": "Verify the user's password.",
+        "operationId": "passwordCheck",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/user_passwordCheck_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Password confirmed" },
+          "401": { "description": "Invalid password" }
+        }
+      }
+    },
+    "/user/groupPendingRequests": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get group pending requests",
+        "description": "Retrieve pending group requests for the authenticated user.",
+        "operationId": "getGroupPendingRequests",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Pending group requests retrieved successfully"
+          },
+          "404": { "description": "No group pending requests" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/favorite/": {
+      "get": {
+        "tags": ["Favorites"],
+        "summary": "Get user's favorite list",
+        "description": "Retrieve the authenticated user's favorite content list.",
+        "operationId": "getFavoriteListByAuth",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Favorite list retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/favorite_item" }
+                }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    },
+    "/favorite/{id}": {
+      "get": {
+        "tags": ["Favorites"],
+        "summary": "Get favorite list by user ID",
+        "description": "Retrieve a favorite content list by user ID.",
+        "operationId": "getFavoriteListById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Favorite list retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/favorite_item" }
+                }
+              }
+            }
+          },
+          "404": { "description": "User or favorite list not found" }
+        }
+      }
+    },
+    "/favorite/add": {
+      "post": {
+        "tags": ["Favorites"],
+        "summary": "Add content to favorites",
+        "description": "Add a new content item to the user's favorite list.",
+        "operationId": "insertContentToFavorite",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/favorite_add_body" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Content added to favorites successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/favorite_item" }
+              }
+            }
+          },
+          "400": { "description": "Invalid content data" }
+        }
+      }
+    },
+    "/favorite/check": {
+      "post": {
+        "tags": ["Favorites"],
+        "summary": "Check if content is in favorites",
+        "description": "Check if a specific content item is in the user's favorite list.",
+        "operationId": "checkFavoriteById",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/favorite_check_body" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Check completed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/favorite_check_response"
+                }
+              }
+            }
+          },
+          "400": { "description": "Content ID is missing" }
+        }
+      }
+    },
+    "/favorite/delete": {
+      "delete": {
+        "tags": ["Favorites"],
+        "summary": "Delete content from favorites",
+        "description": "Delete a content item from the user's favorite list.",
+        "operationId": "deleteFavoriteById",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/favorite_delete_body" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": { "description": "Content deleted successfully" },
+          "404": { "description": "Favorite content not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "user_register_body": {
+        "required": ["email", "password"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "password": { "type": "string", "example": "Password123" }
+        }
+      },
+      "inline_response_201": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "user_login_body": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "password": { "type": "string", "example": "Password123" }
+        }
+      },
+      "inline_response_200": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "token": { "type": "string" }
+        }
+      },
+      "inline_response_200_1": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "email": { "type": "string" },
+          "firstname": { "type": "string" },
+          "lastname": { "type": "string" },
+          "address": { "type": "string" },
+          "phone": { "type": "string" }
+        }
+      },
+      "profile_id_body": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" },
+          "firstname": { "type": "string" },
+          "lastname": { "type": "string" },
+          "address": { "type": "string" },
+          "phone": { "type": "string" }
+        }
+      },
+      "inline_response_200_2": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "user": { "type": "object" }
+        }
+      },
+      "user_passwordCheck_body": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string" }
+        }
+      },
+      "favorite_item": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "Favorite content ID" },
+          "account_id": { "type": "string", "description": "User ID" },
+          "content_id": { "type": "string", "description": "Content ID" },
+          "title": { "type": "string", "description": "Content title" },
+          "media_type": { "type": "string", "description": "Type of content" },
+          "poster_path": {
+            "type": "string",
+            "description": "Poster image path"
+          },
+          "added_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date added to favorites"
+          }
+        }
+      },
+      "favorite_add_body": {
+        "type": "object",
+        "required": ["content_id", "title", "media_type"],
+        "properties": {
+          "content_id": { "type": "string", "description": "Content ID" },
+          "title": { "type": "string", "description": "Title of the content" },
+          "media_type": { "type": "string", "description": "Type of media" },
+          "poster_path": {
+            "type": "string",
+            "description": "Poster image path (optional)"
+          }
+        }
+      },
+      "favorite_check_body": {
+        "type": "object",
+        "required": ["content_id"],
+        "properties": {
+          "content_id": {
+            "type": "string",
+            "description": "Content ID to check"
+          }
+        }
+      },
+      "favorite_check_response": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Check result message"
+          },
+          "favorite": {
+            "type": "boolean",
+            "description": "Whether the content is a favorite"
+          }
+        }
+      },
+      "favorite_delete_body": {
+        "type": "object",
+        "required": ["content_id"],
+        "properties": {
+          "content_id": {
+            "type": "string",
+            "description": "Content ID to delete"
+          }
+        }
+      }
+    }
+  }
+}

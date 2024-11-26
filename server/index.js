@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/api/message", (req, res) => {
-  res.json({ message: "test message" });
+  res.json({ message: "Test message from backend" });
 });
 
 app.use("/user", userRouter);

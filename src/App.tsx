@@ -18,6 +18,7 @@ import { FavoriteProvider } from "./UserComponents/FavoriteProvider";
 import ListGenres from "./components/ListGenres";
 import ListSearchResults from "./components/ListSearchResults";
 import GroupProvider from "./UserComponents/GroupProvider";
+import Test from "./Test";
 
 function App() {
   return (
@@ -25,8 +26,8 @@ function App() {
       <UserProvider>
         <FavoriteProvider>
           <GroupProvider>
-            {" "}
             <Routes>
+              <Route path="/test" element={<Test />} />
               <Route path="/" element={<Home />} />
               <Route path="/:mediaType/:id" element={<ContentDetails />} />
               <Route

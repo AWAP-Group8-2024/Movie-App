@@ -25,14 +25,6 @@ jobs:
           API_URL: ${{ secrets.API_URL }}
           API_TOKEN: ${{ secrets.API_TOKEN }}
 
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-
           CI: false # Disable strict CI mode
 
         run: |
@@ -42,14 +34,6 @@ jobs:
           echo "API_KEY=${API_KEY}"
           echo "API_URL=${API_URL}"
           echo "API_TOKEN=${API_TOKEN}"
-
-          echo "JWT_SECRET=${JWT_SECRET}"
-
-          echo "DB_USER=${DB_USER}"
-          echo "DB_HOST=${DB_HOST}"
-          echo "DB_NAME=${DB_NAME}"
-          echo "DB_PASSWORD=${DB_PASSWORD}"
-          echo "DB_PORT=${DB_PORT}"
 
       - uses: actions/checkout@v3
         with:

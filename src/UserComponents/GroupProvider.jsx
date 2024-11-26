@@ -17,7 +17,7 @@ export default function GroupProvider({ children }) {
 
   const getUserGroups = async (profileId) => {
     try {
-      const response = await axios.get(`${url}/group/${profileId}`, {
+      const response = await axios.get(`${url}/group/userGroup/${profileId}`, {
         headers,
       });
       return response.data;

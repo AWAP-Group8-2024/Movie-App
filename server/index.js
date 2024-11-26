@@ -6,6 +6,10 @@ import groupRouter from "./routers/GroupRouter.js";
 
 const port = process.env.SERVER_PORT;
 
+app.get("/api/message", (req, res) => {
+  res.send({ message: "test message" });
+});
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -20,10 +24,6 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   const statusCode = err.statusCode || 500;
   res.status(statusCode).json({ error: err.message });
-});
-
-app.get("/api/message", (req, res) => {
-  res.send({ message: "test message" });
 });
 
 app.listen(port, () => {

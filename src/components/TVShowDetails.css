@@ -390,27 +390,28 @@
 }
 
 .dark-textarea, .dark-input {
-    background-color: #1a1f2e;
-    border: 1px solid #2a2f3e;
-    color: #fff;
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    color: #451b1b;
 }
 
 .dark-textarea:focus, .dark-input:focus {
-    background-color: #1a1f2e;
-    border-color: #3a3f4e;
-    color: #fff;
+    background-color: #ffffff;  
+    border-color: #000000;      
+    color: #451b1b;          
     box-shadow: none;
 }
+
 
 .submit-btn {
     background-color: #7952b3;
     border: none;
     padding: 0.5rem 2rem;
-}
+  }
 
 .submit-btn:hover {
     background-color: #6942a3;
-}
+  }
 
 /* Social Sharing */
 .social-sharing-btn {

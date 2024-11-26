@@ -50,15 +50,15 @@ jobs:
           name: node-app
 
       - name: Show current path
-        working-directory: ${{ github.workspace }}
+        working-directory: .
         run: pwd
 
       - name: List files in repository
-        working-directory: ${{ github.workspace }}
+        working-directory: .
         run: ls
 
       - name: "Create .env file"
-        working-directory: ${{ github.workspace }}/server
+        working-directory: .
         run: |
           pwd
           echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env

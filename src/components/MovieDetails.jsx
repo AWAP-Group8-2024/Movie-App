@@ -97,6 +97,7 @@ export default function MovieDetails() {
                   className="movie-poster"
                 />
                 <div className="action-buttons">
+                  {/* It has no usage so far */}
                   <button className="action-btn">
                     <FaRegHeart /> <span>0</span>
                   </button>

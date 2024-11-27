@@ -288,11 +288,12 @@ export const getGroupPosts = async (groupId) => {
 	}
 }
 
-export const createGroupPost = async (groupId, accountId, postDescription) => {
+export const createGroupPost = async (groupId, postDescription) => {
 	const headers = getAuthHeaders();
+	const accountId = getUserFromSession().id;
 	if (!headers) return;
 	try {
-		const response = await axios.post(`${API_URL}/group/${groupId}/posts`, { groupId, accountId, description: postDescription });
+		const response = await axios.post(`${API_URL}/group/${groupId}/posts`, { accountId, description: postDescription });
 		return response.data;
 	} catch (error) {
 		console.error(`Error creating post for group ${groupId}:`, error);

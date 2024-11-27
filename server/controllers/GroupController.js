@@ -243,7 +243,7 @@ export const getAllGroupPosts = async (req, res) => {
 
 export const createPost = async (req, res) => {
   const { groupId } = req.params;
-  const { accountId } = req.params;
+  const { accountId } = req.body;
   const { description } = req.body;
 
   try {

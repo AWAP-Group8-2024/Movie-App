@@ -313,7 +313,7 @@ const GroupDetails = () => {
           }
 
           try {
-            const newPost = await createGroupPost(groupId, user.id, postDescription);
+            const newPost = await createGroupPost(groupId, postDescription);
             setPosts([...posts, newPost]); // Update the posts state
             setMessage("Post created successfully.");
             e.target.reset(); // Clear the form

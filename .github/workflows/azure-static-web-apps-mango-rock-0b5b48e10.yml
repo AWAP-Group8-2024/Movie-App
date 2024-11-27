@@ -46,6 +46,7 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
           API_URL: ${{ secrets.API_URL }}
           API_TOKEN: ${{ secrets.API_TOKEN }}
+          CI: false # Ensure CI is set to false during the build
 
       - name: Build And Deploy
         id: builddeploy

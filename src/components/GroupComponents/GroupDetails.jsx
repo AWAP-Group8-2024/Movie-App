@@ -5,6 +5,9 @@ import {
   deleteGroupByGroupId,
   sendJoinRequest,
   leaveGroupByGroupId,
+  getGroupPosts,
+  createGroupPost,
+  deleteGroupPost
 } from "../../services/GroupServices";
 import { useParams, useNavigate } from "react-router-dom";
 import Navigation from "../Navigation";
@@ -18,6 +21,7 @@ const GroupDetails = () => {
   const { user, isLoading: userLoading } = useUser();
   const [group, setGroup] = useState(null);
   const [members, setMembers] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
@@ -34,9 +38,11 @@ const GroupDetails = () => {
 
           const groupData = await getGroupByGroupId(groupId);
           const groupMembers = await getGroupMembersbyGroupId(groupId);
+          const groupPosts = await getGroupPosts(groupId);
 
           setGroup(groupData);
           setMembers(groupMembers);
+          setPosts(groupPosts);
 
           if (user) {
             const isGroupMember = groupMembers.some(
@@ -177,7 +183,7 @@ const GroupDetails = () => {
                   </button>
                 ) : !isOwner ? (
                   <button className="btn btn-primary" onClick={handleJoinGroup}>
-                    Join 
+                    Join
                   </button>
                 ) : null}
 
@@ -185,9 +191,8 @@ const GroupDetails = () => {
                 {isOwner && (
                   <>
                     <button
-                      className={`btn ${
-                        showJoinRequest ? "btn-secondary" : "btn-info"
-                      } me-2`}
+                      className={`btn ${showJoinRequest ? "btn-secondary" : "btn-info"
+                        } me-2`}
                       onClick={() => setShowJoinRequest(!showJoinRequest)}
                     >
                       {showJoinRequest
@@ -263,6 +268,73 @@ const GroupDetails = () => {
           <div className="alert alert-warning">No group details found.</div>
         )}
       </div>
+      <h4 className="mt-4">Group Posts</h4>
+      {posts.length > 0 ? (
+        <div className="mt-3">
+          {posts.map((post) => (
+            <div key={post.post_id} className="card mb-3 shadow-sm">
+              <div className="card-body">
+                <p className="card-text">{post.description}</p>
+                <p className="card-subtitle text-muted">
+                  <small>Posted by: {post.writer_id}</small>
+                </p>
+                {isOwner || post.account_id === user?.id ? (
+                  <button
+                    className="btn btn-danger btn-sm mt-2"
+                    onClick={async () => {
+                      try {
+                        await deleteGroupPost(groupId, post.post_id);
+                        setPosts(posts.filter((p) => p.id !== post.post_id));
+                        setMessage("Post deleted successfully.");
+                      } catch (err) {
+                        setError(err.message || "Failed to delete post.");
+                      }
+                    }}
+                  >
+                    Delete
+                  </button>
+                ) : null}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>No posts found in this group.</p>
+      )}
+      <h5 className="mt-4">Create a Post</h5>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const postDescription = e.target.elements.description.value.trim();
+
+          if (!postDescription) {
+            setError("Post description cannot be empty.");
+            return;
+          }
+
+          try {
+            const newPost = await createGroupPost(groupId, user.id, postDescription);
+            setPosts([...posts, newPost]); // Update the posts state
+            setMessage("Post created successfully.");
+            e.target.reset(); // Clear the form
+          } catch (err) {
+            setError(err.response?.data?.message || "Failed to create post.");
+          }
+        }}
+      >
+        <div className="mb-3">
+          <textarea
+            name="description"
+            rows="3"
+            className="form-control"
+            placeholder="Write your post here..."
+          ></textarea>
+        </div>
+        <button type="submit" className="btn btn-primary btn-sm">
+          Submit
+        </button>
+      </form>
+
     </div>
   );
 };

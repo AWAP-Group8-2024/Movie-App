@@ -70,8 +70,8 @@ INSERT INTO join_requests (group_id, account_id) VALUES (1, 4);
 INSERT INTO join_requests (group_id, account_id) VALUES (2, 5);
 INSERT INTO join_requests (group_id, account_id) VALUES (3, 6);
 
-INSERT INTO group_post (group_id, description, writer_id) VALUES (1, 'post1', 1);
-INSERT INTO group_post (group_id, description, writer_id) VALUES (2, 'post2', 2);
+INSERT INTO group_post (group_id, writer_id, description) VALUES (1, 1, 'post1');
+INSERT INTO group_post (group_id, writer_id,  description) VALUES (2, 2, 'post2');
 
 COMMIT;
 

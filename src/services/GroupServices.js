@@ -147,7 +147,7 @@ export const sendJoinRequest = async (groupId) => {
     let alreadyExists = false;
 
     userReqests.forEach((element) => {
-      if (element.group_id == groupId && element.status == "pending") {
+      if (element.group_id === groupId && element.status === "pending") {
         alreadyExists = true;
       }
     });
@@ -275,3 +275,39 @@ export const cancelUserJoinRequests = async () => {
     throw error;
   }
 };
+
+export const getGroupPosts = async (groupId) => {
+	const headers = getAuthHeaders();
+	if (!headers) return;
+	try {
+		const response = await axios.get(`${API_URL}/group/${groupId}/posts`);
+		return response.data;
+	} catch (error) {
+		console.error(`Error fetching posts for group ${groupId}:`, error);
+		throw error;
+	}
+}
+
+export const createGroupPost = async (groupId, accountId, postDescription) => {
+	const headers = getAuthHeaders();
+	if (!headers) return;
+	try {
+		const response = await axios.post(`${API_URL}/group/${groupId}/posts`, { groupId, accountId, description: postDescription });
+		return response.data;
+	} catch (error) {
+		console.error(`Error creating post for group ${groupId}:`, error);
+		throw error;
+	}
+}
+
+export const deleteGroupPost = async (groupId, postId) => {
+	const headers = getAuthHeaders();
+	if (!headers) return;
+	try {
+		const response = await axios.delete(`${API_URL}/group/delete/${groupId}/posts/${postId}`, { groupId, postId });
+		return response.data;
+	} catch (error) {
+		console.error(`Error deleting post for group ${groupId}:`, error);
+		throw error;
+	}
+}

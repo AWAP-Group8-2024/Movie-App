@@ -47,15 +47,15 @@ function MovieCredits({ movieId }) {
             tabIndex={0}
           >
             <div className="cast-image-container">
-              <img
-                src={
-                  castMember.profile_path
-                    ? `https://image.tmdb.org/t/p/w185${castMember.profile_path}`
-                    : '/api/placeholder/185/185'
-                }
-                alt={castMember.name}
-                className="cast-image"
-              />
+              {castMember.profile_path ? (
+                <img
+                  src={`https://image.tmdb.org/t/p/w185${castMember.profile_path}`}
+                  alt={castMember.name}
+                  className="cast-image"
+                />
+              ) : (
+                <div className="no-photo">No Photo</div>
+              )}
             </div>
             <div className="cast-info">
               <div className="cast-name">{castMember.name}</div>

@@ -1,0 +1,19 @@
+{
+  "sqltools.connections": [
+    {
+      "pgOptions": {
+        "ssl": {
+          "rejectUnauthorized": true
+        }
+      },
+      "previewLimit": 50,
+      "server": "awapmovie.postgres.database.azure.com",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "azureMovieDB",
+      "username": "movieAdmin",
+      "database": "postgres",
+      "password": "!Password123"
+    }
+  ]
+}

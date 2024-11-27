@@ -1,100 +1,98 @@
-/* Container for the entire credits section */
 .credits-container {
-  margin: 20px 0;
-  font-family: Arial, sans-serif;
+  margin: 2rem 0;
 }
 
-/* Title for each section (e.g., Top Cast, Key Crew) */
 .credits-title {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-  color: #333;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 5px;
-  font-weight: bold; /* Make the title bold */
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #000;
 }
 
-/* A row to align items horizontally */
-.credits-row {
+.cast-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-bottom: 20px;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* Each individual cast/crew item */
-.credits-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  max-width: 80px;
-  cursor: pointer; /* Added for clickable items */
-  transition: transform 0.2s ease; /* Added for hover effect */
+.cast-list::-webkit-scrollbar {
+  display: none;
 }
 
-.credits-item:hover {
-  transform: scale(1.05); /* Added for hover effect */
-}
-
-/* Profile photo styling: Circular and responsive */
-.profile-photo {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
-  border: 2px solid #ccc;
-  background-color: #f0f0f0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.9em;
-  color: #888;
-}
-
-/* Profile details (e.g., name and role/job) */
-.profile-details {
-  font-size: 0.9em;
-  color: #333;
-}
-
-.role {
-  display: block;
-  color: #777;
-  font-size: 0.8em;
-}
-
-/* Responsive adjustments for smaller screens */
-@media screen and (max-width: 768px) {
-  .credits-row {
-    gap: 10px;
-    justify-content: center;
-  }
-
-  .credits-item {
-    max-width: 70px;
-  }
-
-  .profile-photo {
-    width: 70px;
-    height: 70px;
-  }
-
-  .credits-title {
-    font-size: 1.3em;
-  }
-}
-
-/* Modal specific styles - Added only these new styles */
-.cast-profile-modal .modal-content {
+.cast-card {
+  flex: 0 0 180px;
+  background: white;
   border-radius: 8px;
-  max-width: 800px;
-  margin: auto;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
-.cast-profile-modal .modal-body {
-  padding: 20px;
-  max-height: 80vh;
-  overflow-y: auto;
+.cast-card:hover {
+  transform: translateY(-5px);
+}
+
+.cast-image-container {
+  width: 100%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  background-color: #dbdbdb;
+}
+
+.cast-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-photo {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.cast-info {
+  padding: 12px;
+}
+
+.cast-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+.cast-character {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cast-card {
+    flex: 0 0 140px;
+  }
+  
+  .cast-name {
+    font-size: 0.9rem;
+  }
+  
+  .cast-character {
+    font-size: 0.8rem;
+  }
+}
+
+/* Focus States for Accessibility */
+.cast-card:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5), 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }

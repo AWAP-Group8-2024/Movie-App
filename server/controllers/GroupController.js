@@ -231,48 +231,45 @@ export const leaveGroup = async (req, res) => {
   }
 };
 
-export const getAllGroupPosts = async (req, res, next) => {
+export const getAllGroupPosts = async (req, res) => {
   const { groupId } = req.params;
   try {
     const result = await GroupModel.selectAllPosts(groupId);
     return res.status(200).json(result.rows || []);
   } catch (error) {
-    return next(error);
+    return res.status(500).json({ error: error.message });
   }
 };
 
-export const createPost = async (req, res, next) => {
+export const createPost = async (req, res) => {
   const { groupId } = req.params;
+  const { accountId } = req.body;
   const { description } = req.body;
-  const { id: accountId } = req.user;
-
-  if (!description || description.trim().length === 0) {
-    return res.status(400).json({ message: "Description cannot be empty." });
-  }
 
   try {
     const result = await GroupModel.insertPost(groupId, accountId, description);
-    return res.status(201).json({
+    return res.status(200).json({
       message: "Post created successfully.",
       post: result.rows[0],
     });
   } catch (error) {
-    return next(error);
+    return res.status(500).json({ error: error.message });
   }
 };
 
-export const deletePost = async (req, res, next) => {
+export const deletePost = async (req, res) => {
+  const { groupId } = req.params;
   const { postId } = req.params;
 
   try {
-    const result = await GroupModel.deletePost(postId);
+    const result = await GroupModel.deletePost(groupId,postId);
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ message: "Post not found." });
+      return res.status(500).json({ error: error.message });
     }
 
     return res.status(200).json({ message: "Post deleted successfully." });
   } catch (error) {
-    return next(error);
+    return res.status(500).json({ error: error.message });
   }
 };

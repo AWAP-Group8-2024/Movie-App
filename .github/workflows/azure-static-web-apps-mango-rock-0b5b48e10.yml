@@ -16,21 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      # - name: Debug Secrets
-      #   env:
-      #     REACT_APP_TMDB_API_KEY: ${{ secrets.REACT_APP_TMDB_API_KEY }}
-      #     REACT_APP_TMDB_URL: ${{ secrets.REACT_APP_TMDB_URL }}
-      #     REACT_APP_TMDB_TOKEN: ${{ secrets.REACT_APP_TMDB_TOKEN }}
-      #     REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
-
-      #     CI: false # Disable strict CI mode
-
-      #   run: |
-      #     echo "REACT_APP_TMDB_API_KEY=${REACT_APP_TMDB_API_KEY}"
-      #     echo "REACT_APP_TMDB_URL=${REACT_APP_TMDB_URL}"
-      #     echo "REACT_APP_TMDB_TOKEN=${REACT_APP_TMDB_TOKEN}"
-      #     echo "REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}"
-
       - uses: actions/checkout@v3
         with:
           submodules: true

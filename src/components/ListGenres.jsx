@@ -12,7 +12,7 @@ export default function ListGenres() {
             for (let n = 0; n < 4; n++) {
                 if (movieGenres[i * 4 + n]) {
                     row.push(
-                        <Col xs={6} md={3} className='text-decoration-none text-dark p-2 fw-bold fs-4'  as={Link} to={`/filtered/movie?genres=${movieGenres[i * 4 + n].id}&page=1`}>
+                        <Col key={i * 4 + n} xs={6} md={3} className='text-decoration-none text-dark p-2 fw-bold fs-4'  as={Link} to={`/filtered/movie?genres=${movieGenres[i * 4 + n].id}&page=1`}>
                             <div className='border border-1 border-dark rounded p-2 h-100 d-flex align-items-center justify-content-center text-center'>
                                 {movieGenres[i * 4 + n].name}
                             </div>
@@ -22,7 +22,7 @@ export default function ListGenres() {
                 }
             }
             body.push(
-                <Row className="d-flex justify-content-around mb-3 flex-grow-1">
+                <Row key={i} className="d-flex justify-content-around mb-3 flex-grow-1">
                     {row}
                 </Row>
             );

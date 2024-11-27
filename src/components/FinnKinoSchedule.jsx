@@ -37,7 +37,7 @@ export default function FinnKinoSchedule({dataTMDB}) {
                     let setter = [];
                     json.forEach((element, i) => {
                         setter.push(
-                            <Dropdown.Item onClick={() => {getTimes(element, currentId)}}>{element.Name._text}</Dropdown.Item>
+                            <Dropdown.Item key={i} onClick={() => {getTimes(element, currentId)}}>{element.Name._text}</Dropdown.Item>
                         )
 
                         if (i == 0) {
@@ -80,7 +80,7 @@ export default function FinnKinoSchedule({dataTMDB}) {
                     if (i < 10) {
                         const date = new Date(element.dttmShowStart._text);
                         setter.push(
-                            <Row className="row-cols-auto">
+                            <Row className="row-cols-auto" key={i}>
                                 <Col>
                                     {weekdays[date.getDay()]}, {date.getDate()} {months[date.getMonth()]}, {date.getHours()}:{date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()};
                                     {' '}{Math.floor(+element.LengthInMinutes._text / 60)} h {+element.LengthInMinutes._text % 60} min;
@@ -91,7 +91,7 @@ export default function FinnKinoSchedule({dataTMDB}) {
                     } 
                 })
                 setter.push(
-                    <Row className="row-cols-auto">
+                    <Row key={11} className="row-cols-auto">
                         <Col>
                             <a href={`https://www.finnkino.fi/en/event/${id}`}>View on FinnKino</a>
                         </Col>

@@ -16,24 +16,36 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      # - name: Debug Secrets
-      #   env:
-      #     REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
-      #     REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+      - name: Create .env file
+        run: |
+          echo "REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }}" >> .env
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> .env
+          echo "API_KEY=${{ secrets.API_KEY }}" >> .env
+          echo "API_URL=${{ secrets.API_URL }}" >> .env
+          echo "API_TOKEN=${{ secrets.API_TOKEN }}" >> .env
+        env:
+          REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
+          API_URL: ${{ secrets.API_URL }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
 
-      #     API_KEY: ${{ secrets.API_KEY }}
-      #     API_URL: ${{ secrets.API_URL }}
-      #     API_TOKEN: ${{ secrets.API_TOKEN }}
+      - name: Debug Secrets
+        env:
+          REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
+          API_URL: ${{ secrets.API_URL }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+          CI: false # Disable strict CI mode
 
-      #     CI: false # Disable strict CI mode
+        run: |
+          echo "REACT_APP_API_KEY=${REACT_APP_API_KEY}"
+          echo "REACT_APP_API_URL=${REACT_APP_API_URL}"
 
-      #   run: |
-      #     echo "REACT_APP_API_KEY=${REACT_APP_API_KEY}"
-      #     echo "REACT_APP_API_URL=${REACT_APP_API_URL}"
-
-      #     echo "API_KEY=${API_KEY}"
-      #     echo "API_URL=${API_URL}"
-      #     echo "API_TOKEN=${API_TOKEN}"
+          echo "API_KEY=${API_KEY}"
+          echo "API_URL=${API_URL}"
+          echo "API_TOKEN=${API_TOKEN}"
 
       - uses: actions/checkout@v3
         with:

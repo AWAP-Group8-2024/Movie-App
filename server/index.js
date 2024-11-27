@@ -4,7 +4,7 @@ import favoriteRouter from "./routers/FavoriteRouter.js";
 import userRouter from "./routers/UserRouter.js";
 import groupRouter from "./routers/GroupRouter.js";
 
-const port = process.env.SERVER_PORT;
+const port = process.env.PORT;
 
 const app = express();
 

@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy Node.js app to Azure Web App - MovieApp-backend-actions
 
 on:
@@ -54,5 +51,5 @@ jobs:
         with:
           app-name: "MovieApp-backend-actions"
           slot-name: "Production"
-          package: .
+          package: ./server
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DF1FFFA0923643B290906E15EEBDBC8B }}

@@ -2,7 +2,7 @@ import { createContext, useState, useContext } from "react";
 import axios from "axios";
 import { useUser } from "./UserProvider";
 
-const url = process.env.REACT_APP_API_URL;
+const url = process.env.REACT_APP_BACKEND_URL;
 
 const GroupContext = createContext();
 

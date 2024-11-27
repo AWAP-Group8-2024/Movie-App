@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import Slider from 'react-slick';
-import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
+import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 
 const CustomNextArrow = ({ onClick }) => (
   <div className="custom-arrow custom-next" onClick={onClick}>
@@ -20,7 +20,7 @@ function RelatedMovies({ movieId }) {
   useEffect(() => {
     const fetchRelatedMovies = async () => {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${process.env.REACT_APP_API_KEY}`
+        `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
       );
       const data = await response.json();
       setRelatedMovies(data.results || []);
@@ -74,7 +74,7 @@ function RelatedMovies({ movieId }) {
             <div
               key={movie.id}
               className="show-card"
-              onClick={() => window.location.href = `/movie/${movie.id}`}
+              onClick={() => (window.location.href = `/movie/${movie.id}`)}
             >
               <div className="show-poster-container">
                 <img

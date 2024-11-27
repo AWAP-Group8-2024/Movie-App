@@ -27,10 +27,10 @@ export default function Navigation() {
     if (query.trim() !== "") {
       Promise.all([
         fetch(
-          `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${query}&page=1`
+          `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&query=${query}&page=1`
         ),
         fetch(
-          `https://api.themoviedb.org/3/search/tv?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${query}&page=1`
+          `https://api.themoviedb.org/3/search/tv?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&query=${query}&page=1`
         ),
       ])
         .then(([movieRes, tvRes]) =>

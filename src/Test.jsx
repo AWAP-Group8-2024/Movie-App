@@ -7,7 +7,7 @@ export default function Test() {
   useEffect(() => {
     const getTestMessage = async () => {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/message`
+        `${process.env.REACT_APP_BACKEND_URL}/api/message`
       );
       setMessage(response.data.message);
     };

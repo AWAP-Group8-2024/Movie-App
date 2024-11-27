@@ -2,7 +2,7 @@
 import axios from "axios";
 import { getUserFromSession } from "../components/utils.js";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 // Retrieves the token and alerts if the user is not authenticated
 const getAuthToken = () => {

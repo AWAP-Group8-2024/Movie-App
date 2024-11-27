@@ -21,7 +21,7 @@ function RecommendedShows({ showId }) {
   useEffect(() => {
     const fetchRelatedShows = async () => {
       const response = await fetch(
-        `https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=${process.env.REACT_APP_API_KEY}`
+        `https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
       );
       const data = await response.json();
       setRelatedShows(data.results || []);

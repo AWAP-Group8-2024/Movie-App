@@ -31,7 +31,7 @@ export default function TVShowDetails() {
 
   useEffect(() => {
     fetch(
-      `https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
+      `https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -45,7 +45,7 @@ export default function TVShowDetails() {
 
   const fetchSeasonDetails = (seasonNumber) => {
     fetch(
-      `https://api.themoviedb.org/3/tv/${id}/season/${seasonNumber}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
+      `https://api.themoviedb.org/3/tv/${id}/season/${seasonNumber}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
     )
       .then((res) => res.json())
       .then((data) => {

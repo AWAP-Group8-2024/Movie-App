@@ -2,7 +2,7 @@ import { useState, createContext, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const url = process.env.REACT_APP_API_URL;
+const url = process.env.REACT_APP_BACKEND_URL;
 
 const initialUserState = { id: "", email: "", token: "", password: "" };
 

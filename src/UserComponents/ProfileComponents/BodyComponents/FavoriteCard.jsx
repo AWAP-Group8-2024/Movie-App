@@ -23,7 +23,7 @@ export const FavoriteCard = () => {
   const navigate = useNavigate();
 
   const fetchContentDetails = async (content_id, media_type) => {
-    const apiKey = process.env.REACT_APP_API_KEY;
+    const apiKey = process.env.REACT_APP_TMDB_API_KEY;
     const url =
       media_type === "movie"
         ? `https://api.themoviedb.org/3/movie/${content_id}?api_key=${apiKey}&language=en-US`

@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import './MovieCredits.css';
-import CastProfileModal from './CastProfileModal';
+import React, { useEffect, useState } from "react";
+import "./MovieCredits.css";
+import CastProfileModal from "./CastProfileModal";
 
 function MovieCredits({ movieId }) {
   const [topCast, setTopCast] = useState([]);
   const [topCrew, setTopCrew] = useState([]);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const placeholderImage = 'https://via.placeholder.com/80?text=No+Photo';
+  const placeholderImage = "https://via.placeholder.com/80?text=No+Photo";
 
   useEffect(() => {
     const fetchCredits = async () => {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
+          `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
         );
         const data = await response.json();
 
@@ -31,14 +31,14 @@ function MovieCredits({ movieId }) {
               (member) =>
                 member.name &&
                 member.job &&
-                ['Director', 'Producer', 'Writer'].includes(member.job)
+                ["Director", "Producer", "Writer"].includes(member.job)
             )
             .sort((a, b) => b.popularity - a.popularity)
             .slice(0, 5);
           setTopCrew(sortedCrew);
         }
       } catch (error) {
-        console.error('Error fetching movie credits:', error);
+        console.error("Error fetching movie credits:", error);
       }
     };
 
@@ -66,8 +66,8 @@ function MovieCredits({ movieId }) {
           <h3 className="credits-title">Top Cast</h3>
           <div className="credits-row">
             {topCast.map((castMember) => (
-              <div 
-                key={castMember.id} 
+              <div
+                key={castMember.id}
                 className="credits-item"
                 onClick={() => handlePersonClick(castMember)}
                 role="button"
@@ -93,8 +93,8 @@ function MovieCredits({ movieId }) {
           <h3 className="credits-title">Key Crew</h3>
           <div className="credits-row">
             {topCrew.map((crewMember) => (
-              <div 
-                key={crewMember.id} 
+              <div
+                key={crewMember.id}
                 className="credits-item"
                 onClick={() => handlePersonClick(crewMember)}
                 role="button"
@@ -115,7 +115,7 @@ function MovieCredits({ movieId }) {
         </>
       )}
 
-      <CastProfileModal 
+      <CastProfileModal
         personId={selectedPerson}
         show={showModal}
         onHide={() => {

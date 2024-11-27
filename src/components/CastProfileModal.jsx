@@ -13,8 +13,8 @@ const CastProfileModal = ({ personId, show, onHide }) => {
     if (personId) {
       // Fetch person details and credits
       Promise.all([
-        fetch(`https://api.themoviedb.org/3/person/${personId}?api_key=${process.env.REACT_APP_API_KEY}`),
-        fetch(`https://api.themoviedb.org/3/person/${personId}/combined_credits?api_key=${process.env.REACT_APP_API_KEY}`)
+        fetch(`https://api.themoviedb.org/3/person/${personId}?api_key=${process.env.REACT_APP_TMDB_API_KEY}`),
+        fetch(`https://api.themoviedb.org/3/person/${personId}/combined_credits?api_key=${process.env.REACT_APP_TMDB_API_KEY}`)
       ])
         .then(([profileRes, creditsRes]) => Promise.all([profileRes.json(), creditsRes.json()]))
         .then(([profileData, creditsData]) => {

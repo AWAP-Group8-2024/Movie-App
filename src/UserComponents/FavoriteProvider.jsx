@@ -3,7 +3,7 @@ import axios from "axios";
 import { useUser } from "./UserProvider";
 import { getUserFromSession } from "../components/utils.js";
 
-const url = process.env.REACT_APP_API_URL;
+const url = process.env.REACT_APP_BACKEND_URL;
 
 const FavoriteContext = createContext();
 

@@ -30,7 +30,7 @@ export default function MovieDetails() {
 
   useEffect(() => {
     fetch(
-      `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
+      `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -44,9 +44,6 @@ export default function MovieDetails() {
       setContentInFavorite(false);
     }
   }, [user, setContentInFavorite]);
-
-  // const shareUrl = `${process.env.REACT_APP_API_URL}/movie/${id}`;
-  // const shareMessage = `Check out "${movie.title}" on MovieApp!`;
 
   const handleToggleFavorite = async () => {
     if (!user.token) {

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
-import "./RecommendedShows.css"; // Assuming you have a CSS file for this component
+import "./RecommendedShows.css";
 
 const CustomNextArrow = ({ onClick }) => (
   <div className="custom-arrow custom-next" onClick={onClick}>
@@ -17,29 +18,38 @@ const CustomPrevArrow = ({ onClick }) => (
 
 function RecommendedShows({ showId }) {
   const [relatedShows, setRelatedShows] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRelatedShows = async () => {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
-      );
-      const data = await response.json();
-      setRelatedShows(data.results || []);
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/tv/${showId}/recommendations?api_key=${process.env.REACT_APP_TMDB_API_KEY}`
+        );
+        const data = await response.json();
+        setRelatedShows(data.results || []);
+      } catch (error) {
+        console.error("Error fetching related shows:", error);
+      }
     };
 
     fetchRelatedShows();
   }, [showId]);
 
+  const handleShowClick = (showId) => {
+    navigate(`/tv/${showId}`);
+  };
+
   const settings = {
-    dots: false, // Hide default dots
-    infinite: true, // Enable looping
-    speed: 600, // Smooth transition speed
-    slidesToShow: 4, // Number of visible slides
-    slidesToScroll: 1, // Scroll one slide at a time
-    arrows: true, // Enable custom arrows
-    autoplay: true, // Automatically cycle through slides
-    autoplaySpeed: 3000, // Delay between transitions
-    pauseOnHover: true, // Pause autoplay on hover
+    dots: false,
+    infinite: true,
+    speed: 600,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    arrows: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    pauseOnHover: true,
     nextArrow: <CustomNextArrow />,
     prevArrow: <CustomPrevArrow />,
     responsive: [
@@ -75,7 +85,7 @@ function RecommendedShows({ showId }) {
             <div
               key={show.id}
               className="show-card"
-              onClick={() => (window.location.href = `/tv/${show.id}`)}
+              onClick={() => handleShowClick(show.id)}
             >
               <div className="show-poster-container">
                 <img

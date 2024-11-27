@@ -36,7 +36,7 @@ function TVShowCredits({ showId }) {
 
   return (
     <div className="credits-container">
-      <h3 className="credits-title">Top Billed Cast</h3>
+      <h3 className="credits-title">Cast</h3>
       <div className="cast-list">
         {cast.slice(0, 10).map((castMember) => (
           <div

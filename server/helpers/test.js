@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { pool } from "./db.js";
-import { hash } from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
+const { hash } = bcrypt;
 const { sign } = jwt;
 
 const __dirname = path.resolve();

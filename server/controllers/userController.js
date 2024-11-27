@@ -1,9 +1,9 @@
-import { hash, compare } from "bcrypt";
+import bcrypt from "bcryptjs";
 import * as UserModel from "../models/User.js";
 import { ApiError } from "../helpers/apiError.js";
 import jwt from "jsonwebtoken";
 const { sign } = jwt;
-
+const { hash, compare } = bcrypt;
 export const registration = async (req, res, next) => {
   try {
     const { email, password } = req.body;

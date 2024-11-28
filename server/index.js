@@ -3,20 +3,19 @@ import cors from "cors";
 import favoriteRouter from "./routers/FavoriteRouter.js";
 import userRouter from "./routers/UserRouter.js";
 import groupRouter from "./routers/GroupRouter.js";
-import { fileURLToPath } from "url";
-import path from "path";
+// import { fileURLToPath } from "url";
+// import path from "path";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 const port = process.env.PORT;
-
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "../build")));
+app.use(express.static(path.join(__dirname, "../build", "index.html")));
 
 // test message
 app.get("/api/message", (req, res) => {
@@ -28,9 +27,9 @@ app.use("/favorite", favoriteRouter);
 app.use("/group", groupRouter);
 
 // Catch-all handler to serve index.html for frontend routes
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
+// app.get("/*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "build", "index.html"));
+// });
 
 // Global Error handling middleware
 app.use((err, req, res, next) => {

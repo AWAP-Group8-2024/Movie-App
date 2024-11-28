@@ -11,15 +11,15 @@ dotenv.config();
 
 const router = Router();
 
+// Fetch a list of all groups for all users.
 router.get("/", auth, GroupController.getAllGroupsListing);
-
-router.post("/create", auth, GroupController.createNewGroup);
-
 // listing user's groups that user's joined already.
 router.get("/all", auth, GroupController.getGroupsByAuth);
 
 // for sharing profile use
-router.get("/userGroup/:id", auth, GroupController.getGroupsByUserId);
+router.get("/userGroup/:id", auth, GroupController.getGroupsByUrlId);
+
+router.post("/create", auth, GroupController.createNewGroup);
 
 // access group if the user joined the group.
 router.get(

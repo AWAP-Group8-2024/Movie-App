@@ -464,6 +464,202 @@
           "500": { "description": "Internal server error" }
         }
       }
+    },
+
+    "/group/": {
+      "get": {
+        "tags": ["groups"],
+        "summary": "Retrieve all groups",
+        "description": "Fetch a list of all groups.",
+        "operationId": "getAllGroupsListing",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Groups list retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/group_response"
+                  }
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "name": "Developers Group",
+                    "description": "A group for developers",
+                    "creator_id": 101
+                  },
+                  {
+                    "id": 2,
+                    "name": "Designers Hub",
+                    "description": "A group for designers",
+                    "creator_id": 102
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+
+    "/group/all": {
+      "get": {
+        "tags": ["groups"],
+        "summary": "Retrieve all groups accessible by the authenticated user",
+        "description": "Fetch a list of all groups where the authenticated user is a member.",
+        "operationId": "getGroupsByAuth",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Groups list retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/group_detail_response"
+                  }
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "name": "Developers Group",
+                    "description": "A group for developers",
+                    "creator_id": 101,
+                    "member_count": 33
+                  },
+                  {
+                    "id": 2,
+                    "name": "Designers Hub",
+                    "description": "A group for designers",
+                    "creator_id": 102,
+                    "member_count": 63
+                  }
+                ]
+              }
+            }
+          },
+          "400": { "description": "Bad Request - Invalid user ID provided" },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+
+    "/group/userGroup/{id}": {
+      "get": {
+        "tags": ["groups"],
+        "summary": "Retrieve groups associated with a user by the ID from url",
+        "description": "Fetch a list of groups where the user, specified by their ID, is a member. Includes group details and member count.",
+        "operationId": "getGroupsByUrlId",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user whose groups are being retrieved",
+            "schema": {
+              "type": "integer",
+              "example": 101
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Groups list retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/group_detail_response"
+                  }
+                },
+                "example": [
+                  {
+                    "id": 1,
+                    "name": "Developers Group",
+                    "creator_id": 201,
+                    "member_count": 25
+                  },
+                  {
+                    "id": 2,
+                    "name": "Designers Hub",
+                    "creator_id": 202,
+                    "member_count": 15
+                  }
+                ]
+              }
+            }
+          },
+          "400": { "description": "Bad Request - Invalid user ID provided" },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+
+    "/group/create": {
+      "post": {
+        "tags": ["groups"],
+        "summary": "Create a new group",
+        "description": "Allows an authenticated user to create a new group with a specified name and description. The authenticated user is set as the group's creator and automatically added as a member.",
+        "operationId": "createNewGroup",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/create_group_body"
+              },
+              "example": {
+                "name": "Developers Group",
+                "description": "A group for developers to collaborate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Group created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/create_group_response"
+                },
+                "example": {
+                  "id": 1,
+                  "name": "Developers Group",
+                  "description": "A group for developers to collaborate",
+                  "creator_id": 101
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request - Invalid group name" },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
+        }
+      }
     }
   },
   "components": {
@@ -865,6 +1061,116 @@
             "type": "string",
             "description": "Confirmation message indicating successful deletion."
           }
+        }
+      },
+
+      "group_response": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the group"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the group"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the group"
+          },
+          "creator_id": {
+            "type": "integer",
+            "description": "ID of the group creator (can be null)"
+          }
+        },
+        "example": {
+          "id": 1,
+          "name": "Developers Group",
+          "description": "A group for developers",
+          "creator_id": 101
+        }
+      },
+
+      "group_detail_response": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the group"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the group"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the group"
+          },
+          "creator_id": {
+            "type": "integer",
+            "description": "ID of the group creator (can be null)"
+          },
+          "member_count": {
+            "type": "integer",
+            "description": "Number of members in the group"
+          }
+        },
+        "example": {
+          "id": 1,
+          "name": "Developers Group",
+          "description": "A group for developers",
+          "creator_id": 101,
+          "member_count": 15
+        }
+      },
+
+      "create_group_body": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the group",
+            "maxLength": 50
+          },
+          "description": {
+            "type": "string",
+            "description": "A brief description of the group",
+            "maxLength": 200
+          }
+        },
+        "example": {
+          "name": "Developers Group",
+          "description": "A group for developers to collaborate"
+        }
+      },
+
+      "create_group_response": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the group"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the group"
+          },
+          "description": {
+            "type": "string",
+            "description": "A brief description of the group"
+          },
+          "creator_id": {
+            "type": "integer",
+            "description": "ID of the user who created the group"
+          }
+        },
+        "example": {
+          "id": 1,
+          "name": "Developers Group",
+          "description": "A group for developers to collaborate",
+          "creator_id": 101
         }
       }
     }

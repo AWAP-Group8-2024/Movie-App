@@ -1,7 +1,6 @@
 import * as GroupModel from "../models/Group.js";
 import * as JoinRequestModel from "../models/JoinRequest.js";
 import { ApiError } from "../helpers/apiError.js";
-import { request } from "http";
 
 // Listing is available for all user
 export const getAllGroupsListing = async (req, res, next) => {
@@ -9,28 +8,59 @@ export const getAllGroupsListing = async (req, res, next) => {
     const result = await GroupModel.getAllGroups();
     return res.status(200).json(result.rows || []);
   } catch (error) {
-    return next(error);
+    return next(new ApiError("Server error while getAllGroupsListing", 500));
   }
 };
 
 export const getGroupsByAuth = async (req, res, next) => {
   try {
     const { id } = req.user;
+    if (!id) {
+      return next(new ApiError("Bad Request - Invalid user ID provided", 400));
+    }
     const result = await GroupModel.getGroupsInfoByUserId(id);
     return res.status(200).json(result.rows || []);
   } catch (error) {
-    return next(error);
+    return next(new ApiError("Server error while getGroupsByAuth", 500));
   }
 };
 
 // for sharing profile use
-export const getGroupsByUserId = async (req, res, next) => {
+export const getGroupsByUrlId = async (req, res, next) => {
   try {
     const { id } = req.params;
+    if (!id) {
+      return next(new ApiError("Bad Request - Invalid user ID provided", 400));
+    }
     const result = await GroupModel.getGroupsInfoByUserId(id);
     return res.status(200).json(result.rows || []);
   } catch (error) {
-    return next(error);
+    return next(new ApiError("Server error while getGroupsByUrlId", 500));
+  }
+};
+
+export const createNewGroup = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const { name, description } = req.body;
+    if (!isGroupNameValid) return next(new ApiError("Invalid group name", 400));
+    const groupResult = await GroupModel.insertNewGroup(name, description, id);
+
+    const group = groupResult.rows[0];
+    await GroupModel.insertUserGroupAssociation(group.id, id);
+
+    return res
+      .status(201)
+      .json(
+        createGroupObj(
+          group.id,
+          group.name,
+          group.description,
+          group.creator_id
+        )
+      );
+  } catch (error) {
+    return next(new ApiError("Server error while createNewGroup", 500));
   }
 };
 
@@ -65,31 +95,6 @@ export const getGroupMembers = async (req, res, next) => {
   try {
     const members = await GroupModel.getGroupMembers(groupId);
     return res.status(200).json(members.rows || []);
-  } catch (error) {
-    return next(error);
-  }
-};
-
-export const createNewGroup = async (req, res, next) => {
-  try {
-    const { id } = req.user;
-    const { name, description } = req.body;
-    if (!isGroupNameValid) return next(new ApiError("Invalid group name", 400));
-    const groupResult = await GroupModel.insertNewGroup(name, description, id);
-
-    const group = groupResult.rows[0];
-    await GroupModel.insertUserGroupAssociation(group.id, id);
-
-    return res
-      .status(201)
-      .json(
-        createGroupObj(
-          group.id,
-          group.name,
-          group.description,
-          group.creator_id
-        )
-      );
   } catch (error) {
     return next(error);
   }
@@ -262,7 +267,7 @@ export const deletePost = async (req, res) => {
   const { postId } = req.params;
 
   try {
-    const result = await GroupModel.deletePost(groupId,postId);
+    const result = await GroupModel.deletePost(groupId, postId);
 
     if (result.rowCount === 0) {
       return res.status(500).json({ error: error.message });

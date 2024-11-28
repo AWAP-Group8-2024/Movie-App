@@ -2,9 +2,10 @@ BEGIN;
 
 DROP TABLE IF EXISTS join_requests;
 DROP TABLE IF EXISTS group_account;
+DROP TABLE IF EXISTS group_post;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS account;
-DROP TABLE IF EXISTS group_post;
+
 
 CREATE TABLE account (
     id SERIAL PRIMARY KEY,
@@ -19,7 +20,7 @@ CREATE TABLE account (
 CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    description VARCHAR(100),
+    description VARCHAR(200),
     creator_id INTEGER REFERENCES account(id) ON DELETE SET NULL
 );
 

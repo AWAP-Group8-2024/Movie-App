@@ -84,14 +84,38 @@ export const updateGroupDetails = async (groupId, name, description) => {
   );
   return result;
 };
+// Function to remove a user from a group
+export const removeUserFromGroup = async (groupId, memberId) => {
+  const query = `
+    DELETE FROM group_account
+    WHERE group_id = $1 AND account_id = $2
+    RETURNING *;
+  `;
+  const values = [groupId, memberId];
 
-// leave the group
-export const leaveGroup = async (groupId, accountId) => {
-  const result = await pool.query(
-    "DELETE FROM group_account WHERE group_id = $1 AND account_id = $2",
-    [groupId, accountId]
-  );
-  return result;
+  try {
+    const result = await pool.query(query, values);
+    return result;
+  } catch (error) {
+    throw new Error("Error removing user from group: " + error.message);
+  }
+};
+
+// Function to allow a user to leave a group
+export const leaveGroup = async (groupId, userId) => {
+  const query = `
+    DELETE FROM group_account
+    WHERE group_id = $1 AND account_id = $2
+    RETURNING *;
+  `;
+  const values = [groupId, userId];
+
+  try {
+    const result = await pool.query(query, values);
+    return result;
+  } catch (error) {
+    throw new Error("Error leaving the group: " + error.message);
+  }
 };
 
 export const selectAllPosts = async (groupId) => {

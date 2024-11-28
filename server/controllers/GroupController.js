@@ -223,16 +223,38 @@ export const updateGroupDetails = async (req, res) => {
   }
 };
 
-// leaveGroup
-export const leaveGroup = async (req, res) => {
+// Controller to remove a member from the group
+export const removeMember = async (req, res, next) => {
+  const { groupId, memberId } = req.params;
+
+  try {
+    const result = await GroupModel.removeUserFromGroup(groupId, memberId);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Member not found in the group" });
+    }
+
+    return res.status(200).json({ message: "Member removed from the group" });
+  } catch (error) {
+    console.log("Error removing member from group:", error.message);
+  }
+};
+
+// Controller for user to leave the group
+export const leaveGroup = async (req, res, next) => {
   const { groupId } = req.params;
-  const { id } = req.user;
+  const { id } = req.user; // the logged-in user
 
   try {
     const result = await GroupModel.leaveGroup(groupId, id);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "You are not a member of this group" });
+    }
+
     return res.status(200).json({ message: "You have left the group" });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return next(new ApiError("Error leaving the group", 500));
   }
 };
 

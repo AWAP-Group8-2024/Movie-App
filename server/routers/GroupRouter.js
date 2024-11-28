@@ -59,7 +59,15 @@ router.put(
 // update group details
 router.put("/:groupId", auth, GroupController.updateGroupDetails);
 
-// leave group
+// Remove a member from the group (only accessible by the group creator)
+router.delete(
+  "/:groupId/remove/:memberId",
+  auth,
+  verifyCreatorIsValid,
+  GroupController.removeMember
+);
+
+// Allow a member to leave the group (any member can leave)
 router.delete("/:groupId/leave", auth, GroupController.leaveGroup);
 
 router.get("/:groupId/posts", GroupController.getAllGroupPosts); // Get all posts

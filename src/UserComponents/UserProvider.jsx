@@ -23,7 +23,7 @@ export default function UserProvider({ children }) {
 
   const signUp = async () => {
     try {
-      const response = await axios.post(`${url}/user/register`, user);
+      const response = await axios.post(`${url}/api/user/register`, user);
       setUser({ id: "", email: "", token: "", password: "" });
       return response.data;
     } catch (error) {
@@ -33,7 +33,7 @@ export default function UserProvider({ children }) {
 
   const signIn = async () => {
     try {
-      const response = await axios.post(`${url}/user/login`, user);
+      const response = await axios.post(`${url}/api/user/login`, user);
       setUser({ ...response.data, password: "" });
       sessionStorage.setItem("user", JSON.stringify(response.data));
       return response.data;
@@ -61,7 +61,7 @@ export default function UserProvider({ children }) {
       password,
     };
     try {
-      const response = await axios.post(`${url}/user/passwordCheck`, body, {
+      const response = await axios.post(`${url}/api/user/passwordCheck`, body, {
         headers,
       });
       return response.status === 200;
@@ -85,7 +85,7 @@ export default function UserProvider({ children }) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-      const response = await axios.delete(`${url}/user/deleteAccount`, {
+      const response = await axios.delete(`${url}/api/user/deleteAccount`, {
         headers,
       });
       handleLogout();
@@ -102,7 +102,7 @@ export default function UserProvider({ children }) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-      const response = await axios.get(`${url}/user/profile/${profileId}`, {
+      const response = await axios.get(`${url}/api/user/profile/${profileId}`, {
         headers,
       });
       return response.data;
@@ -119,7 +119,7 @@ export default function UserProvider({ children }) {
         Authorization: `Bearer ${token}`,
       };
       const response = await axios.put(
-        `${url}/user/profile/${user.id}`,
+        `${url}/api/user/profile/${user.id}`,
         updatedData,
         { headers }
       );

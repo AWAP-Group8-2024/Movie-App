@@ -17,9 +17,12 @@ export default function GroupProvider({ children }) {
 
   const getUserGroups = async (profileId) => {
     try {
-      const response = await axios.get(`${url}/group/userGroup/${profileId}`, {
-        headers,
-      });
+      const response = await axios.get(
+        `${url}/api/group/userGroup/${profileId}`,
+        {
+          headers,
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Failed to fetch groups:", error);
@@ -29,7 +32,7 @@ export default function GroupProvider({ children }) {
 
   const createNewGroup = async (newGroup) => {
     try {
-      const response = await axios.post(`${url}/group/create`, newGroup, {
+      const response = await axios.post(`${url}/api/group/create`, newGroup, {
         headers,
       });
       window.location.reload();
@@ -42,7 +45,7 @@ export default function GroupProvider({ children }) {
 
   const leaveGroup = async (groupId) => {
     try {
-      const response = await axios.delete(`${url}/group/${groupId}/leave`, {
+      const response = await axios.delete(`${url}/api/group/${groupId}/leave`, {
         headers,
       });
       return response.data;

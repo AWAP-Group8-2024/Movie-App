@@ -38,7 +38,7 @@
     }
   ],
   "paths": {
-    "/user/register": {
+    "/api/user/register": {
       "post": {
         "tags": ["Users"],
         "summary": "Register a new user",
@@ -71,7 +71,7 @@
       }
     },
 
-    "/user/login": {
+    "/api/user/login": {
       "post": {
         "tags": ["Users"],
         "summary": "Log in a user",
@@ -104,7 +104,7 @@
       }
     },
 
-    "/user/profile/{id}": {
+    "/api/user/profile/{id}": {
       "get": {
         "tags": ["Users"],
         "summary": "Get user profile",
@@ -189,7 +189,7 @@
       }
     },
 
-    "/user/deleteAccount": {
+    "/api/user/deleteAccount": {
       "delete": {
         "tags": ["Users"],
         "summary": "Delete user account",
@@ -216,7 +216,7 @@
       }
     },
 
-    "/user/passwordCheck": {
+    "/api/user/passwordCheck": {
       "post": {
         "tags": ["Users"],
         "summary": "Check user email and password for account deletion",
@@ -256,7 +256,7 @@
       }
     },
 
-    "/user/groupPendingRequests": {
+    "/api/user/groupPendingRequests": {
       "get": {
         "tags": ["Users"],
         "summary": "Get group pending requests",
@@ -287,7 +287,7 @@
       }
     },
 
-    "/favorite/": {
+    "/api/favorite/": {
       "get": {
         "tags": ["Favorites"],
         "summary": "Get favorite list by authorization",
@@ -317,7 +317,7 @@
       }
     },
 
-    "/favorite/{id}": {
+    "/api/favorite/{id}": {
       "get": {
         "tags": ["Favorites"],
         "summary": "Get favorite list by profile ID",
@@ -357,7 +357,7 @@
       }
     },
 
-    "/favorite/add": {
+    "/api/favorite/add": {
       "post": {
         "tags": ["Favorites"],
         "summary": "Add content to favorites",
@@ -393,7 +393,7 @@
       }
     },
 
-    "/favorite/check": {
+    "/api/favorite/check": {
       "post": {
         "tags": ["Favorites"],
         "summary": "Check if content is in favorites",
@@ -429,7 +429,7 @@
       }
     },
 
-    "/favorite/delete": {
+    "/api/favorite/delete": {
       "delete": {
         "tags": ["Favorites"],
         "summary": "Delete content from favorites",
@@ -466,7 +466,7 @@
       }
     },
 
-    "/group/": {
+    "/api/group/": {
       "get": {
         "tags": ["groups"],
         "summary": "Retrieve all groups",
@@ -510,7 +510,7 @@
       }
     },
 
-    "/group/all": {
+    "/api/group/all": {
       "get": {
         "tags": ["groups"],
         "summary": "Retrieve all groups accessible by the authenticated user",
@@ -557,7 +557,7 @@
       }
     },
 
-    "/group/userGroup/{id}": {
+    "/api/group/userGroup/{id}": {
       "get": {
         "tags": ["groups"],
         "summary": "Retrieve groups associated with a user by the ID from url",
@@ -614,7 +614,7 @@
       }
     },
 
-    "/group/create": {
+    "/api/group/create": {
       "post": {
         "tags": ["groups"],
         "summary": "Create a new group",

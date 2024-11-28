@@ -15,16 +15,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "../build", "index.html")));
+// app.use(express.static(path.join(__dirname, "../build", "index.html")));
 
 // test message
 app.get("/api/message", (req, res) => {
   res.json({ message: "Test message from backend" });
 });
 
-app.use("/user", userRouter);
-app.use("/favorite", favoriteRouter);
-app.use("/group", groupRouter);
+app.use("/api/user", userRouter);
+app.use("/api/favorite", favoriteRouter);
+app.use("/api/group", groupRouter);
 
 // Catch-all handler to serve index.html for frontend routes
 // app.get("/*", (req, res) => {

@@ -22,7 +22,7 @@ export function FavoriteProvider({ children }) {
 
     try {
       const body = { content_id: content.id };
-      const response = await axios.post(`${url}/favorite/check`, body, {
+      const response = await axios.post(`${url}/api/favorite/check`, body, {
         headers,
       });
 
@@ -34,7 +34,7 @@ export function FavoriteProvider({ children }) {
 
   const getUserFavorites = async (profileId) => {
     try {
-      const response = await axios.get(`${url}/favorite/${profileId}`, {
+      const response = await axios.get(`${url}/api/favorite/${profileId}`, {
         headers,
       });
       return response.data;
@@ -65,7 +65,7 @@ export function FavoriteProvider({ children }) {
         poster_path: content.poster_path,
       };
 
-      const response = await axios.post(`${url}/favorite/add`, body, {
+      const response = await axios.post(`${url}/api/favorite/add`, body, {
         headers,
       });
 
@@ -97,7 +97,7 @@ export function FavoriteProvider({ children }) {
         Authorization: `Bearer ${token}`,
       };
       const body = { content_id: content.id };
-      const response = await axios.delete(`${url}/favorite/delete`, {
+      const response = await axios.delete(`${url}/api/favorite/delete`, {
         headers,
         data: body,
       });

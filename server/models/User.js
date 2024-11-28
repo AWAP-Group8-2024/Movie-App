@@ -58,11 +58,14 @@ export const updateUserById = async (id, updateInfo) => {
     RETURNING *;
   `;
 
-  try {
-    const result = await pool.query(query, values);
-    return result.rows[0];
-  } catch (error) {
-    console.error("Error in user model:", error);
-    throw error;
-  }
+  // try {
+  //   const result = await pool.query(query, values);
+  //   return result.rows[0];
+  // } catch (error) {
+  //   console.error("Error in user model:", error);
+  //   throw error;
+  // }
+
+  const result = await pool.query(query, values);
+  return result.rows[0];
 };

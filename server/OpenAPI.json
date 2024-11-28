@@ -9,7 +9,7 @@
   },
   "servers": [
     {
-      "url": "https://Azure-portal-backend",
+      "url": "https://movieapp-backend-actions-gxfcdkh7h6hccvfu.northeurope-01.azurewebsites.net",
       "description": "azure development server"
     },
     {
@@ -45,14 +45,14 @@
         "description": "Register a new user with an email and password.",
         "operationId": "registerUser",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/user_register_body"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "201": {
@@ -60,7 +60,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_201"
+                  "$ref": "#/components/schemas/user_register_response"
                 }
               }
             }
@@ -70,6 +70,7 @@
         }
       }
     },
+
     "/user/login": {
       "post": {
         "tags": ["Users"],
@@ -77,12 +78,14 @@
         "description": "Authenticate a user and return a JWT token.",
         "operationId": "loginUser",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/user_login_body" }
+              "schema": {
+                "$ref": "#/components/schemas/user_login_body"
+              }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -90,7 +93,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200"
+                  "$ref": "#/components/schemas/user_login_response"
                 }
               }
             }
@@ -100,17 +103,19 @@
         }
       }
     },
+
     "/user/profile/{id}": {
       "get": {
         "tags": ["Users"],
         "summary": "Get user profile",
         "description": "Retrieve a user's profile information.",
         "operationId": "getUserProfile",
+        "security": [{ "BearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "The user's ID.",
+            "description": "The profile's ID.",
             "required": true,
             "style": "simple",
             "explode": false,
@@ -124,50 +129,71 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_1"
+                  "$ref": "#/components/schemas/user_profile_response"
                 }
               }
             }
           },
-          "404": { "description": "User not found" }
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "404": { "description": "User not found" },
+          "500": { "description": "Internal server error" }
         }
       },
       "put": {
         "tags": ["Users"],
         "summary": "Update user profile",
-        "description": "Update the profile information of a user.",
+        "description": "Modify the profile information of an existing user.",
         "operationId": "updateUserProfile",
+        "security": [{ "BearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": { "type": "string" },
-            "security": [{ "BearerAuth": [] }]
+            "description": "The ID of the user to update.",
+            "schema": { "type": "string" }
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/profile_id_body" }
+              "schema": {
+                "$ref": "#/components/schemas/update_profile_body"
+              }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
-          "200": { "description": "Profile updated successfully" },
+          "200": {
+            "description": "Profile updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/update_profile_response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials (incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
           "400": { "description": "No fields to update" },
-          "404": { "description": "User not found" }
+          "404": { "description": "User not found" },
+          "500": { "description": "Internal server error" }
         }
       }
     },
+
     "/user/deleteAccount": {
       "delete": {
         "tags": ["Users"],
         "summary": "Delete user account",
-        "description": "Delete the authenticated user's account.",
+        "description": "Delete the authenticated user's account. The user's ID is obtained from the authentication token.",
         "operationId": "deleteUserAccount",
         "security": [{ "BearerAuth": [] }],
         "responses": {
@@ -176,38 +202,60 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_2"
+                  "$ref": "#/components/schemas/delete_account_response"
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+
+    "/user/passwordCheck": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Check user email and password for account deletion",
+        "description": "Verify the user's email and password to confirm the identity before account deletion.",
+        "operationId": "passwordCheck",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/passwordCheck_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password confirmed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/passwordCheck_response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "400": {
+            "description": "Invalid credentials (user not found with the provided email)."
           },
           "500": { "description": "Internal server error" }
         }
       }
     },
-    "/user/passwordCheck": {
-      "post": {
-        "tags": ["Users"],
-        "summary": "Check user password",
-        "description": "Verify the user's password.",
-        "operationId": "passwordCheck",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/user_passwordCheck_body"
-              }
-            }
-          },
-          "required": true
-        },
-        "security": [{ "BearerAuth": [] }],
-        "responses": {
-          "200": { "description": "Password confirmed" },
-          "401": { "description": "Invalid password" }
-        }
-      }
-    },
+
     "/user/groupPendingRequests": {
       "get": {
         "tags": ["Users"],
@@ -217,17 +265,32 @@
         "security": [{ "BearerAuth": [] }],
         "responses": {
           "200": {
-            "description": "Pending group requests retrieved successfully"
+            "description": "Pending group requests retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/join_request_response"
+                  }
+                }
+              }
+            }
           },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
           "404": { "description": "No group pending requests" },
           "500": { "description": "Internal server error" }
         }
       }
     },
+
     "/favorite/": {
       "get": {
         "tags": ["Favorites"],
-        "summary": "Get user's favorite list",
+        "summary": "Get favorite list by authorization",
         "description": "Retrieve the authenticated user's favorite content list.",
         "operationId": "getFavoriteListByAuth",
         "security": [{ "BearerAuth": [] }],
@@ -238,26 +301,33 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/favorite_item" }
+                  "items": {
+                    "$ref": "#/components/schemas/favorite_item_response"
+                  }
                 }
               }
             }
           },
-          "401": { "description": "Unauthorized" }
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
         }
       }
     },
+
     "/favorite/{id}": {
       "get": {
         "tags": ["Favorites"],
-        "summary": "Get favorite list by user ID",
-        "description": "Retrieve a favorite content list by user ID.",
+        "summary": "Get favorite list by profile ID",
+        "description": "Retrieve the favorite content list for a specific user ID.",
         "operationId": "getFavoriteListById",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "User ID",
+            "description": "User ID for which to retrieve the favorite content list.",
             "required": true,
             "schema": { "type": "string" }
           }
@@ -270,15 +340,23 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/favorite_item" }
+                  "items": {
+                    "$ref": "#/components/schemas/favorite_item_response"
+                  }
                 }
               }
             }
           },
-          "404": { "description": "User or favorite list not found" }
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "404": { "description": "User or favorite list not found" },
+          "500": { "description": "Internal server error" }
         }
       }
     },
+
     "/favorite/add": {
       "post": {
         "tags": ["Favorites"],
@@ -287,26 +365,34 @@
         "operationId": "insertContentToFavorite",
         "security": [{ "BearerAuth": [] }],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": { "$ref": "#/components/schemas/favorite_add_body" }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
             "description": "Content added to favorites successfully",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/favorite_item" }
+                "schema": {
+                  "$ref": "#/components/schemas/favorite_item_response"
+                }
               }
             }
           },
-          "400": { "description": "Invalid content data" }
+          "400": { "description": "Invalid content data" },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
         }
       }
     },
+
     "/favorite/check": {
       "post": {
         "tags": ["Favorites"],
@@ -315,12 +401,12 @@
         "operationId": "checkFavoriteById",
         "security": [{ "BearerAuth": [] }],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": { "$ref": "#/components/schemas/favorite_check_body" }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -333,10 +419,16 @@
               }
             }
           },
-          "400": { "description": "Content ID is missing" }
+          "400": { "description": "Content ID is missing" },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
         }
       }
     },
+
     "/favorite/delete": {
       "delete": {
         "tags": ["Favorites"],
@@ -345,16 +437,31 @@
         "operationId": "deleteFavoriteById",
         "security": [{ "BearerAuth": [] }],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": { "$ref": "#/components/schemas/favorite_delete_body" }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
-          "200": { "description": "Content deleted successfully" },
-          "404": { "description": "Favorite content not found" }
+          "200": {
+            "description": "Favorite deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/favorite_delete_response"
+                }
+              }
+            }
+          },
+          "400": { "description": "Content ID is missing" },
+          "404": { "description": "Favorite content not found" },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
         }
       }
     }
@@ -362,140 +469,401 @@
   "components": {
     "schemas": {
       "user_register_body": {
-        "required": ["email", "password"],
         "type": "object",
         "properties": {
           "email": {
             "type": "string",
             "format": "email",
-            "example": "user@example.com"
+            "example": "user@example.com",
+            "description": "The email of the user to register."
           },
-          "password": { "type": "string", "example": "Password123" }
-        }
+          "password": {
+            "type": "string",
+            "example": "Password123",
+            "description": "The password of the user to register."
+          }
+        },
+        "required": ["email", "password"]
       },
-      "inline_response_201": {
+
+      "user_register_response": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "email": { "type": "string" }
-        }
+          "id": {
+            "type": "integer",
+            "description": "The unique identifier of the registered user."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The email of the registered user."
+          },
+          "token": {
+            "type": "string",
+            "nullable": true,
+            "description": "The JWT token for the registered user. This field is optional and may not always be present."
+          }
+        },
+        "required": ["id", "email"]
       },
+
       "user_login_body": {
         "type": "object",
         "properties": {
           "email": {
             "type": "string",
             "format": "email",
-            "example": "user@example.com"
+            "example": "user@example.com",
+            "description": "The email of the user to login."
           },
-          "password": { "type": "string", "example": "Password123" }
+          "password": {
+            "type": "string",
+            "example": "Password123",
+            "description": "The password of the user to login."
+          }
         }
       },
-      "inline_response_200": {
+
+      "user_login_response": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "email": { "type": "string" },
-          "token": { "type": "string" }
+          "id": {
+            "type": "integer",
+            "description": "The unique identifier of the login user."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The email of the login user."
+          },
+          "token": {
+            "type": "string",
+            "description": "The JWT token for the registered user. This field is optional and may not always be present."
+          }
         }
       },
-      "inline_response_200_1": {
+
+      "update_profile_body": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "email": { "type": "string" },
-          "firstname": { "type": "string" },
-          "lastname": { "type": "string" },
-          "address": { "type": "string" },
-          "phone": { "type": "string" }
+          "email": {
+            "type": "string",
+            "description": "The email address of the user."
+          },
+          "firstname": {
+            "type": "string",
+            "description": "The first name of the user."
+          },
+          "lastname": {
+            "type": "string",
+            "description": "The last name of the user."
+          },
+          "address": {
+            "type": "string",
+            "description": "The address of the user."
+          },
+          "phone": {
+            "type": "string",
+            "description": "The phone of the user."
+          }
         }
       },
-      "profile_id_body": {
+
+      "update_profile_response": {
         "type": "object",
         "properties": {
-          "email": { "type": "string" },
-          "firstname": { "type": "string" },
-          "lastname": { "type": "string" },
-          "address": { "type": "string" },
-          "phone": { "type": "string" }
+          "id": {
+            "type": "integer",
+            "description": "The unique identifier of the user."
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the user."
+          },
+          "firstname": {
+            "type": "string",
+            "description": "The first name of the user."
+          },
+          "lastname": {
+            "type": "string",
+            "description": "The last name of the user."
+          },
+          "address": {
+            "type": "string",
+            "description": "The address of the user."
+          },
+          "phone": {
+            "type": "string",
+            "description": "The phone of the user."
+          }
         }
       },
-      "inline_response_200_2": {
+
+      "delete_account_response": {
         "type": "object",
         "properties": {
-          "message": { "type": "string" },
-          "user": { "type": "object" }
+          "message": {
+            "type": "string",
+            "description": "A message indicating the outcome of the deletion."
+          },
+          "user": {
+            "type": "object",
+            "description": "The user object that was deleted.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier of the user."
+              },
+              "email": {
+                "type": "string",
+                "description": "The email address of the user."
+              }
+            },
+            "required": ["id", "email"]
+          }
+        },
+        "required": ["message", "user"],
+        "example": {
+          "message": "User ID 123 deleted successfully.",
+          "user": {
+            "id": "123",
+            "email": "user@example.com"
+          }
         }
       },
-      "user_passwordCheck_body": {
+
+      "passwordCheck_body": {
         "type": "object",
         "properties": {
-          "email": { "type": "string", "format": "email" },
-          "password": { "type": "string" }
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The email address of the user."
+          },
+          "password": {
+            "type": "string",
+            "description": "The password associated with the user's account."
+          }
+        },
+        "required": ["email", "password"]
+      },
+
+      "passwordCheck_response": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A message confirming that the user's identity has been verified."
+          },
+          "user": {
+            "type": "object",
+            "description": "Information about the user that was verified.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier of the user."
+              },
+              "email": {
+                "type": "string",
+                "description": "The email address of the user."
+              }
+            },
+            "required": ["id", "email"]
+          }
+        },
+        "required": ["message", "user"],
+        "example": {
+          "message": "ID: 123 user is confirmed.",
+          "user": {
+            "id": "123",
+            "email": "user@example.com"
+          }
+        },
+        "favorite_delete_body": {
+          "type": "object",
+          "required": ["content_id"],
+          "properties": {
+            "content_id": {
+              "type": "string",
+              "description": "Content ID to delete"
+            }
+          }
         }
       },
-      "favorite_item": {
+
+      "join_request_response": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "description": "Favorite content ID" },
-          "account_id": { "type": "string", "description": "User ID" },
-          "content_id": { "type": "string", "description": "Content ID" },
-          "title": { "type": "string", "description": "Content title" },
-          "media_type": { "type": "string", "description": "Type of content" },
+          "id": {
+            "type": "integer",
+            "description": "The unique identifier for the join request."
+          },
+          "group_id": {
+            "type": "integer",
+            "description": "The ID of the group associated with the join request."
+          },
+          "account_id": {
+            "type": "integer",
+            "description": "The ID of the user making the join request."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "accepted", "rejected"],
+            "description": "The current status of the join request."
+          },
+          "request_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the join request was made."
+          },
+          "response_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the join request was responded to, if applicable."
+          }
+        },
+        "required": ["id", "group_id", "account_id", "status", "request_date"],
+        "example": {
+          "id": 1,
+          "group_id": 101,
+          "account_id": 1001,
+          "status": "pending",
+          "request_date": "2024-11-28T10:30:00Z",
+          "response_date": null
+        }
+      },
+
+      "favorite_item_response": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The unique identifier for the favorite item."
+          },
+          "account_id": {
+            "type": "integer",
+            "description": "The ID of the user who added the item to favorites."
+          },
+          "content_id": {
+            "type": "integer",
+            "description": "The ID of the content that is marked as favorite."
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the favorite content."
+          },
+          "media_type": {
+            "type": "string",
+            "enum": ["movie", "tv"],
+            "description": "The type of media (either 'movie' or 'tv')."
+          },
           "poster_path": {
             "type": "string",
-            "description": "Poster image path"
+            "description": "The path to the poster image of the favorite content."
           },
           "added_date": {
             "type": "string",
             "format": "date-time",
-            "description": "Date added to favorites"
+            "description": "The date and time when the item was added to favorites."
           }
+        },
+        "required": [
+          "id",
+          "account_id",
+          "content_id",
+          "title",
+          "media_type",
+          "added_date"
+        ],
+        "example": {
+          "id": 1,
+          "account_id": 1001,
+          "content_id": 2001,
+          "title": "Inception",
+          "media_type": "movie",
+          "poster_path": "/path/to/inception.jpg",
+          "added_date": "2024-11-28T10:30:00Z"
         }
       },
+
       "favorite_add_body": {
         "type": "object",
-        "required": ["content_id", "title", "media_type"],
         "properties": {
-          "content_id": { "type": "string", "description": "Content ID" },
-          "title": { "type": "string", "description": "Title of the content" },
-          "media_type": { "type": "string", "description": "Type of media" },
+          "content_id": {
+            "type": "integer",
+            "description": "Unique identifier for the content item."
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the content item."
+          },
+          "media_type": {
+            "type": "string",
+            "enum": ["movie", "tv"],
+            "description": "Type of the media (e.g., movie, tv)."
+          },
           "poster_path": {
             "type": "string",
-            "description": "Poster image path (optional)"
+            "description": "URL or path to the content item's poster image."
           }
+        },
+        "required": ["content_id", "title", "media_type"],
+        "example": {
+          "content_id": "12345",
+          "title": "Inception",
+          "media_type": "movie",
+          "poster_path": "https://example.com/inception.jpg"
         }
       },
+
       "favorite_check_body": {
         "type": "object",
-        "required": ["content_id"],
         "properties": {
           "content_id": {
             "type": "string",
-            "description": "Content ID to check"
+            "description": "Unique identifier for the content item to check in favorites."
           }
+        },
+        "required": ["content_id"],
+        "example": {
+          "content_id": 12345
         }
       },
+
       "favorite_check_response": {
         "type": "object",
         "properties": {
           "message": {
             "type": "string",
-            "description": "Check result message"
+            "description": "Indicates whether the content is in favorites."
           },
           "favorite": {
             "type": "boolean",
-            "description": "Whether the content is a favorite"
+            "description": "True if the content is in favorites, false otherwise."
           }
         }
       },
+
       "favorite_delete_body": {
         "type": "object",
-        "required": ["content_id"],
         "properties": {
           "content_id": {
+            "type": "integer",
+            "description": "Unique identifier for the content item to be deleted from favorites."
+          }
+        },
+        "required": ["content_id"],
+        "example": {
+          "content_id": 12345
+        }
+      },
+
+      "favorite_delete_response": {
+        "type": "object",
+        "properties": {
+          "message": {
             "type": "string",
-            "description": "Content ID to delete"
+            "description": "Confirmation message indicating successful deletion."
           }
         }
       }

@@ -8,7 +8,7 @@ const { verify } = jwt;
 export const auth = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    return res.status(401).json({ message: "Authorization required" });
+    return next(new ApiError("Authorization required", 401));
   }
   try {
     const token = authHeader.split(" ")[1];
@@ -18,8 +18,17 @@ export const auth = (req, res, next) => {
     req.user = createUserObj(verifiedUser.id, verifiedUser.email);
     next();
   } catch (error) {
-    console.error("Authorization error:", error);
-    return res.status(403).json({ message: "Invalid credentials" });
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
+      return next(
+        new ApiError("Forbidden - Invalid credentials provided.", 403)
+      );
+    }
+    return next(
+      new ApiError("Server error during authorization verification", 500)
+    );
   }
 };
 
@@ -29,20 +38,17 @@ export const verifyUserInGroup = async (req, res, next) => {
   const { groupId } = req.params;
   try {
     const groups = await getGroupsInfoByUserId(id);
-    console.log(groups);
     const isUserInGroup = groups.rows.some(
       (group) => group.id === parseInt(groupId)
     );
     if (!isUserInGroup) {
-      return res
-        .status(403)
-        .json({ message: "User is not a member of this group" });
+      return next(new ApiError("User is not a member of this group", 403));
     }
     next();
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Server error while checking group membership" });
+    return next(
+      new ApiError("Server error while checking group membership", 500)
+    );
   }
 };
 
@@ -52,19 +58,22 @@ export const verifyCreatorIsValid = async (req, res, next) => {
   try {
     const group = await getGroupDetailsById(groupId);
     if (!group) {
-      return res.status(404).json({
-        message: "Group not found",
-      });
+      return next(new ApiError("Group not found", 404));
     }
     if (id !== group.creator_id) {
-      return res.status(400).json({
-        message: `The user id: ${id} is not the owner of group ${groupId}. Only the group owner can proceed this operation`,
-      });
+      return next(
+        new ApiError(
+          `The user id: ${id} is not the owner of group ${groupId}. Only the group owner can proceed this operation`,
+          400
+        )
+      );
     }
     // Attached group object to req for further uses.
     req.group = createGroupObj(group.id, group.name, group.creator_id);
     next();
   } catch (error) {
-    return next(error);
+    return next(
+      new ApiError("Server error while verifying group creator", 500)
+    );
   }
 };

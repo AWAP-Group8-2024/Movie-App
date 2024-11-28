@@ -6,7 +6,7 @@ export const getFavoriteListByAuth = async (req, res, next) => {
     const result = await FavoriteModel.getFavoriteListByUserId(id);
     return res.status(200).json(result.rows || []);
   } catch (error) {
-    return next(error);
+    return next(new ApiError("Server error while getFavoriteListByAuth", 500));
   }
 };
 
@@ -16,7 +16,7 @@ export const getFavoriteListById = async (req, res, next) => {
     const result = await FavoriteModel.getFavoriteListByUserId(id);
     return res.status(200).json(result.rows || []);
   } catch (error) {
-    return next(error);
+    return next(new ApiError("Server error while getFavoriteListById", 500));
   }
 };
 
@@ -33,7 +33,9 @@ export const insertContentToFavorite = async (req, res, next) => {
     const result = await FavoriteModel.addContentToFavoriteList(id, content);
     return res.status(200).json(result.rows || []);
   } catch (error) {
-    return next(error);
+    return next(
+      new ApiError("Server error while insertContentToFavorite", 500)
+    );
   }
 };
 
@@ -55,8 +57,7 @@ export const checkFavoriteById = async (req, res) => {
       favorite: isFavorite,
     });
   } catch (error) {
-    console.error("Error in checkFavoriteById:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return next(new ApiError("Server error while checkFavoriteById", 500));
   }
 };
 
@@ -72,7 +73,6 @@ export const deleteFavoriteById = async (req, res) => {
     }
     return res.status(200).json({ message: "Favorite deleted successfully" });
   } catch (error) {
-    console.error("Error in deleteFavoriteById:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return next(new ApiError("Server error while deleteFavoriteById", 500));
   }
 };

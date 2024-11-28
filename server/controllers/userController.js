@@ -4,6 +4,7 @@ import { ApiError } from "../helpers/apiError.js";
 import jwt from "jsonwebtoken";
 const { sign } = jwt;
 const { hash, compare } = bcrypt;
+
 export const registration = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -14,7 +15,7 @@ export const registration = async (req, res, next) => {
     if (!isPasswordValid(password)) {
       return next(
         new ApiError(
-          "Invalid password. The password should contain at least one capital letter and number.",
+          "Password must contain at least one uppercase letter and one number.",
           400
         )
       );
@@ -29,7 +30,7 @@ export const registration = async (req, res, next) => {
     const user = result.rows[0];
     return res.status(201).json(createUserObj(user.id, user.email));
   } catch (error) {
-    return next(error);
+    return next(new ApiError("Server error while registration", 500));
   }
 };
 
@@ -39,7 +40,7 @@ export const login = async (req, res, next) => {
     const result = await UserModel.searchUserByEmail(email);
 
     if (result.rowCount === 0)
-      return next(new ApiError("Invalid credentials", 400));
+      return next(new ApiError("Email not found", 400));
 
     const user = result.rows[0];
     const isPasswordValid = await compare(password, user.password);
@@ -50,7 +51,7 @@ export const login = async (req, res, next) => {
 
     return res.status(200).json(createUserObj(user.id, user.email, token));
   } catch (error) {
-    return next(error);
+    return next(new ApiError("Server error while login", 500));
   }
 };
 
@@ -72,42 +73,7 @@ export const getUserProfile = async (req, res, next) => {
     );
     return res.status(200).json(profile);
   } catch (error) {
-    return next(error);
-  }
-};
-
-export const deleteUser = async (req, res, next) => {
-  try {
-    const { id } = req.user;
-    await UserModel.deleteUserById(id);
-    const response = {
-      user: req.user,
-      message: `User ID ${req.user.id} deleted successfully.`,
-    };
-    return res.status(200).json(response);
-  } catch (error) {
-    return next(error);
-  }
-};
-
-export const passwordCheck = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-    const result = await UserModel.searchUserByEmail(email);
-
-    if (result.rowCount === 0)
-      return next(new ApiError("Invalid credentials", 400));
-
-    const user = result.rows[0];
-    const isPasswordValid = await compare(password, user.password);
-    if (!isPasswordValid) return next(new ApiError("Invalid password", 401));
-    const response = {
-      user: req.user,
-      message: `ID:${req.user.id} user is confirmed.`,
-    };
-    return res.status(200).json(response);
-  } catch (error) {
-    return next(error);
+    return next(new ApiError("Server error while getUserProfile", 500));
   }
 };
 
@@ -131,7 +97,47 @@ export const updateUserProfile = async (req, res) => {
     }
     return res.status(200).json(updatedUser);
   } catch (error) {
-    return res.status(500).json({ message: "Error updating profile" });
+    return next(new ApiError("Server error while updateUserProfile", 500));
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    await UserModel.deleteUserById(id);
+    const response = {
+      user: req.user,
+      message: `User ID ${req.user.id} deleted successfully.`,
+    };
+    return res.status(200).json(response);
+  } catch (error) {
+    return next(new ApiError("Server error while deleteUser", 500));
+  }
+};
+
+export const passwordCheck = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const result = await UserModel.searchUserByEmail(email);
+
+    if (result.rowCount === 0)
+      return next(
+        new ApiError(
+          "Invalid credentials (user not found with the provided email).",
+          400
+        )
+      );
+
+    const user = result.rows[0];
+    const isPasswordValid = await compare(password, user.password);
+    if (!isPasswordValid) return next(new ApiError("Invalid password", 401));
+    const response = {
+      user: req.user,
+      message: `ID:${req.user.id} user is confirmed.`,
+    };
+    return res.status(200).json(response);
+  } catch (error) {
+    return next(new ApiError("Server error while passwordCheck", 500));
   }
 };
 
@@ -139,16 +145,16 @@ export const getGroupPendingRequests = async (req, res) => {
   try {
     const { id } = req.user;
     const result = await UserModel.getGroupPendingRequestsById(id);
-    console.log(result);
+
     if (result.rowCount == 0) {
       return res.status(404).json({ message: "No group pending requests" });
     }
 
     return res.status(200).json(result);
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error get group pending requests" });
+    return next(
+      new ApiError("Server error while getGroupPendingRequests", 500)
+    );
   }
 };
 

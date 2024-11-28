@@ -30,7 +30,7 @@ export const getAllGroups = async () => {
   if (!headers) return;
 
   try {
-    const response = await axios.get(`${API_URL}/group`, { headers });
+    const response = await axios.get(`${API_URL}/api/group`, { headers });
     return response.data;
   } catch (error) {
     console.error("Error fetching all groups:", error);

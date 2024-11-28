@@ -122,7 +122,7 @@ export default function MovieDetails() {
 
                 <div className="social-buttons">
                   {showShareOptions && (
-                    <SocialSharing url={"localhost"} message={movie.title} />
+                    <SocialSharing url={"localhost"} message={movie.title} movie={movie}/>
                   )}
                 </div>
               </div>

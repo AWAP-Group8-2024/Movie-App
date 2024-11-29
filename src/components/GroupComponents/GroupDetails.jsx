@@ -7,7 +7,8 @@ import {
   leaveGroupByGroupId,
   getGroupPosts,
   createGroupPost,
-  deleteGroupPost
+  deleteGroupPost,
+  removeMemberFromGroup,
 } from "../../services/GroupServices";
 import { useParams, useNavigate } from "react-router-dom";
 import Navigation from "../Navigation";
@@ -39,6 +40,9 @@ const GroupDetails = () => {
           const groupData = await getGroupByGroupId(groupId);
           const groupMembers = await getGroupMembersbyGroupId(groupId);
           const groupPosts = await getGroupPosts(groupId);
+
+          // Sort posts by descending creation date
+          groupPosts.sort((a, b) => new Date(b.creation_date) - new Date(a.creation_date));
 
           setGroup(groupData);
           setMembers(groupMembers);
@@ -113,9 +117,9 @@ const GroupDetails = () => {
       }
     }
   };
+
   const handleLeaveGroup = async () => {
     try {
-      // if the user is the owner of the group, they cannot leave the group
       if (isOwner) {
         setError(
           "You are the owner of this group. You cannot leave the group."
@@ -125,7 +129,6 @@ const GroupDetails = () => {
       await leaveGroupByGroupId(groupId);
       setMessage("You have left the group successfully.");
       navigate("/groups/all");
-      console.log("You have left the group successfully.");
     } catch (err) {
       if (err.message === "User not authenticated") {
         navigate("/login");
@@ -135,205 +138,199 @@ const GroupDetails = () => {
       }
     }
   };
-  const handleRemoveMember = async (memberId) => {
+
+  const handleRemoveMember = async (groupId, memberId) => {
+    if (!memberId || isNaN(memberId)) {
+      console.error("Invalid member ID:", memberId);
+      setError("Invalid member ID.");
+      return;
+    }
+
     try {
-      // Remove the member from the group
-      await leaveGroupByGroupId(groupId);
+      await removeMemberFromGroup(groupId, memberId);
       setMessage("Member removed successfully.");
-      navigate("/groups/all");
+      setMembers(members.filter((member) => member.id !== memberId));
+      navigate();
     } catch (err) {
-      if (err.message === "User not authenticated") {
-        navigate("/login");
-      } else {
-        setError(err.message || "Failed to remove member.");
-        console.error(err);
-      }
+      console.error("Error removing member from group:", err);
+      setError(err.message || "Failed to remove member.");
     }
   };
 
   if (loading || userLoading)
     return <div className="text-center mt-5">Loading...</div>;
+
   if (error) return <div className="alert alert-danger mt-5">{error}</div>;
-  if (message) return <div className="alert alert-success mt-5">{message}</div>;
+
 
   return (
     <div>
       <Navigation />
+      {message && <div className="alert alert-success mt-5">{message}</div>}
       <div className="container mt-5">
-        <h2 className="mb-4">Group Details</h2>
-        {group ? (
-          <div className="card shadow-sm">
-            <div className="card-body">
-              <h3 className="card-title">{group.name}</h3>
-              <p className="card-text">
-                <strong>Group ID:</strong> {group.id}
-              </p>
-              <p className="card-text">
-                <strong>Description:</strong> {group.description}
-              </p>
-              <p className="card-text">
-                <strong>Creator:</strong> {group.creator_id}
-              </p>
+  <div className="row">
+    {/* Left Column: Group Details and Post Form */}
+    <div className="col-md-8">
+      <h2 className="mb-4">Group Details</h2>
+      {group ? (
+        <div className="card shadow-sm mb-4">
+          <div className="card-body">
+            <h3 className="card-title">{group.name}</h3>
+            <p className="card-text">
+              <strong>Group ID:</strong> {group.id}
+            </p>
+            <p className="card-text">
+              <strong>Description:</strong> {group.description}
+            </p>
+            <p className="card-text">
+              <strong>Creator:</strong> {group.creator_id}
+            </p>
 
-              <div className="d-flex flex-wrap gap-2 mt-3">
-                {/* Display the 'Leave Group' button only if the user is a member and not the owner */}
-                {isMember && !isOwner ? (
-                  <button className="btn btn-danger" onClick={handleLeaveGroup}>
-                    Leave Group
-                  </button>
-                ) : !isOwner ? (
-                  <button className="btn btn-primary" onClick={handleJoinGroup}>
-                    Join
-                  </button>
-                ) : null}
+            <div className="d-flex flex-wrap gap-2 mt-3">
+              {isMember && !isOwner ? (
+                <button className="btn btn-danger" onClick={handleLeaveGroup}>
+                  Leave Group
+                </button>
+              ) : !isOwner ? (
+                <button className="btn btn-primary" onClick={handleJoinGroup}>
+                  Join
+                </button>
+              ) : null}
 
-                {/* Display buttons for the owner to manage the group */}
-                {isOwner && (
-                  <>
-                    <button
-                      className={`btn ${showJoinRequest ? "btn-secondary" : "btn-info"
-                        } me-2`}
-                      onClick={() => setShowJoinRequest(!showJoinRequest)}
-                    >
-                      {showJoinRequest
-                        ? "Hide Pending Requests"
-                        : "Show Pending Requests"}
-                    </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={handleDeleteGroup}
-                    >
-                      Delete Group
-                    </button>
-                  </>
-                )}
-              </div>
-
-              {showJoinRequest && isOwner && (
-                <div className="mt-4">
-                  <h4>Pending Join Requests</h4>
-                  <div className="table-responsive mt-3">
-                    <table className="table table-striped table-hover">
-                      <JoinRequestList groupId={groupId} />
-                    </table>
-                  </div>
-                </div>
-              )}
-
-              <h4 className="mt-4">Group Members</h4>
-              {members.length > 0 ? (
-                <table className="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Email</th>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Role</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {members.map((member) => (
-                      <tr key={member.id}>
-                        <td>{member.id}</td>
-                        <td>{member.email}</td>
-                        <td>{member.firstname}</td>
-                        <td>{member.lastname}</td>
-                        <td>
-                          {member.id === group.creator_id ? "Owner" : "Member"}
-                        </td>
-                        <td>
-                          {isOwner && member.id !== group.creator_id ? (
-                            <button
-                              className="btn btn-danger"
-                              onClick={() => handleRemoveMember(member.id)}
-                            >
-                              Remove
-                            </button>
-                          ) : (
-                            ""
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <p>No members found.</p>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="alert alert-warning">No group details found.</div>
-        )}
-      </div>
-      <h4 className="mt-4">Group Posts</h4>
-      {posts.length > 0 ? (
-        <div className="mt-3">
-          {posts.map((post) => (
-            <div key={post.post_id} className="card mb-3 shadow-sm">
-              <div className="card-body">
-                <p className="card-text">{post.description}</p>
-                <p className="card-subtitle text-muted">
-                  <small>Posted by: {post.writer_id}</small>
-                </p>
-                {isOwner || post.account_id === user?.id ? (
+              {isOwner && (
+                <>
                   <button
-                    className="btn btn-danger btn-sm mt-2"
-                    onClick={async () => {
-                      try {
-                        await deleteGroupPost(groupId, post.post_id);
-                        setPosts(posts.filter((p) => p.id !== post.post_id));
-                        setMessage("Post deleted successfully.");
-                      } catch (err) {
-                        setError(err.message || "Failed to delete post.");
-                      }
-                    }}
+                    className={`btn ${showJoinRequest ? "btn-secondary" : "btn-info"} me-2`}
+                    onClick={() => setShowJoinRequest(!showJoinRequest)}
                   >
-                    Delete
+                    {showJoinRequest
+                      ? "Hide Pending Requests"
+                      : "Show Pending Requests"}
                   </button>
-                ) : null}
-              </div>
+                  <button
+                    className="btn btn-danger"
+                    onClick={handleDeleteGroup}
+                  >
+                    Delete Group
+                  </button>
+                </>
+              )}
             </div>
-          ))}
+
+            {showJoinRequest && isOwner && (
+              <div className="mt-4">
+                <h4>Pending Join Requests</h4>
+                <div className="table-responsive mt-3">
+                  <table className="table table-striped table-hover">
+                    <JoinRequestList groupId={groupId} />
+                  </table>
+                </div>
+              </div>
+            )}
+
+            <h4 className="mt-4">Create a Post</h4>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const postDescription = e.target.elements.description.value.trim();
+
+                if (!postDescription) {
+                  setError("Post description cannot be empty.");
+                  return;
+                }
+
+                try {
+                  const newPost = await createGroupPost(groupId, postDescription);
+                  setPosts([newPost, ...posts]);
+                  e.target.reset();
+                  navigate(0);
+                  setMessage("Post created successfully.");
+                } catch (err) {
+                  setError(err.response?.data?.message || "Failed to create post.");
+                }
+              }}
+            >
+              <div className="mb-3">
+                <textarea
+                  name="description"
+                  rows="3"
+                  className="form-control"
+                  placeholder="Write your post here..."
+                ></textarea>
+              </div>
+              <button type="submit" className="btn btn-primary btn-sm">
+                Submit
+              </button>
+            </form>
+
+            <h4 className="mt-4">Group Posts</h4>
+            {posts.length > 0 ? (
+              <div className="mt-3">
+                {posts.map((post) => (
+                  <div key={post.post_id} className="card mb-3 shadow-sm">
+                    <div className="card-body">
+                      <p className="card-text">{post.description}</p>
+                      <p className="card-subtitle text-muted">
+                        <small>Posted by {post.creator_name} on {new Date(post.creation_date).toLocaleString()}</small>
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No posts found in this group.</p>
+            )}
+          </div>
         </div>
       ) : (
-        <p>No posts found in this group.</p>
+        <p>Group details not available.</p>
       )}
-      <h5 className="mt-4">Create a Post</h5>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const postDescription = e.target.elements.description.value.trim();
+    </div>
 
-          if (!postDescription) {
-            setError("Post description cannot be empty.");
-            return;
-          }
+    {/* Right Column: Members List */}
+    <div className="col-md-4 mt-4"> {/* Added mt-4 here for gap */}
+      <h4 className="mb-3">Group Members</h4>
+      <div className="card shadow-sm">
+        <div className="card-body">
+          {members && members.length > 0 ? (
+            <div className="list-group">
+              {members.map((member) => (
+                <div
+                  key={member.id}
+                  className="list-group-item d-flex justify-content-between align-items-center border-0"
+                >
+                  <div className="d-flex align-items-center">
+                    <div className="ms-3">
+                      <h6 className="mb-1">{member.email}</h6>
+                      <small className="text-muted">
+                        {member.id === group.creator_id ? "Group Creator" : "Member"}
+                      </small>
+                    </div>
+                  </div>
 
-          try {
-            const newPost = await createGroupPost(groupId, postDescription);
-            setPosts([...posts, newPost]); // Update the posts state
-            setMessage("Post created successfully.");
-            e.target.reset(); // Clear the form
-          } catch (err) {
-            setError(err.response?.data?.message || "Failed to create post.");
-          }
-        }}
-      >
-        <div className="mb-3">
-          <textarea
-            name="description"
-            rows="3"
-            className="form-control"
-            placeholder="Write your post here..."
-          ></textarea>
+                  <div className="d-flex gap-2">
+                    {/* Remove Button */}
+                    {isOwner && member.id !== user.id && (
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleRemoveMember(groupId, member.id)}
+                        title="Remove member"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-muted">No members found in this group.</p>
+          )}
         </div>
-        <button type="submit" className="btn btn-primary btn-sm">
-          Submit
-        </button>
-      </form>
+      </div>
+    </div>
+  </div>
+</div>
 
     </div>
   );

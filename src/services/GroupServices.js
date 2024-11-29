@@ -271,6 +271,23 @@ export const leaveGroupByGroupId = async (groupId) => {
   }
 };
 
+// Removes a member from the group by its ID
+export const removeMemberFromGroup = async (groupId, memberId) => {
+  const headers = getAuthHeaders();
+  if (!headers) return;
+
+  try {
+    const response = await axios.delete(
+      `${API_URL}/api/group/${groupId}/remove/${memberId}`,
+      { headers }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error removing member ${memberId} from group ${groupId}:`, error);
+    throw error;
+  }
+};
+
 export const getUserJoinRequests = async () => {
   const headers = getAuthHeaders();
   if (!headers) return;
@@ -344,3 +361,5 @@ export const deleteGroupPost = async (groupId, postId) => {
     throw error;
   }
 };
+
+

@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  viewPendingRequests,
-  updateJoinRequestStatus,
-} from "../../services/GroupServices"; // Ensure the import path is correct
+import { viewPendingRequests, updateJoinRequestStatus } from "../../services/GroupServices";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import JoinRequestElement from "../../HomeComponents/JoinRequestElement";
@@ -33,20 +30,21 @@ const JoinRequestList = ({ groupId }) => {
     fetchRequests();
   }, [groupId]);
 
-  // Filter the requests based on the group name only
+  // Filter the requests based on the search query
   useEffect(() => {
     if (searchQuery) {
       const filtered = requests.filter((request) => {
-        // Filter by group name only (assuming `group.name` is a property)
-        return request.group_name
-          ?.toLowerCase()
-          .includes(searchQuery.toLowerCase());
+        // Assuming you may want to filter by requester's name or email as well
+        return (
+          request.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          request.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
       });
       setFilteredRequests(filtered);
     } else {
       setFilteredRequests(requests);
     }
-  }, [searchQuery, requests]); // Re-run when searchQuery or requests change
+  }, [searchQuery, requests]);
 
   const handleGroupRequest = async (requestId, requestStatus) => {
     try {
@@ -57,7 +55,7 @@ const JoinRequestList = ({ groupId }) => {
       navigate(`/groups/${groupId}`); // Redirect to groups page after updating request status
     } catch (error) {
       setError("Failed to update request status");
-      console.error("Error details:", error.response.data);
+      console.error("Error details:", error.response?.data);
     }
   };
 
@@ -74,6 +72,17 @@ const JoinRequestList = ({ groupId }) => {
       {message && <div className="alert alert-success">{message}</div>}
       {error && <div className="alert alert-danger">{error}</div>}
 
+      {/* Search Bar */}
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by email or name"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
       {filteredRequests.length > 0 ? (
         <div className="table-responsive">
           <table className="table table-striped">
@@ -88,9 +97,9 @@ const JoinRequestList = ({ groupId }) => {
             <tbody>
               {filteredRequests.map((request) => (
                 <JoinRequestElement 
+                  key={request.id}
                   request={request}
                   handleGroupRequest={handleGroupRequest}
-                  key={request.id}
                 />
               ))}
             </tbody>
@@ -100,7 +109,7 @@ const JoinRequestList = ({ groupId }) => {
         <p>No pending join requests.</p>
       )}
 
-      {/* New Section Above Table for More Information or Actions */}
+      {/* Information Section Above Table for More Context */}
       <div className="mb-4">
         <p>
           Here you can manage the pending join requests for your group. You can

@@ -1,11 +1,7 @@
 import { Router } from "express";
 import dotenv from "dotenv";
 import * as GroupController from "../controllers/GroupController.js";
-import {
-  auth,
-  verifyUserInGroup,
-  verifyCreatorIsValid,
-} from "../helpers/auth.js";
+import { auth, verifyCreatorIsValid } from "../helpers/auth.js";
 
 dotenv.config();
 
@@ -21,13 +17,11 @@ router.get("/userGroup/:id", auth, GroupController.getGroupsByUrlId);
 
 router.post("/create", auth, GroupController.createNewGroup);
 
-// access group if the user joined the group.
-router.get(
-  "/:groupId",
-  auth,
-  // verifyUserInGroup,
-  GroupController.getGroupByGroupId
-);
+// get group details
+router.get("/:groupId", auth, GroupController.getGroupDetails);
+
+// update group details
+router.put("/:groupId", auth, GroupController.updateGroupDetails);
 
 router.get("/:groupId/members", auth, GroupController.getGroupMembers);
 
@@ -55,9 +49,6 @@ router.put(
   verifyCreatorIsValid,
   GroupController.updateJoinRequestStatus
 );
-
-// update group details
-router.put("/:groupId", auth, GroupController.updateGroupDetails);
 
 // Remove a member from the group (only accessible by the group creator)
 router.delete(

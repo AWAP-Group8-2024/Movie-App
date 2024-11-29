@@ -100,6 +100,8 @@ const GroupList = ({ fetchType }) => {
   };
 
   const handleSaveEdit = async (updatedGroup) => {
+    console.log("editingGroup", editingGroup);
+    console.log("updatedGroup", updatedGroup);
     try {
       await updateGroupByGroupId(updatedGroup.id, updatedGroup);
       setGroups((prevGroups) =>
@@ -178,10 +180,15 @@ const GroupList = ({ fetchType }) => {
             <h2 className="text-center mt-5 mb-4">Your Groups</h2>
             <div className="row">
               {userGroups.length === 0 ? (
-                <p className="text-center">You haven't joined any groups yet.</p>
+                <p className="text-center">
+                  You haven't joined any groups yet.
+                </p>
               ) : (
                 userGroups.map((group) => (
-                  <div key={group.id} className="col-lg-4 col-md-6 col-sm-12 mb-3">
+                  <div
+                    key={group.id}
+                    className="col-lg-4 col-md-6 col-sm-12 mb-3"
+                  >
                     <div className="card h-100 shadow-sm">
                       <div className="card-body">
                         <h5 className="card-title">{group.name}</h5>
@@ -189,7 +196,10 @@ const GroupList = ({ fetchType }) => {
                           Created by {group.creator_id}
                         </p>
                         <div className="d-flex justify-content-between">
-                          <a href={`/groups/${group.id}`} className="btn btn-dark btn-sm">
+                          <a
+                            href={`/groups/${group.id}`}
+                            className="btn btn-dark btn-sm"
+                          >
                             View Group
                           </a>
                           <button
@@ -226,7 +236,10 @@ const GroupList = ({ fetchType }) => {
                 <p className="text-center">No available groups found.</p>
               ) : (
                 filteredGroups.map((group) => (
-                  <div key={group.id} className="col-lg-4 col-md-6 col-sm-12 mb-3">
+                  <div
+                    key={group.id}
+                    className="col-lg-4 col-md-6 col-sm-12 mb-3"
+                  >
                     <div className="card h-100 shadow-sm">
                       <div className="card-body">
                         <h5 className="card-title">{group.name}</h5>
@@ -234,7 +247,6 @@ const GroupList = ({ fetchType }) => {
                           Created by {group.creator_id}
                         </p>
                         <div className="d-flex justify-content-between mt-3">
-                          
                           <button
                             className="btn btn-primary btn-sm"
                             onClick={() => handleJoinGroup(group.id)}

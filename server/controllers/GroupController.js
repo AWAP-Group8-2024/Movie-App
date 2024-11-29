@@ -64,14 +64,12 @@ export const createNewGroup = async (req, res, next) => {
   }
 };
 
-export const getGroupByGroupId = async (req, res, next) => {
+export const getGroupDetails = async (req, res, next) => {
   const { groupId } = req.params;
-
   try {
-    const group = await GroupModel.getGroupDetailsById(groupId);
-
+    const group = await GroupModel.getGroupDetails(groupId);
     if (!group) {
-      return res.status(404).json({ message: "Group not found" });
+      return next(new ApiError("Group not found", 404));
     }
 
     return res
@@ -85,7 +83,26 @@ export const getGroupByGroupId = async (req, res, next) => {
         )
       );
   } catch (error) {
-    return next(error);
+    return next(new ApiError("Server error while getGroupDetails", 500));
+  }
+};
+
+export const updateGroupDetails = async (req, res, next) => {
+  const { groupId } = req.params;
+  const { name, description } = req.body;
+
+  try {
+    const result = await GroupModel.updateGroupDetails(
+      groupId,
+      name,
+      description
+    );
+    if (!result) {
+      return next(new ApiError("Group not found", 404));
+    }
+    return res.status(200).json({ message: "Group details updated", result });
+  } catch (error) {
+    return next(new ApiError("Server error while updateGroupDetails", 500));
   }
 };
 
@@ -96,7 +113,7 @@ export const getGroupMembers = async (req, res, next) => {
     const members = await GroupModel.getGroupMembers(groupId);
     return res.status(200).json(members.rows || []);
   } catch (error) {
-    return next(error);
+    return next(new ApiError("Server error while getGroupMembers", 500));
   }
 };
 
@@ -110,7 +127,7 @@ export const deleteGroupByGroupId = async (req, res, next) => {
     };
     return res.status(200).json(response);
   } catch (error) {
-    return next(error);
+    return next(new ApiError("Server error while deleteGroupByGroupId", 500));
   }
 };
 
@@ -124,7 +141,7 @@ export const sendJoinRequest = async (req, res) => {
       .status(201)
       .json({ message: "Join request sent successfully", request });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return next(new ApiError("Server error while sendJoinRequest", 500));
   }
 };
 
@@ -144,8 +161,7 @@ export const cancelJoinRequest = async (req, res) => {
       .status(200)
       .json({ message: "Join request cancel successfully", request });
   } catch (error) {
-    console.error("Error canceling join request:", error);
-    return res.status(500).json({ error: error.message });
+    return next(new ApiError("Server error while cancelJoinRequest", 500));
   }
 };
 
@@ -156,7 +172,7 @@ export const viewPendingRequests = async (req, res) => {
     const requests = await JoinRequestModel.getPendingRequests(groupId);
     return res.status(200).json(requests);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return next(new ApiError("Server error while viewPendingRequests", 500));
   }
 };
 
@@ -190,7 +206,9 @@ export const updateJoinRequestStatus = async (req, res) => {
 
     return res.status(200).json({ message: "Join request rejected" });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return next(
+      new ApiError("Server error while updateJoinRequestStatus", 500)
+    );
   }
 };
 
@@ -207,22 +225,6 @@ export const isGroupNameValid = (groupName) => {
   return groupName && groupName.trim().length > 0;
 };
 
-export const updateGroupDetails = async (req, res) => {
-  const { groupId } = req.params;
-  const { name, description } = req.body;
-
-  try {
-    const result = await GroupModel.updateGroupDetails(
-      groupId,
-      name,
-      description
-    );
-    return res.status(200).json({ message: "Group details updated", result });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
-
 // Controller to remove a member from the group
 export const removeMember = async (req, res, next) => {
   const { groupId, memberId } = req.params;
@@ -236,7 +238,7 @@ export const removeMember = async (req, res, next) => {
 
     return res.status(200).json({ message: "Member removed from the group" });
   } catch (error) {
-    console.log("Error removing member from group:", error.message);
+    return next(new ApiError("Server error while removeMember", 500));
   }
 };
 
@@ -249,12 +251,14 @@ export const leaveGroup = async (req, res, next) => {
     const result = await GroupModel.leaveGroup(groupId, id);
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ message: "You are not a member of this group" });
+      return res
+        .status(404)
+        .json({ message: "You are not a member of this group" });
     }
 
     return res.status(200).json({ message: "You have left the group" });
   } catch (error) {
-    return next(new ApiError("Error leaving the group", 500));
+    return next(new ApiError("Server error while leaveGroup", 500));
   }
 };
 
@@ -280,7 +284,7 @@ export const createPost = async (req, res) => {
       post: result.rows[0],
     });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return next(new ApiError("Server error while createPost", 500));
   }
 };
 
@@ -297,6 +301,6 @@ export const deletePost = async (req, res) => {
 
     return res.status(200).json({ message: "Post deleted successfully." });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return next(new ApiError("Server error while deletePost", 500));
   }
 };

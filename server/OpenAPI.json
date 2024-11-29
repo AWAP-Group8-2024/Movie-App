@@ -660,6 +660,91 @@
           "500": { "description": "Internal server error" }
         }
       }
+    },
+
+    "/api/group/{groupId}": {
+      "get": {
+        "tags": ["groups"],
+        "summary": "Get Group by Group ID",
+        "description": "Retrieve details of a specific group by its unique ID.",
+        "operationId": "getGroupDetails",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Group details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/get_group_response"
+                }
+              }
+            }
+          },
+          "404": { "description": "Group not found" },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
+        }
+      },
+      "put": {
+        "tags": ["groups"],
+        "summary": "Update Group Details",
+        "description": "Update the details of an existing group.",
+        "operationId": "updateGroupDetails",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group to update",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/update_group_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Group details updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/update_group_response"
+                }
+              }
+            }
+          },
+          "404": { "description": "Group not found" },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
+        }
+      }
     }
   },
   "components": {
@@ -1171,6 +1256,67 @@
           "name": "Developers Group",
           "description": "A group for developers to collaborate",
           "creator_id": 101
+        }
+      },
+
+      "get_group_response": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Group Name"
+          },
+          "description": {
+            "type": "string",
+            "example": "Group description"
+          },
+          "creator_id": {
+            "type": "integer",
+            "example": 10
+          }
+        }
+      },
+
+      "update_group_body": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The updated name of the group",
+            "example": "Updated Group Name"
+          },
+          "description": {
+            "type": "string",
+            "description": "The updated description of the group",
+            "example": "Updated group description"
+          }
+        },
+        "required": ["name", "description"]
+      },
+
+      "update_group_response": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Group Name"
+          },
+          "description": {
+            "type": "string",
+            "example": "Group description"
+          },
+          "creator_id": {
+            "type": "integer",
+            "example": 10
+          }
         }
       }
     }

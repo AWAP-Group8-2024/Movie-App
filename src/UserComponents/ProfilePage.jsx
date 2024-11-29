@@ -48,14 +48,6 @@ export default function ProfilePage() {
           console.error("Failed to fetch profile:", error);
         });
 
-      // getUserGroups()
-      //   .then((userGroups) => {
-      //     setGroups(userGroups);
-      //   })
-      //   .catch((error) => {
-      //     console.error("Failed to fetch groups:", error);
-      //   });
-
       getUserGroups(profileId)
         .then((userGroups) => {
           setGroups(userGroups);

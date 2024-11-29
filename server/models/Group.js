@@ -34,10 +34,19 @@ export const insertUserGroupAssociation = async (group_id, user_id) => {
   return result;
 };
 
-export const getGroupDetailsById = async (groupId) => {
+export const getGroupDetails = async (groupId) => {
   const result = await pool.query(
     "SELECT id, name, description, creator_id FROM groups WHERE id = $1;",
     [groupId]
+  );
+  return result.rows[0];
+};
+
+// update group details by group id
+export const updateGroupDetails = async (groupId, name, description) => {
+  const result = await pool.query(
+    "UPDATE groups SET name = $1, description = $2 WHERE id = $3 RETURNING *",
+    [name, description, groupId]
   );
   return result.rows[0];
 };
@@ -66,24 +75,6 @@ export const addUserToGroup = async (groupId, accountId) => {
   return result;
 };
 
-// export const checkUserInGroupByUserId = async (id) => {
-//   const query = `
-//   SELECT g.id AS group_id, g.name AS group_name
-//   FROM groups g
-//   JOIN group_account ga ON g.id = ga.group_id
-//   WHERE ga.account_id = $1;
-// `;
-//   const result = await pool.query(query, [id]);
-//   return result;
-// };
-// update group details by group id
-export const updateGroupDetails = async (groupId, name, description) => {
-  const result = await pool.query(
-    "UPDATE groups SET name = $1, description = $2 WHERE id = $3 RETURNING *",
-    [name, description, groupId]
-  );
-  return result;
-};
 // Function to remove a user from a group
 export const removeUserFromGroup = async (groupId, memberId) => {
   const query = `
@@ -119,13 +110,21 @@ export const leaveGroup = async (groupId, userId) => {
 };
 
 export const selectAllPosts = async (groupId) => {
-  return await pool.query('SELECT * FROM group_post WHERE group_id = $1', [groupId]);
-}
+  return await pool.query("SELECT * FROM group_post WHERE group_id = $1", [
+    groupId,
+  ]);
+};
 
 export const insertPost = async (groupId, accountId, description) => {
-  return await pool.query('INSERT INTO group_post (group_id, writer_id, description) VALUES ($1,$2,$3) RETURNING *', [groupId, accountId, description]);
-}
+  return await pool.query(
+    "INSERT INTO group_post (group_id, writer_id, description) VALUES ($1,$2,$3) RETURNING *",
+    [groupId, accountId, description]
+  );
+};
 
 export const deletePost = async (groupId, postId) => {
-  return await pool.query('DELETE FROM group_post WHERE group_id = $1 AND post_id = $2', [groupId, postId]);
-}
+  return await pool.query(
+    "DELETE FROM group_post WHERE group_id = $1 AND post_id = $2",
+    [groupId, postId]
+  );
+};

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { createUserObj } from "../controllers/UserController.js";
-import { getGroupsInfoByUserId, getGroupDetailsById } from "../models/Group.js";
 import { createGroupObj } from "../controllers/GroupController.js";
+import { ApiError } from "./apiError.js";
 
 const { verify } = jwt;
 
@@ -32,26 +32,6 @@ export const auth = (req, res, next) => {
   }
 };
 
-export const verifyUserInGroup = async (req, res, next) => {
-  const { id } = req.user;
-  console.log(req.user);
-  const { groupId } = req.params;
-  try {
-    const groups = await getGroupsInfoByUserId(id);
-    const isUserInGroup = groups.rows.some(
-      (group) => group.id === parseInt(groupId)
-    );
-    if (!isUserInGroup) {
-      return next(new ApiError("User is not a member of this group", 403));
-    }
-    next();
-  } catch (error) {
-    return next(
-      new ApiError("Server error while checking group membership", 500)
-    );
-  }
-};
-
 export const verifyCreatorIsValid = async (req, res, next) => {
   const { id } = req.user;
   const { groupId } = req.params;
@@ -72,8 +52,6 @@ export const verifyCreatorIsValid = async (req, res, next) => {
     req.group = createGroupObj(group.id, group.name, group.creator_id);
     next();
   } catch (error) {
-    return next(
-      new ApiError("Server error while verifying group creator", 500)
-    );
+    return next(new ApiError("Server error while verifyCreatorIsValid", 500));
   }
 };

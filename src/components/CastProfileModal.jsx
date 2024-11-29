@@ -7,6 +7,7 @@ const CastProfileModal = ({ personId, show, onHide }) => {
   const [profile, setProfile] = useState(null);
   const [credits, setCredits] = useState({ movies: [], tvShows: [] });
   const [loading, setLoading] = useState(true);
+  const [showFullBio, setShowFullBio] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -110,13 +111,21 @@ const CastProfileModal = ({ personId, show, onHide }) => {
         <Row>
           <Col md={3}>
             <div className="profile-image-container">
-              <img
-                src={profile.profile_path 
-                  ? `https://image.tmdb.org/t/p/w300${profile.profile_path}`
-                  : 'placeholder-image-url'}
-                alt={profile.name}
-                className="profile-image"
-              />
+              {profile.profile_path ? (
+                <img
+                  src={`https://image.tmdb.org/t/p/w300${profile.profile_path}`}
+                  alt={profile.name}
+                  className="profile-image"
+                />
+              ) : (
+                <div className="no-photo">
+                  <svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100%" height="100%" fill="#dbdbdb"/>
+                    <circle cx="150" cy="120" r="60" fill="#a0a0a0"/>
+                    <path d="M150 190 C70 190 40 250 40 300 L260 300 C260 250 230 190 150 190Z" fill="#a0a0a0"/>
+                  </svg>
+                </div>
+              )}
             </div>
 
             <div className="personal-info">
@@ -153,9 +162,7 @@ const CastProfileModal = ({ personId, show, onHide }) => {
                 <div className="info-item">
                   <span className="info-label">Also Known As</span>
                   <div className="info-value">
-                    {profile.also_known_as.map(name => (
-                      <div key={name}>{name}</div>
-                    ))}
+                    <div>{profile.also_known_as[0]}</div> {/* Show only the first name */}
                   </div>
                 </div>
               )}
@@ -166,7 +173,18 @@ const CastProfileModal = ({ personId, show, onHide }) => {
             <div className="biography-section mb-4">
               <h2>Biography</h2>
               <div className="biography-text">
-                {profile.biography || 'No biography available.'}
+                {!showFullBio && profile.biography?.length > 300 
+                  ? `${profile.biography.slice(0, 300)}...` 
+                  : profile.biography || 'No biography available.'}
+                {profile.biography?.length > 300 && (
+                  <Button 
+                    variant="link" 
+                    className="p-0 ms-2"
+                    onClick={() => setShowFullBio(!showFullBio)}
+                  >
+                    {showFullBio ? 'See Less' : 'See More'}
+                  </Button>
+                )}
               </div>
             </div>
             

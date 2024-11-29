@@ -4,13 +4,14 @@ import { createGroupPost } from "../services/GroupServices";
 
 export default function ShareAsPost({ group, show, setShow, movie }) {
     const [textAreaValue, setTextAreaValue] = useState(
-        `Let's watch "${movie.title}"! (${window.location.href})`
+        `Let's watch "${movie.title || movie.name}"! (${window.location.href})`
     );
 
     function createPost() {
         createGroupPost(group.id, textAreaValue)
         .then(() => {
-            alert(`Shared ${movie.title} to ${group.name} successfully!`);
+            alert(`Shared ${movie.title || movie.name} to ${group.name} successfully!`);
+            setShow(false);
         }).catch(error => {
             console.error(error.message);
             alert(`Failed to share`)

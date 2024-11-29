@@ -38,6 +38,7 @@ function RelatedMovies({ movieId }) {
 
   const handleMovieClick = (movieId) => {
     navigate(`/movie/${movieId}`);
+    window.location.reload();
   };
 
   const settings = {

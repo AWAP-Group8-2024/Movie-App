@@ -323,6 +323,7 @@ export default function TVShowDetails() {
                     <SocialSharing
                       url={window.location.href}
                       message={show.name}
+                      movie={show}
                     />
                   </div>
                 )}

@@ -312,6 +312,6 @@ export const deletePost = async (req, res) => {
 
     return res.status(200).json({ message: "Post deleted successfully." });
   } catch (error) {
-    return next(new ApiError("Server error while deletePost", 500));
+    return new ApiError("Server error while deletePost", 500);
   }
 };

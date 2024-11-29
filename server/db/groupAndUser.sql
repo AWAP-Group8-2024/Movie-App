@@ -34,7 +34,8 @@ CREATE TABLE group_post (
   group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
   writer_id INTEGER REFERENCES account(id) ON DELETE CASCADE,
   post_id SERIAL PRIMARY KEY,
-  description varchar(255) not null
+  description varchar(255) not null,
+  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE join_requests (

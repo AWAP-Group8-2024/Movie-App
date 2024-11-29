@@ -64,7 +64,7 @@ export default function ProfilePage() {
           console.error("Failed to fetch favorties:", error);
         });
     }
-  }, [getUserProfile, profileId]);
+  }, [getUserProfile, profileId, getUserFavorites, getUserGroups, setFavorites, setGroups]);
 
   const handleDelete = async () => {
     try {

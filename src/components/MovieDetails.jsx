@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { FaRegHeart, FaShare } from "react-icons/fa";
+import { FaShare } from "react-icons/fa";
 
 import RelatedMovies from "./RelatedMovies.jsx";
 import MovieCredits from "./MovieCredits.jsx";
@@ -97,10 +97,6 @@ export default function MovieDetails() {
                   className="movie-poster"
                 />
                 <div className="action-buttons">
-                  {/* It has no usage so far */}
-                  <button className="action-btn">
-                    <FaRegHeart /> <span>0</span>
-                  </button>
                   <button
                     className="action-btn"
                     onClick={() => setShowShareOptions(!showShareOptions)}

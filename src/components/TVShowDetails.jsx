@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
-import { FaEye, FaStar, FaRegHeart, FaShare } from "react-icons/fa";
+import { FaEye, FaStar, FaShare } from "react-icons/fa";
 import Navigation from "./Navigation";
 import TVShowCredits from "./TVShowCredits";
 import RecommendedShows from "./RecommendedShows";
@@ -297,9 +297,6 @@ export default function TVShowDetails() {
                   className="show-poster"
                 />
                 <div className="action-buttons">
-                  <button className="action-btn">
-                    <FaRegHeart /> <span>0</span>
-                  </button>
                   <button
                     className="action-btn"
                     onClick={() => setShowShareOptions(!showShareOptions)}

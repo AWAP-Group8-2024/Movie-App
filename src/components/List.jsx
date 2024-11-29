@@ -25,7 +25,7 @@ export default function List({ items, total_pages }) {
 
     const [rating, setRating] = useState(+searchQuery.get('rating') === 1 ? 0 : +searchQuery.get('rating') || 0);
     const [genreIdList, setGenreIdList] = useState(currentGenres ? currentGenres : []);
-    const [searchButton, setSearchButton] = useState(genreIdList.length === 0 && (currentYear == '' || currentYear == null) && rating === 0);
+    const [searchButton, setSearchButton] = useState(genreIdList.length === 0 && (currentYear === '' || currentYear === null) && rating === 0);
     const [year, setYear] = useState(currentYear);
     const [body, setBody] = useState(null);
 
@@ -44,7 +44,7 @@ export default function List({ items, total_pages }) {
             if (event.target.checked) {
                 setGenreIdList([...genreIdList, element.id]);
             } else {
-                setGenreIdList(genreIdList.filter(item => !(item == element.id)));
+                setGenreIdList(genreIdList.filter(item => !(item === element.id)));
             }
 
             setSearchButton(false);
@@ -96,7 +96,7 @@ export default function List({ items, total_pages }) {
     }
 
     function createBody() {
-        if (total_pages == -1) {
+        if (total_pages === -1) {
             setBody(<div>Failed to fetch. Try again later</div>);
             return;
         }
@@ -105,14 +105,14 @@ export default function List({ items, total_pages }) {
             setter.push(
                 <Col xs={6} md={3} className="text-decoration-none text-dark p-2" as={Link} to={element.title ? `/movie/${element.id}` : `/tv/${element.id}`} key={i}>
                     <div className="border border-1 border-dark rounded p-2 text-center h-100 d-flex flex-column">
-                        <img src={element.poster_path == null ? noImage : `https://image.tmdb.org/t/p/w500${element.poster_path}`} className="img-fluid p-1"/>
+                        <img src={element.poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${element.poster_path}`} alt="failed to load poster" className="img-fluid p-1"/>
                         <div className="mt-auto">{element.title ? element.title : element.name}</div>
                     </div>
                 </Col> 
             );
         });
 
-        if (items.length == 0) {
+        if (items.length === 0) {
             setBody(<Container>No results were found.</Container>);
         } else {
             setBody(
@@ -126,7 +126,7 @@ export default function List({ items, total_pages }) {
     }
 
     function createBodyFinKino() {
-        if (total_pages == -1) {
+        if (total_pages === -1) {
             setBody(<div>Failed to fetch. Try again later</div>);
             return;
         }
@@ -135,14 +135,14 @@ export default function List({ items, total_pages }) {
             setter.push(
                 <Col xs={6} md={3} className="text-decoration-none text-dark p-2" as={Link} onClick={() => {getLink(element)}}>
                     <div className="border border-1 border-dark rounded p-2 text-center h-100 d-flex flex-column">
-                        <img src={element.Images.EventLargeImagePortrait._text} className="img-fluid p-1"/>
+                        <img src={element.Images.EventLargeImagePortrait._text} alt="failed to fetch." className="img-fluid p-1"/>
                         {element.Title._text}
                     </div>
                 </Col> 
             );
         });
 
-        if (items.length == 0) {
+        if (items.length === 0) {
             setBody(<Container>No results were found.</Container>);
         } else {
             setBody(
@@ -159,7 +159,7 @@ export default function List({ items, total_pages }) {
 
     if (!window.location.href.includes('finnkino') && !window.location.href.includes('search')) {
         filters = (
-            <Accordion defaultActiveKey={genreIdList.length === 0 && (currentYear == '' || currentYear == null) && rating === 0 ? '' : '0'}>
+            <Accordion defaultActiveKey={genreIdList.length === 0 && (currentYear === '' || currentYear == null) && rating === 0 ? '' : '0'}>
                 <Accordion.Item eventKey="0">
                     <Accordion.Header><Col className="fs-3">Filters</Col></Accordion.Header>
                     <Accordion.Body>
@@ -210,7 +210,7 @@ export default function List({ items, total_pages }) {
             <Container className="mt-2">
                 <Dropdown>
                     <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                        {condition == 'tv' ? 'TV shows' : 'Movies'}
+                        {condition === 'tv' ? 'TV shows' : 'Movies'}
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>

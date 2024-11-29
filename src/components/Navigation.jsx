@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import {
   Navbar,
   Nav,
@@ -17,7 +17,6 @@ import { UserDropdown } from "./NavComponents";
 export default function Navigation() {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const navigate = useNavigate();
   const { user, handleLogout } = useUser();
 
   const handleInputChange = (e) => {

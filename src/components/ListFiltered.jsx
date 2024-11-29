@@ -15,7 +15,7 @@ export default function ListFiltered() {
 
   function getItems() {
     fetch(
-      condition == "tv"
+      condition === "tv"
         ? `https://api.themoviedb.org/3/discover/tv?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&with_genres=${genres}&first_air_date_year=${year}&vote_average.gte=${rating}&page=${page}`
         : `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&with_genres=${genres}&primary_release_year=${year}&vote_average.gte=${rating}&page=${page}`
     )

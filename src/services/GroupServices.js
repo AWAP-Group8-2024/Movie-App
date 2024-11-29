@@ -283,7 +283,10 @@ export const removeMemberFromGroup = async (groupId, memberId) => {
     );
     return response.data;
   } catch (error) {
-    console.error(`Error removing member ${memberId} from group ${groupId}:`, error);
+    console.error(
+      `Error removing member ${memberId} from group ${groupId}:`,
+      error
+    );
     throw error;
   }
 };
@@ -361,5 +364,3 @@ export const deleteGroupPost = async (groupId, postId) => {
     throw error;
   }
 };
-
-

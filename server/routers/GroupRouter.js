@@ -23,7 +23,14 @@ router.get("/:groupId", auth, GroupController.getGroupDetails);
 // update group details
 router.put("/:groupId", auth, GroupController.updateGroupDetails);
 
+router.post("/:groupId/join", auth, GroupController.sendJoinRequest);
+
+router.delete("/:groupId/cancel", auth, GroupController.cancelJoinRequest);
+
 router.get("/:groupId/members", auth, GroupController.getGroupMembers);
+
+// Allow a member to leave the group (any member can leave)
+router.delete("/:groupId/leave", auth, GroupController.leaveGroup);
 
 // delete group if user is the owner
 router.delete(
@@ -32,9 +39,6 @@ router.delete(
   verifyCreatorIsValid,
   GroupController.deleteGroupByGroupId
 );
-
-router.post("/:groupId/join", auth, GroupController.sendJoinRequest);
-router.delete("/:groupId/cancel", auth, GroupController.cancelJoinRequest);
 
 router.get(
   "/:groupId/requests",
@@ -58,9 +62,7 @@ router.delete(
   GroupController.removeMember
 );
 
-// Allow a member to leave the group (any member can leave)
-router.delete("/:groupId/leave", auth, GroupController.leaveGroup);
-
+// group posts section
 router.get("/:groupId/posts", GroupController.getAllGroupPosts); // Get all posts
 router.post("/:groupId/posts", GroupController.createPost); // Create a post
 router.delete("/delete/:groupId/posts/:postId", GroupController.deletePost); // Delete a post

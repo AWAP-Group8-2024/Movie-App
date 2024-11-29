@@ -26,6 +26,7 @@ export const getPendingRequests = async (groupId) => {
       WHERE jr.group_id = $1 AND jr.status = 'pending';
     `;
   const { rows } = await pool.query(query, [groupId]);
+  console.log("rows", rows);
   return rows;
 };
 

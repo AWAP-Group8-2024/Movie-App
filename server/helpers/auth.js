@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { createUserObj } from "../controllers/UserController.js";
 import { createGroupObj } from "../controllers/GroupController.js";
+import { getGroupDetails } from "../models/Group.js";
 import { ApiError } from "./apiError.js";
 
 const { verify } = jwt;
@@ -36,7 +37,7 @@ export const verifyCreatorIsValid = async (req, res, next) => {
   const { id } = req.user;
   const { groupId } = req.params;
   try {
-    const group = await getGroupDetailsById(groupId);
+    const group = await getGroupDetails(groupId);
     if (!group) {
       return next(new ApiError("Group not found", 404));
     }

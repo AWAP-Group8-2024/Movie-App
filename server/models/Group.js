@@ -52,11 +52,32 @@ export const updateGroupDetails = async (groupId, name, description) => {
 };
 
 export const getGroupMembers = async (groupId) => {
-  const result = await pool.query(
-    "SELECT a.id, a.email, a.firstname, a.lastname FROM group_account ga JOIN account a ON ga.account_id = a.id WHERE ga.group_id = $1;",
-    [groupId]
-  );
-  return result;
+  const query = `SELECT a.id, a.email, a.firstname, a.lastname
+  FROM group_account ga
+  JOIN account a ON ga.account_id = a.id 
+  WHERE ga.group_id = $1
+  ORDER BY id
+  `;
+  const { rows } = await pool.query(query, [groupId]);
+  console.log(rows);
+  return rows;
+};
+
+// Function to allow a user to leave a group
+export const leaveGroup = async (groupId, userId) => {
+  const query = `
+    DELETE FROM group_account
+    WHERE group_id = $1 AND account_id = $2
+    RETURNING *;
+  `;
+  const values = [groupId, userId];
+
+  try {
+    const result = await pool.query(query, values);
+    return result;
+  } catch (error) {
+    throw new Error("Error leaving the group: " + error.message);
+  }
 };
 
 export const deleteGroupById = async (groupId) => {
@@ -89,23 +110,6 @@ export const removeUserFromGroup = async (groupId, memberId) => {
     return result;
   } catch (error) {
     throw new Error("Error removing user from group: " + error.message);
-  }
-};
-
-// Function to allow a user to leave a group
-export const leaveGroup = async (groupId, userId) => {
-  const query = `
-    DELETE FROM group_account
-    WHERE group_id = $1 AND account_id = $2
-    RETURNING *;
-  `;
-  const values = [groupId, userId];
-
-  try {
-    const result = await pool.query(query, values);
-    return result;
-  } catch (error) {
-    throw new Error("Error leaving the group: " + error.message);
   }
 };
 

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { createUserObj } from "../controllers/UserController.js";
 import { createGroupObj } from "../controllers/GroupController.js";
-import { getGroupDetails } from "../models/Group.js";
+import { getGroupDetails, getGroupsInfoByUserId } from "../models/Group.js";
 import { ApiError } from "./apiError.js";
 
 const { verify } = jwt;
@@ -30,6 +30,23 @@ export const auth = (req, res, next) => {
     return next(
       new ApiError("Server error during authorization verification", 500)
     );
+  }
+};
+
+export const verifyUserInGroup = async (req, res, next) => {
+  const { id } = req.user;
+  const { groupId } = req.params;
+  try {
+    const groups = await getGroupsInfoByUserId(id);
+    const isUserInGroup = groups.rows.some(
+      (group) => group.id === parseInt(groupId)
+    );
+    if (!isUserInGroup) {
+      return next(new ApiError("User is not a member of this group", 403));
+    }
+    next();
+  } catch (error) {
+    return next(new ApiError("Server error while verifyUserInGroup", 500));
   }
 };
 

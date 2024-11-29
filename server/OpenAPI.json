@@ -271,7 +271,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/join_request_response"
+                    "$ref": "#/components/schemas/user_pending_request_response"
                   }
                 }
               }
@@ -673,7 +673,7 @@
           {
             "name": "groupId",
             "in": "path",
-            "description": "The unique ID of the group to retrieve",
+            "description": "The unique ID of the group",
             "required": true,
             "schema": {
               "type": "string"
@@ -743,6 +743,192 @@
           },
           "403": { "description": "Forbidden - Invalid credentials provided." },
           "500": { "description": "Internal server error" }
+        }
+      }
+    },
+
+    "/api/group/{groupId}/join": {
+      "post": {
+        "tags": ["groups"],
+        "summary": "Send Join Request to a Group",
+        "description": "Allows an authenticated user to send a request to join a specific group.",
+        "operationId": "sendJoinRequest",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Join request sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/join_request_response"
+                }
+              }
+            }
+          },
+          "404": { "description": "Group not found" },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+
+    "/api/group/{groupId}/cancel": {
+      "post": {
+        "tags": ["groups"],
+        "summary": "Cancel Join Request",
+        "description": "Allows an authenticated user to cancel their pending join request for a specific group.",
+        "operationId": "cancelJoinRequest",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Join request canceled successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/cancel_request_response"
+                }
+              }
+            }
+          },
+          "404": { "description": "Group not found" },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+
+    "/api/group/{groupId}/members": {
+      "get": {
+        "tags": ["groups"],
+        "summary": "Retrieve Group Members",
+        "description": "Fetches a list of members for a specific group.",
+        "operationId": "getGroupMembers",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of members in the specified group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/get_group_members_response"
+                }
+              },
+              "example": [
+                {
+                  "id": 1,
+                  "email": "user1@example.com",
+                  "firstname": "John",
+                  "lastname": "Doe"
+                },
+                {
+                  "id": 2,
+                  "email": "user2@example.com",
+                  "firstname": "Jane",
+                  "lastname": "Smith"
+                }
+              ]
+            }
+          },
+          "404": { "description": "Group not found" },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+
+    "/api/group/{groupId}/leave": {
+      "delete": {
+        "tags": ["groups"],
+        "summary": "Leave a Group",
+        "description": "Allows an authenticated user to leave a specific group they are a member of.",
+        "operationId": "leaveGroup",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully left the group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/leave_group_response"
+                }
+              },
+              "example": [
+                {
+                  "id": 1,
+                  "email": "user1@example.com",
+                  "firstname": "John",
+                  "lastname": "Doe"
+                },
+                {
+                  "id": 2,
+                  "email": "user2@example.com",
+                  "firstname": "Jane",
+                  "lastname": "Smith"
+                }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not Found - User is not a member of the specified group."
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error." }
         }
       }
     }
@@ -972,7 +1158,7 @@
         }
       },
 
-      "join_request_response": {
+      "user_pending_request_response": {
         "type": "object",
         "properties": {
           "id": {
@@ -1316,6 +1502,125 @@
           "creator_id": {
             "type": "integer",
             "example": 10
+          }
+        }
+      },
+
+      "join_request_response": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Join request sent successfully"
+          },
+          "request": {
+            "type": "object",
+            "description": "Details of the join request",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 123
+              },
+              "group_id": {
+                "type": "integer",
+                "example": 10
+              },
+              "account_id": {
+                "type": "integer",
+                "example": 5
+              },
+              "status": {
+                "type": "string",
+                "example": "pending"
+              },
+              "request_date": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2024-11-29T12:34:56Z"
+              },
+              "response_date": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2024-11-30T12:34:56Z"
+              }
+            }
+          }
+        }
+      },
+
+      "cancel_request_response": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Join request cancel successfully"
+          },
+          "request": {
+            "type": "object",
+            "description": "Details of the canceled join request",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "example": 123
+              },
+              "group_id": {
+                "type": "integer",
+                "example": 10
+              },
+              "account_id": {
+                "type": "integer",
+                "example": 5
+              },
+              "status": {
+                "type": "string",
+                "example": "pending"
+              },
+              "request_date": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2024-11-29T12:34:56Z"
+              },
+              "response_date": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2024-11-30T12:34:56Z"
+              }
+            }
+          }
+        }
+      },
+
+      "get_group_members_response": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "example": 1
+            },
+            "email": {
+              "type": "string",
+              "example": "user@example.com"
+            },
+            "firstname": {
+              "type": "string",
+              "example": "John"
+            },
+            "lastname": {
+              "type": "string",
+              "example": "Doe"
+            }
+          }
+        }
+      },
+
+      "leave_group_response": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "You have left the group"
           }
         }
       }

@@ -6,7 +6,9 @@ export const createJoinRequest = async (groupId, accountId) => {
       VALUES ($1, $2) 
       RETURNING *;
     `;
+
   const { rows } = await pool.query(query, [groupId, accountId]);
+  console.log(rows);
   return rows[0];
 };
 
@@ -26,7 +28,6 @@ export const getPendingRequests = async (groupId) => {
       WHERE jr.group_id = $1 AND jr.status = 'pending';
     `;
   const { rows } = await pool.query(query, [groupId]);
-  console.log("rows", rows);
   return rows;
 };
 

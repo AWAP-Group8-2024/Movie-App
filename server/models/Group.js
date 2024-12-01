@@ -182,3 +182,10 @@ export const deletePost = async (groupId, postId) => {
     [groupId, postId]
   );
 };
+
+export const updatePost = async (groupId, postId, description) => {
+  return await pool.query(
+    "UPDATE group_post SET description = $1 WHERE group_id = $2 AND post_id = $3 RETURNING *",
+    [description, groupId, postId]
+  );
+};

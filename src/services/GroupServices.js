@@ -350,6 +350,21 @@ export const createGroupPost = async (groupId, postDescription) => {
   }
 };
 
+export const updateGroupPost = async (groupId, postId, postDescription) => {
+  const headers = getAuthHeaders();
+  if (!headers) return;
+  try {
+    const response = await axios.put(
+      `${API_URL}/api/group/edit/${groupId}/posts/${postId}`,
+      { description: postDescription }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating post for group ${groupId}:`, error);
+    throw error;
+  }
+}
+
 export const deleteGroupPost = async (groupId, postId) => {
   const headers = getAuthHeaders();
   if (!headers) return;

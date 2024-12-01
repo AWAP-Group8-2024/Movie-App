@@ -202,12 +202,14 @@ const GroupList = ({ fetchType }) => {
                           >
                             View Group
                           </a>
-                          <button
-                            className="btn btn-primary btn-sm"
-                            onClick={() => setEditingGroup(group)}
-                          >
-                            Edit Group
-                          </button>
+                          {group.creator_id === userId && (
+                            <button
+                              className="btn btn-primary btn-sm"
+                              onClick={() => setEditingGroup(group)}
+                            >
+                              Edit Group
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

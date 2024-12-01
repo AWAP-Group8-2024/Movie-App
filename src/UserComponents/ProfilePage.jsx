@@ -11,6 +11,7 @@ import ProfileBody from "./ProfileComponents/ProfileBody.jsx";
 import { useUser } from "./UserProvider.jsx";
 import { useFavorite } from "./FavoriteProvider";
 import { useGroup } from "./GroupProvider";
+import ErrorPage from "./ProfileComponents/ErrorPage.jsx";
 
 export default function ProfilePage() {
   const {
@@ -36,35 +37,72 @@ export default function ProfilePage() {
   const [newGroup, setNewGroup] = useState({ name: "", description: "" });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [createGroupModalIsOpen, setCreateGroupModalIsOpen] = useState(false);
+  const [error, setError] = useState(null);
+
+  // useEffect(() => {
+  //   if (profileId) {
+  //     getUserProfile(profileId)
+  //       .then((userProfile) => {
+  //         setProfileData(userProfile);
+  //         setEditData(userProfile);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Failed to fetch profile:", error);
+  //       });
+
+  //     getUserGroups(profileId)
+  //       .then((userGroups) => {
+  //         setGroups(userGroups);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Failed to fetch groups:", error);
+  //       });
+
+  //     getUserFavorites(profileId)
+  //       .then((userFavorites) => {
+  //         setFavorites(userFavorites);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Failed to fetch favorties:", error);
+  //       });
+  //   }
+  // }, [getUserProfile, profileId, getUserFavorites, getUserGroups, setFavorites, setGroups]);
 
   useEffect(() => {
-    if (profileId) {
-      getUserProfile(profileId)
-        .then((userProfile) => {
-          setProfileData(userProfile);
-          setEditData(userProfile);
-        })
-        .catch((error) => {
-          console.error("Failed to fetch profile:", error);
-        });
+    const fetchData = async () => {
+      try {
+        const userProfile = await getUserProfile(profileId);
 
-      getUserGroups(profileId)
-        .then((userGroups) => {
-          setGroups(userGroups);
-        })
-        .catch((error) => {
-          console.error("Failed to fetch groups:", error);
-        });
+        if (!userProfile) {
+          throw new Error("Profile not found.");
+        }
 
-      getUserFavorites(profileId)
-        .then((userFavorites) => {
-          setFavorites(userFavorites);
-        })
-        .catch((error) => {
-          console.error("Failed to fetch favorties:", error);
-        });
-    }
-  }, [getUserProfile, profileId, getUserFavorites, getUserGroups, setFavorites, setGroups]);
+        setProfileData(userProfile);
+        setEditData(userProfile);
+
+        const userGroups = await getUserGroups(profileId);
+        setGroups(userGroups);
+
+        const userFavorites = await getUserFavorites(profileId);
+        setFavorites(userFavorites);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError(error.message);
+      }
+    };
+
+    fetchData();
+  }, [
+    profileId,
+    // getUserProfile,
+    // getUserGroups,
+    // getUserFavorites,
+    // setGroups,
+    // setFavorites,
+  ]);
+  // if (error) {
+  //   return <ErrorPage message={error} />;
+  // }
 
   const handleDelete = async () => {
     try {
@@ -138,20 +176,27 @@ export default function ProfilePage() {
   return (
     <Container>
       <Navigation />
-      <ProfileBody
-        profileData={profileData}
-        isEditing={isEditing}
-        editData={editData}
-        handleInputChange={handleInputChange}
-        isOwnProfile={isOwnProfile}
-        handleSave={handleSave}
-        handleCancel={handleCancel}
-        handleLogout={handleLogout}
-        setShowDeleteModal={setShowDeleteModal}
-        setIsEditing={setIsEditing}
-        handleShare={handleShare}
-        setCreateGroupModalIsOpen={setCreateGroupModalIsOpen}
-      />
+      <>
+        {error ? (
+          <ErrorPage message={error} />
+        ) : (
+          <ProfileBody
+            profileData={profileData}
+            isEditing={isEditing}
+            editData={editData}
+            handleInputChange={handleInputChange}
+            isOwnProfile={isOwnProfile}
+            handleSave={handleSave}
+            handleCancel={handleCancel}
+            handleLogout={handleLogout}
+            setShowDeleteModal={setShowDeleteModal}
+            setIsEditing={setIsEditing}
+            handleShare={handleShare}
+            setCreateGroupModalIsOpen={setCreateGroupModalIsOpen}
+          />
+        )}
+      </>
+
       <AccountDeleteModal
         showDeleteModal={showDeleteModal}
         setShowDeleteModal={setShowDeleteModal}

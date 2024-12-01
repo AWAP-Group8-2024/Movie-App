@@ -173,7 +173,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/update_profile_response"
+                  "$ref": "#/components/schemas/user_profile_response"
                 }
               }
             }
@@ -482,22 +482,22 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/group_response"
-                  }
-                },
-                "example": [
-                  {
-                    "id": 1,
-                    "name": "Developers Group",
-                    "description": "A group for developers",
-                    "creator_id": 101
                   },
-                  {
-                    "id": 2,
-                    "name": "Designers Hub",
-                    "description": "A group for designers",
-                    "creator_id": 102
-                  }
-                ]
+                  "example": [
+                    {
+                      "id": 1,
+                      "name": "Developers Group",
+                      "description": "A group for developers",
+                      "creator_id": 101
+                    },
+                    {
+                      "id": 2,
+                      "name": "Designers Hub",
+                      "description": "A group for designers",
+                      "creator_id": 102
+                    }
+                  ]
+                }
               }
             }
           },
@@ -526,24 +526,22 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/group_detail_response"
-                  }
-                },
-                "example": [
-                  {
-                    "id": 1,
-                    "name": "Developers Group",
-                    "description": "A group for developers",
-                    "creator_id": 101,
-                    "member_count": 33
                   },
-                  {
-                    "id": 2,
-                    "name": "Designers Hub",
-                    "description": "A group for designers",
-                    "creator_id": 102,
-                    "member_count": 63
-                  }
-                ]
+                  "example": [
+                    {
+                      "id": 1,
+                      "name": "Developers Group",
+                      "creator_id": 201,
+                      "member_count": 25
+                    },
+                    {
+                      "id": 2,
+                      "name": "Designers Hub",
+                      "creator_id": 202,
+                      "member_count": 15
+                    }
+                  ]
+                }
               }
             }
           },
@@ -582,25 +580,8 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/group_detail_response"
-                  }
-                },
-                "example": [
-                  {
-                    "id": 1,
-                    "name": "Developers Group",
-                    "creator_id": 201,
-                    "member_count": 25
-                  },
-                  {
-                    "id": 2,
-                    "name": "Designers Hub",
-                    "creator_id": 202,
-                    "member_count": 15
-                  }
-                ]
+                  "$ref": "#/components/schemas/group_detail_response"
+                }
               }
             }
           },
@@ -627,10 +608,6 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/create_group_body"
-              },
-              "example": {
-                "name": "Developers Group",
-                "description": "A group for developers to collaborate"
               }
             }
           }
@@ -642,12 +619,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/create_group_response"
-                },
-                "example": {
-                  "id": 1,
-                  "name": "Developers Group",
-                  "description": "A group for developers to collaborate",
-                  "creator_id": 101
                 }
               }
             }
@@ -851,21 +822,7 @@
                 "schema": {
                   "$ref": "#/components/schemas/get_group_members_response"
                 }
-              },
-              "example": [
-                {
-                  "id": 1,
-                  "email": "user1@example.com",
-                  "firstname": "John",
-                  "lastname": "Doe"
-                },
-                {
-                  "id": 2,
-                  "email": "user2@example.com",
-                  "firstname": "Jane",
-                  "lastname": "Smith"
-                }
-              ]
+              }
             }
           },
           "404": { "description": "Group not found" },
@@ -904,21 +861,7 @@
                 "schema": {
                   "$ref": "#/components/schemas/leave_group_response"
                 }
-              },
-              "example": [
-                {
-                  "id": 1,
-                  "email": "user1@example.com",
-                  "firstname": "John",
-                  "lastname": "Doe"
-                },
-                {
-                  "id": 2,
-                  "email": "user2@example.com",
-                  "firstname": "Jane",
-                  "lastname": "Smith"
-                }
-              ]
+              }
             }
           },
           "404": {
@@ -931,30 +874,249 @@
           "500": { "description": "Internal server error." }
         }
       }
+    },
+
+    "/api/group/delete/{groupId}": {
+      "delete": {
+        "tags": ["groups"],
+        "summary": "Delete a Group",
+        "description": "Allows the creator of a group to delete it permanently.",
+        "operationId": "deleteGroupByGroupId",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Group deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/delete_group_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - The user is not the owner of the group."
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "404": { "description": "Not Found - The group does not exist." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+
+    "/api/group/{groupId}/requests": {
+      "get": {
+        "tags": ["groups"],
+        "summary": "Get Pending Join Group Requests",
+        "description": "Allows the owner of a group to view all pending join requests for their group.",
+        "operationId": "viewPendingRequests",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Group deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/view_pending_requests_response"
+                  },
+                  "example": [
+                    {
+                      "id": 1,
+                      "email": "user@example.com",
+                      "firstname": "John",
+                      "lastname": "Doe",
+                      "request_date": "2024-11-29T14:00:00Z"
+                    },
+                    {
+                      "id": 2,
+                      "email": "jane.doe@example.com",
+                      "firstname": "Jane",
+                      "lastname": "Doe",
+                      "request_date": "2024-11-28T10:30:00Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - The user is not the owner of the group."
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorizatio."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "404": { "description": "Not Found - The group does not exist." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+
+    "/api/group/{groupId}/requests/{requestId}": {
+      "put": {
+        "tags": ["groups"],
+        "summary": "Update Join Request Status",
+        "description": "Allows the owner of a group to accept or reject a join request for their group.",
+        "operationId": "updateJoinRequestStatus",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "requestId",
+            "in": "path",
+            "description": "The unique ID of the join request.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The new status of the join request.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/update_join_requests_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Join request status updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/update_join_requests_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - The user is not the owner or invalid status"
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorizatio."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "404": { "description": "Not Found - The group does not exist." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+
+    "/api/group/{groupId}/remove/{memberId}": {
+      "put": {
+        "tags": ["groups"],
+        "summary": "Remove Member from Group",
+        "description": "Allows the creator of a group to remove a member from that group.",
+        "operationId": "removeMemberFromGroup",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "description": "The unique ID of the member to be removed.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Member removed from the group successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/remove_member_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - The user is not the owner or invalid status"
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorizatio."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "404": { "description": "Not Found - The group does not exist." },
+          "500": { "description": "Internal server error." }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
       "user_register_body": {
         "type": "object",
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
             "format": "email",
-            "example": "user@example.com",
             "description": "The email of the user to register."
           },
           "password": {
             "type": "string",
-            "example": "Password123",
             "description": "The password of the user to register."
           }
         },
-        "required": ["email", "password"]
+        "example": {
+          "email": "user@example.com",
+          "password": "Password123"
+        }
       },
 
       "user_register_response": {
         "type": "object",
+        "required": ["id", "email"],
         "properties": {
           "id": {
             "type": "integer",
@@ -971,7 +1133,10 @@
             "description": "The JWT token for the registered user. This field is optional and may not always be present."
           }
         },
-        "required": ["id", "email"]
+        "example": {
+          "id": "1",
+          "email": "user@example.com"
+        }
       },
 
       "user_login_body": {
@@ -980,14 +1145,16 @@
           "email": {
             "type": "string",
             "format": "email",
-            "example": "user@example.com",
             "description": "The email of the user to login."
           },
           "password": {
             "type": "string",
-            "example": "Password123",
             "description": "The password of the user to login."
           }
+        },
+        "example": {
+          "email": "user@example.com",
+          "password": "Password123"
         }
       },
 
@@ -1007,6 +1174,49 @@
             "type": "string",
             "description": "The JWT token for the registered user. This field is optional and may not always be present."
           }
+        },
+        "example": {
+          "id": 2,
+          "email": "test2@123.com",
+          "token": "ei66yyyy9.ey12345IyfQ.njhhhhh0EdI"
+        }
+      },
+
+      "user_profile_response": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The unique identifier of the user."
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the user."
+          },
+          "firstname": {
+            "type": "string",
+            "description": "The first name of the user."
+          },
+          "lastname": {
+            "type": "string",
+            "description": "The last name of the user."
+          },
+          "address": {
+            "type": "string",
+            "description": "The address of the user."
+          },
+          "phone": {
+            "type": "string",
+            "description": "The phone number of the user."
+          }
+        },
+        "example": {
+          "id": 1,
+          "email": "user@example.com",
+          "firstname": "John",
+          "lastname": "Doe",
+          "address": "123 Main St, Springfield, IL 62701",
+          "phone": "+1-555-123-4567"
         }
       },
 
@@ -1033,36 +1243,13 @@
             "type": "string",
             "description": "The phone of the user."
           }
-        }
-      },
-
-      "update_profile_response": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "description": "The unique identifier of the user."
-          },
-          "email": {
-            "type": "string",
-            "description": "The email address of the user."
-          },
-          "firstname": {
-            "type": "string",
-            "description": "The first name of the user."
-          },
-          "lastname": {
-            "type": "string",
-            "description": "The last name of the user."
-          },
-          "address": {
-            "type": "string",
-            "description": "The address of the user."
-          },
-          "phone": {
-            "type": "string",
-            "description": "The phone of the user."
-          }
+        },
+        "example": {
+          "email": "user@example.com",
+          "firstname": "John",
+          "lastname": "Doe",
+          "address": "123 Main St, Springfield, IL 62701",
+          "phone": "+1-555-123-4567"
         }
       },
 
@@ -1112,7 +1299,11 @@
             "description": "The password associated with the user's account."
           }
         },
-        "required": ["email", "password"]
+        "required": ["email", "password"],
+        "example": {
+          "email": "user@example.com",
+          "password": "SecurePassword123!"
+        }
       },
 
       "passwordCheck_response": {
@@ -1308,6 +1499,10 @@
             "type": "boolean",
             "description": "True if the content is in favorites, false otherwise."
           }
+        },
+        "example": {
+          "message": "The content is in your favorites.",
+          "favorite": true
         }
       },
 
@@ -1464,6 +1659,12 @@
             "type": "integer",
             "example": 10
           }
+        },
+        "example": {
+          "id": 1,
+          "name": "Study Group",
+          "description": "A group for students to collaborate on homework and projects.",
+          "creator_id": 10
         }
       },
 
@@ -1545,6 +1746,17 @@
               }
             }
           }
+        },
+        "example": {
+          "message": "Join request sent successfully",
+          "request": {
+            "id": 123,
+            "group_id": 10,
+            "account_id": 5,
+            "status": "pending",
+            "request_date": "2024-11-29T12:34:56Z",
+            "response_date": null
+          }
         }
       },
 
@@ -1587,6 +1799,17 @@
               }
             }
           }
+        },
+        "example": {
+          "message": "Join request canceled successfully",
+          "request": {
+            "id": 123,
+            "group_id": 10,
+            "account_id": 5,
+            "status": "canceled",
+            "request_date": "2024-11-29T12:34:56Z",
+            "response_date": "2024-11-30T12:34:56Z"
+          }
         }
       },
 
@@ -1612,7 +1835,21 @@
               "example": "Doe"
             }
           }
-        }
+        },
+        "example": [
+          {
+            "id": 1,
+            "email": "user1@example.com",
+            "firstname": "John",
+            "lastname": "Doe"
+          },
+          {
+            "id": 2,
+            "email": "user2@example.com",
+            "firstname": "Jane",
+            "lastname": "Smith"
+          }
+        ]
       },
 
       "leave_group_response": {
@@ -1621,6 +1858,102 @@
           "message": {
             "type": "string",
             "example": "You have left the group"
+          }
+        }
+      },
+
+      "delete_group_response": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer", "example": 1 },
+              "name": { "type": "string", "example": "Example Group" },
+              "description": {
+                "type": "string",
+                "example": "This is an example group description."
+              },
+              "creator_id": {
+                "type": "integer",
+                "example": 123
+              }
+            }
+          },
+          "message": {
+            "type": "string",
+            "example": "Group 'Example Group' with ID 1 deleted successfully."
+          }
+        },
+        "example": {
+          "group": {
+            "id": 1,
+            "name": "group2",
+            "description": "group2 desc",
+            "creator_id": 1
+          },
+          "message": "Group 'group2' with ID 1 deleted successfully."
+        }
+      },
+
+      "view_pending_requests_response": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "email": { "type": "string", "example": "user@example.com" },
+          "firstname": { "type": "string", "example": "John" },
+          "lastname": { "type": "string", "example": "Doe" },
+          "request_date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-11-29T14:00:00Z"
+          }
+        }
+      },
+
+      "update_join_requests_body": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["accepted", "rejected"],
+            "description": "The status to update the join request to."
+          }
+        },
+        "example": {
+          "status": "accepted"
+        }
+      },
+
+      "update_join_requests_response": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A message confirming the operation."
+          }
+        },
+        "examples": {
+          "accepted": {
+            "value": {
+              "message": "Join request accepted"
+            }
+          },
+          "rejected": {
+            "value": {
+              "message": "Join request rejected"
+            }
+          }
+        }
+      },
+
+      "remove_member_response": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Member removed from the group"
           }
         }
       }

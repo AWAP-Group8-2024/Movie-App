@@ -40,6 +40,7 @@ router.delete(
   GroupController.deleteGroupByGroupId
 );
 
+// get pending join group requests as an owner
 router.get(
   "/:groupId/requests",
   auth,
@@ -47,6 +48,7 @@ router.get(
   GroupController.viewPendingRequests
 );
 
+// update join requests status, accepted or rejected
 router.put(
   "/:groupId/requests/:requestId",
   auth,

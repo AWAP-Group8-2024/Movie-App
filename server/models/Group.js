@@ -14,102 +14,152 @@ export const getGroupsInfoByUserId = async (id) => {
   GROUP BY g.id
   ORDER BY g.id
 `;
-  const result = await pool.query(query, [id]);
-  return result;
+  try {
+    const result = await pool.query(query, [id]);
+    return result;
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };
 
 export const insertNewGroup = async (name, description, creator_id) => {
-  const result = await pool.query(
-    "INSERT INTO groups (name, description, creator_id) values ($1, $2, $3) returning *",
-    [name, description, creator_id]
-  );
-  return result;
+  try {
+    const result = await pool.query(
+      "INSERT INTO groups (name, description, creator_id) values ($1, $2, $3) returning *",
+      [name, description, creator_id]
+    );
+    return result;
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };
 
 export const insertUserGroupAssociation = async (group_id, user_id) => {
-  const result = await pool.query(
-    "INSERT INTO group_account (group_id, account_id) VALUES ($1, $2) returning *",
-    [group_id, user_id]
-  );
-  return result;
+  try {
+    const result = await pool.query(
+      "INSERT INTO group_account (group_id, account_id) VALUES ($1, $2) returning *",
+      [group_id, user_id]
+    );
+    return result;
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };
 
 export const getGroupDetails = async (groupId) => {
-  const result = await pool.query(
-    "SELECT id, name, description, creator_id FROM groups WHERE id = $1;",
-    [groupId]
-  );
-  return result.rows[0];
+  try {
+    const result = await pool.query(
+      "SELECT id, name, description, creator_id FROM groups WHERE id = $1;",
+      [groupId]
+    );
+    return result.rows[0];
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };
 
 // update group details by group id
 export const updateGroupDetails = async (groupId, name, description) => {
-  const result = await pool.query(
-    "UPDATE groups SET name = $1, description = $2 WHERE id = $3 RETURNING *",
-    [name, description, groupId]
-  );
-  return result.rows[0];
+  try {
+    const result = await pool.query(
+      "UPDATE groups SET name = $1, description = $2 WHERE id = $3 RETURNING *",
+      [name, description, groupId]
+    );
+    return result.rows[0];
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };
 
 export const getGroupMembers = async (groupId) => {
-  const query = `SELECT a.id, a.email, a.firstname, a.lastname
-  FROM group_account ga
-  JOIN account a ON ga.account_id = a.id 
-  WHERE ga.group_id = $1
-  ORDER BY id
-  `;
-  const { rows } = await pool.query(query, [groupId]);
-  console.log(rows);
-  return rows;
+  try {
+    const query = `SELECT a.id, a.email, a.firstname, a.lastname
+    FROM group_account ga
+    JOIN account a ON ga.account_id = a.id 
+    WHERE ga.group_id = $1
+    ORDER BY id
+    `;
+    const { rows } = await pool.query(query, [groupId]);
+    return rows;
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };
 
 // Function to allow a user to leave a group
 export const leaveGroup = async (groupId, userId) => {
-  const query = `
+  try {
+    const query = `
     DELETE FROM group_account
     WHERE group_id = $1 AND account_id = $2
     RETURNING *;
   `;
-  const values = [groupId, userId];
-
-  try {
-    const result = await pool.query(query, values);
-    return result;
+    const values = [groupId, userId];
+    const { rows } = await pool.query(query, values);
+    return rows[0];
   } catch (error) {
-    throw new Error("Error leaving the group: " + error.message);
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
   }
 };
 
 export const deleteGroupById = async (groupId) => {
-  const result = await pool.query("DELETE FROM groups WHERE id = $1", [
-    groupId,
-  ]);
-  return result;
+  try {
+    const { rows } = await pool.query(
+      "DELETE FROM groups WHERE id = $1 returning *",
+      [groupId]
+    );
+    return rows[0];
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };
 
 export const addUserToGroup = async (groupId, accountId) => {
-  const query = `
+  try {
+    const query = `
     INSERT INTO group_account (group_id, account_id)
     VALUES ($1, $2) ON CONFLICT DO NOTHING returning *;
   `;
-  const result = await pool.query(query, [groupId, accountId]);
-  return result;
+    const result = await pool.query(query, [groupId, accountId]);
+    return result;
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };
 
 // Function to remove a user from a group
 export const removeUserFromGroup = async (groupId, memberId) => {
-  const query = `
+  try {
+    const query = `
     DELETE FROM group_account
     WHERE group_id = $1 AND account_id = $2
     RETURNING *;
   `;
-  const values = [groupId, memberId];
-
-  try {
-    const result = await pool.query(query, values);
-    return result;
+    const values = [groupId, memberId];
+    const { rows } = await pool.query(query, values);
+    return rows[0];
   } catch (error) {
-    throw new Error("Error removing user from group: " + error.message);
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
   }
 };
 

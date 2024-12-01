@@ -33,23 +33,6 @@ export const auth = (req, res, next) => {
   }
 };
 
-export const verifyUserInGroup = async (req, res, next) => {
-  const { id } = req.user;
-  const { groupId } = req.params;
-  try {
-    const groups = await getGroupsInfoByUserId(id);
-    const isUserInGroup = groups.rows.some(
-      (group) => group.id === parseInt(groupId)
-    );
-    if (!isUserInGroup) {
-      return next(new ApiError("User is not a member of this group", 403));
-    }
-    next();
-  } catch (error) {
-    return next(new ApiError("Server error while verifyUserInGroup", 500));
-  }
-};
-
 export const verifyCreatorIsValid = async (req, res, next) => {
   const { id } = req.user;
   const { groupId } = req.params;
@@ -67,9 +50,31 @@ export const verifyCreatorIsValid = async (req, res, next) => {
       );
     }
     // Attached group object to req for further uses.
-    req.group = createGroupObj(group.id, group.name, group.creator_id);
+    req.group = createGroupObj(
+      group.id,
+      group.name,
+      group.description,
+      group.creator_id
+    );
     next();
   } catch (error) {
     return next(new ApiError("Server error while verifyCreatorIsValid", 500));
+  }
+};
+
+export const verifyUserInGroup = async (req, res, next) => {
+  const { id } = req.user;
+  const { groupId } = req.params;
+  try {
+    const groups = await getGroupsInfoByUserId(id);
+    const isUserInGroup = groups.rows.some(
+      (group) => group.id === parseInt(groupId)
+    );
+    if (!isUserInGroup) {
+      return next(new ApiError("User is not a member of this group", 403));
+    }
+    next();
+  } catch (error) {
+    return next(new ApiError("Server error while verifyUserInGroup", 500));
   }
 };

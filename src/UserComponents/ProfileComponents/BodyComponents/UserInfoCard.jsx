@@ -22,7 +22,7 @@ export const UserInfoCard = ({
       <Col md={9} className="mb-2">
         <Card style={{ width: "100%" }}>
           <CardHeader className="rounded">
-            <CardText
+            <div
               className="d-flex justify-content-between align-items-center fw-bolder fs-5"
               style={{ height: "30px" }}
             >
@@ -31,7 +31,7 @@ export const UserInfoCard = ({
                 {isOwnProfile && <EditButton setIsEditing={setIsEditing} />}
                 <ShareButton handleShare={handleShare} />
               </div>
-            </CardText>
+            </div>
           </CardHeader>
           <Card.Body className="pt-0">
             <Row>

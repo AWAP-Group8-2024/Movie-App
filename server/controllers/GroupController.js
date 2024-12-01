@@ -172,7 +172,7 @@ export const leaveGroup = async (req, res, next) => {
   try {
     const result = await GroupModel.leaveGroup(groupId, id);
 
-    if (result.rowCount === 0) {
+    if (!result) {
       return next(new ApiError("You are not a member of this group", 404));
     }
 
@@ -184,11 +184,11 @@ export const leaveGroup = async (req, res, next) => {
 
 export const deleteGroupByGroupId = async (req, res, next) => {
   try {
-    const { id } = req.group;
-    await GroupModel.deleteGroupById(id);
+    const { groupId } = req.group.id;
+    const group = await GroupModel.deleteGroupById(groupId);
     const response = {
-      group: req.group,
-      message: `Group '${req.group.name}' with ID ${req.group.id} deleted successfully.`,
+      group: group,
+      message: `Group '${group.name}' with ID ${group.id} deleted successfully.`,
     };
     return res.status(200).json(response);
   } catch (error) {
@@ -207,14 +207,14 @@ export const viewPendingRequests = async (req, res) => {
   }
 };
 
-export const updateJoinRequestStatus = async (req, res) => {
+export const updateJoinRequestStatus = async (req, res, next) => {
   const { requestId } = req.params;
   const { status } = req.body; // 'accepted' or 'rejected'
 
   if (!["accepted", "rejected"].includes(status)) {
-    return res
-      .status(400)
-      .json({ error: "Invalid status. It must be 'accepted' or 'rejected'" });
+    return next(
+      new ApiError("Invalid status. It must be 'accepted' or 'rejected'", 400)
+    );
   }
 
   try {
@@ -224,7 +224,7 @@ export const updateJoinRequestStatus = async (req, res) => {
     );
 
     if (!updatedRequest) {
-      return res.status(404).json({ error: "Join request not found" });
+      return next(new ApiError("Join request not found", 404));
     }
 
     if (status === "accepted") {
@@ -243,19 +243,6 @@ export const updateJoinRequestStatus = async (req, res) => {
   }
 };
 
-export const createGroupObj = (id, name, description, creator_id) => {
-  return {
-    id: id,
-    name: name,
-    description: description,
-    creator_id: creator_id,
-  };
-};
-
-export const isGroupNameValid = (groupName) => {
-  return groupName && groupName.trim().length > 0;
-};
-
 // Controller to remove a member from the group
 export const removeMember = async (req, res, next) => {
   const { groupId, memberId } = req.params;
@@ -263,8 +250,8 @@ export const removeMember = async (req, res, next) => {
   try {
     const result = await GroupModel.removeUserFromGroup(groupId, memberId);
 
-    if (result.rowCount === 0) {
-      return res.status(404).json({ message: "Member not found in the group" });
+    if (!result) {
+      return next(new ApiError("Member not found in the group", 404));
     }
 
     return res.status(200).json({ message: "Member removed from the group" });
@@ -312,6 +299,19 @@ export const deletePost = async (req, res) => {
 
     return res.status(200).json({ message: "Post deleted successfully." });
   } catch (error) {
-    return new ApiError("Server error while deletePost", 500);
+    return next(new ApiError("Server error while deletePost", 500));
   }
+};
+
+export const createGroupObj = (id, name, description, creator_id) => {
+  return {
+    id: id,
+    name: name,
+    description: description,
+    creator_id: creator_id,
+  };
+};
+
+export const isGroupNameValid = (groupName) => {
+  return groupName && groupName.trim().length > 0;
 };

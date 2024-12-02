@@ -6,7 +6,7 @@ import avatar from "../components/images/avatar.png";
 import { formatDate } from "./utils.js";
 import { ShareButton } from "../UserComponents/ProfileComponents/BodyComponents/UserInfoCardComponents/Button.jsx";
 
-const url = process.env.REACT_APP_TMDB_URL;
+const url = process.env.REACT_APP_BACKEND_URL;
 
 function Reviews({ movieId, loggedInUserId, movieTitle }) {
   const [reviews, setReviews] = useState([]);
@@ -19,7 +19,7 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
   useEffect(() => {
     // Fetch reviews for the movie
     const fetchReviews = async () => {
-      const response = await fetch(`${url}/movie/reviews/${movieId}`);
+      const response = await fetch(`${url}movie/reviews/${movieId}`);
       const data = await response.json();
       setReviews(data);
 

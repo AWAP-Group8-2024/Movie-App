@@ -916,7 +916,7 @@
             "description": "Unauthorized - Incorrect password or invalid authorization)."
           },
           "403": { "description": "Forbidden - Invalid credentials provided." },
-          "404": { "description": "Not Found - The group does not exist." },
+          "404": { "description": "Group not found." },
           "500": { "description": "Internal server error." }
         }
       }
@@ -977,7 +977,7 @@
             "description": "Unauthorized - Incorrect password or invalid authorization)."
           },
           "403": { "description": "Forbidden - Invalid credentials provided." },
-          "404": { "description": "Not Found - The group does not exist." },
+          "404": { "description": "Group not found." },
           "500": { "description": "Internal server error." }
         }
       }
@@ -1039,7 +1039,7 @@
             "description": "Unauthorized - Incorrect password or invalid authorization)."
           },
           "403": { "description": "Forbidden - Invalid credentials provided." },
-          "404": { "description": "Not Found - The group does not exist." },
+          "404": { "description": "Group not found." },
           "500": { "description": "Internal server error." }
         }
       }
@@ -1090,7 +1090,7 @@
             "description": "Unauthorized - Incorrect password or invalid authorization)."
           },
           "403": { "description": "Forbidden - Invalid credentials provided." },
-          "404": { "description": "Not Found - The group does not exist." },
+          "404": { "description": "Group not found." },
           "500": { "description": "Internal server error." }
         }
       }
@@ -1245,9 +1245,7 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found - The post does not exist in the specified group."
-          },
+          "404": { "description": "Post not found." },
           "401": {
             "description": "Unauthorized - Incorrect password or invalid authorization)."
           },
@@ -1305,9 +1303,7 @@
               }
             }
           },
-          "404": {
-            "description": "Bad Request - Not Found - The specified post does not exist."
-          },
+          "404": { "description": "Post not found." },
           "401": {
             "description": "Unauthorized - Incorrect password or invalid authorization)."
           },
@@ -1323,22 +1319,148 @@
         "summary": "Get Reviews for a Movie",
         "description": "Retrieves all reviews for a specific movie, sorted by the timestamp in descending order.",
         "operationId": "getMovieReviews",
-        "security": [{ "BearerAuth": [] }],
         "parameters": [
           {
-            "name": "groupId",
+            "name": "id",
             "in": "path",
-            "description": "The unique ID of the group.",
+            "description": "The unique ID of the review.",
             "required": true,
             "schema": {
               "type": "integer"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of reviews for the specified movie.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/get_review_response"
+                  },
+                  "example": [
+                    {
+                      "id": 1,
+                      "movie_id": 10,
+                      "user_id": 5,
+                      "description": "Amazing movie! Loved it.",
+                      "rating": 4.8,
+                      "reviewer_email": "user1@example.com",
+                      "timestamp": "2024-12-01T10:45:00Z"
+                    },
+                    {
+                      "id": 2,
+                      "movie_id": 10,
+                      "user_id": 8,
+                      "description": "Good but a bit too long.",
+                      "rating": 3.5,
+                      "reviewer_email": "user2@example.com",
+                      "timestamp": "2024-11-30T14:20:00Z"
+                    }
+                  ]
+                }
+              }
+            }
           },
+          "404": { "description": "Review not found." },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+      "delete": {
+        "tags": ["Movies"],
+        "summary": "Delete a Review for a Movie",
+        "description": "Allows authenticated users to delete a specific review for a movie by its ID.",
+        "operationId": "deleteMovieReview",
+        "parameters": [
           {
-            "name": "postId",
+            "name": "id",
             "in": "path",
-            "description": "The unique ID of the post to be edited.",
+            "description": "The unique ID of the review to be deleted.",
             "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The review was successfully deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/delete_review_response"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Review not found."
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+
+    "/api/movie/addReview": {
+      "post": {
+        "tags": ["Movies"],
+        "summary": "Add a Review for a Movie",
+        "description": "Allows authenticated users to add a review for a specific movie, including a description, rating, and email of the reviewer.",
+        "operationId": "addMovieReview",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/add_review_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The review was successfully added.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/add_review_response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+
+    "/api/movie/editReview/{id}": {
+      "put": {
+        "tags": ["Movies"],
+        "summary": "Edit a Review for a Movie",
+        "description": "Allows authenticated users to edit an existing review for a specific movie by its ID. Users can update the review's description and rating.",
+        "operationId": "editMovieReview",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the review to be edited.",
             "schema": {
               "type": "integer"
             }
@@ -1349,25 +1471,23 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/update_posts_body"
+                "$ref": "#/components/schemas/edit_review_body"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "A list of posts belonging to the specified group.",
+            "description": "The review was successfully updated.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/update_posts_response"
+                  "$ref": "#/components/schemas/add_review_response"
                 }
               }
             }
           },
-          "404": {
-            "description": "Bad Request - Not Found - The specified post does not exist."
-          },
+          "404": { "description": "Review not found." },
           "401": {
             "description": "Unauthorized - Incorrect password or invalid authorization)."
           },
@@ -2380,6 +2500,149 @@
             "description": "something",
             "creation_date": "2024-12-02T10:22:01.298Z"
           }
+        }
+      },
+
+      "get_review_response": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "movie_id": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "description": { "type": "string" },
+          "rating": { "type": "number", "format": "double", "example": 4.5 },
+          "reviewer_email": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      },
+
+      "delete_review_response": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "movie_id": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "description": { "type": "string" },
+          "rating": { "type": "number", "format": "double" },
+          "reviewer_email": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        },
+        "example": {
+          "id": 2,
+          "movie_id": 10,
+          "user_id": 8,
+          "description": "Good but a bit too long.",
+          "rating": 3.5,
+          "reviewer_email": "user2@example.com",
+          "timestamp": "2024-11-30T14:20:00Z"
+        }
+      },
+
+      "add_review_body": {
+        "type": "object",
+        "properties": {
+          "movie_id": {
+            "type": "integer",
+            "description": "The ID of the movie."
+          },
+          "user_id": {
+            "type": "integer",
+            "description": "The ID of the user submitting the review."
+          },
+          "description": {
+            "type": "string",
+            "description": "The content of the review."
+          },
+          "rating": {
+            "type": "number",
+            "description": "The rating given by the reviewer, between 0 and 5.",
+            "minimum": 0,
+            "maximum": 5
+          },
+          "reviewer_email": {
+            "type": "string",
+            "description": "The email of the reviewer.",
+            "format": "email"
+          }
+        },
+        "required": [
+          "movie_id",
+          "user_id",
+          "description",
+          "rating",
+          "reviewer_email"
+        ],
+        "example": {
+          "movie_id": 10,
+          "user_id": 5,
+          "description": "An amazing film with a captivating story!",
+          "rating": 4.7,
+          "reviewer_email": "reviewer@example.com"
+        }
+      },
+
+      "add_review_response": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "movie_id": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "description": { "type": "string" },
+          "rating": { "type": "number", "format": "double" },
+          "reviewer_email": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        },
+        "example": {
+          "id": 20,
+          "movie_id": 10,
+          "user_id": 5,
+          "description": "An amazing film with a captivating story!",
+          "rating": 4.7,
+          "reviewer_email": "reviewer@example.com",
+          "timestamp": "2024-12-01T11:00:00Z"
+        }
+      },
+
+      "edit_review_body": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "The updated content of the review."
+          },
+          "rating": {
+            "type": "number",
+            "description": "The updated rating given by the reviewer, between 0 and 5.",
+            "minimum": 0,
+            "maximum": 5
+          }
+        },
+        "required": ["description", "rating"],
+        "example": {
+          "description": "An updated review with more insights.",
+          "rating": 4.5
+        }
+      },
+
+      "edit_review_response": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "movie_id": { "type": "integer" },
+          "user_id": { "type": "integer" },
+          "description": { "type": "string" },
+          "rating": { "type": "number", "format": "double" },
+          "reviewer_email": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        },
+        "example": {
+          "id": 20,
+          "movie_id": 10,
+          "user_id": 5,
+          "description": "An updated review with more insights.",
+          "rating": 4.5,
+          "reviewer_email": "reviewer@example.com",
+          "timestamp": "2024-12-01T11:00:00Z"
         }
       }
     }

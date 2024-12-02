@@ -11,6 +11,6 @@ router.get("/reviews/:id", MovieController.getReviews);
 router.delete("/reviews/:id", MovieController.deleteReview);
 router.post("/addReview", auth, MovieController.addReview);
 router.put("/editReview/:id", auth, MovieController.editReview);
-router.delete("/deletereview", auth, MovieController.deleteReview);
+// router.delete("/deletereview", auth, MovieController.deleteReview);
 
 export default router;

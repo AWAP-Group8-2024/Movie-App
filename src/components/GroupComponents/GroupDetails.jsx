@@ -16,6 +16,7 @@ import Navigation from "../Navigation";
 import { useUser } from "../../UserComponents/UserProvider";
 import JoinRequestList from "./JoinRequestList";
 import "bootstrap/dist/css/bootstrap.min.css";
+import AttachItem from "./AttachItem";
 
 const GroupDetails = () => {
 	const navigate = useNavigate();
@@ -368,9 +369,12 @@ const GroupDetails = () => {
 								placeholder="Write your post here..."
 							></textarea>
 						</div>
-						<button type="submit" className="btn btn-primary btn-sm">
-							Submit
-						</button>
+						<AttachItem />
+						<div>
+							<button type="submit" className="btn btn-primary btn-sm">
+								Submit
+							</button>
+						</div>
 					</form>
 
 					<h4 className="mt-4">Group Posts</h4>

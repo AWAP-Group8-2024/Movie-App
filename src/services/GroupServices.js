@@ -352,17 +352,14 @@ export const createGroupPost = async (groupId, postDescription) => {
     throw error;
   }
 };
-
 export const updateGroupPost = async (groupId, postId, postDescription) => {
   const headers = getAuthHeaders();
   if (!headers) return;
   try {
     const response = await axios.put(
       `${API_URL}/api/group/edit/${groupId}/posts/${postId}`,
-      {
-        description: postDescription,
-        headers,
-      }
+      { description: postDescription },
+      { headers } // Headers passed correctly here
     );
     return response.data;
   } catch (error) {

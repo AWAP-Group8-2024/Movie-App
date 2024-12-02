@@ -164,28 +164,57 @@ export const removeUserFromGroup = async (groupId, memberId) => {
 };
 
 export const selectAllPosts = async (groupId) => {
-  return await pool.query("SELECT * FROM group_post WHERE group_id = $1", [
-    groupId,
-  ]);
+  try {
+    const result = await pool.query(
+      "SELECT * FROM group_post WHERE group_id = $1",
+      [groupId]
+    );
+    return result;
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };
 
 export const insertPost = async (groupId, accountId, description) => {
-  return await pool.query(
-    "INSERT INTO group_post (group_id, writer_id, description) VALUES ($1,$2,$3) RETURNING *",
-    [groupId, accountId, description]
-  );
+  try {
+    const result = await pool.query(
+      "INSERT INTO group_post (group_id, writer_id, description) VALUES ($1,$2,$3) RETURNING *",
+      [groupId, accountId, description]
+    );
+    return result;
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };
 
 export const deletePost = async (groupId, postId) => {
-  return await pool.query(
-    "DELETE FROM group_post WHERE group_id = $1 AND post_id = $2",
-    [groupId, postId]
-  );
+  try {
+    const result = await pool.query(
+      "DELETE FROM group_post WHERE group_id = $1 AND post_id = $2 returning *",
+      [groupId, postId]
+    );
+    return result;
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };
 
 export const updatePost = async (groupId, postId, description) => {
-  return await pool.query(
-    "UPDATE group_post SET description = $1 WHERE group_id = $2 AND post_id = $3 RETURNING *",
-    [description, groupId, postId]
-  );
+  try {
+    const result = await pool.query(
+      "UPDATE group_post SET description = $1 WHERE group_id = $2 AND post_id = $3 RETURNING *",
+      [description, groupId, postId]
+    );
+    return result;
+  } catch (error) {
+    return next(
+      new ApiError("Internal server error while database queries.", 500)
+    );
+  }
 };

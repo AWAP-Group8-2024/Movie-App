@@ -20,7 +20,7 @@ app.get("/api/message", (req, res) => {
 app.use("/api/user", userRouter);
 app.use("/api/favorite", favoriteRouter);
 app.use("/api/group", groupRouter);
-app.use("/movie", movieRouter);
+app.use("/api/movie", movieRouter);
 
 // Global Error handling middleware
 app.use((err, req, res, next) => {

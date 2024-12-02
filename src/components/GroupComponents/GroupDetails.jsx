@@ -9,6 +9,7 @@ import {
 	createGroupPost,
 	deleteGroupPost,
 	removeMemberFromGroup,
+	updateGroupPost,
 } from "../../services/GroupServices";
 import { useParams, useNavigate } from "react-router-dom";
 import Navigation from "../Navigation";
@@ -29,7 +30,9 @@ const GroupDetails = () => {
 	const [isOwner, setIsOwner] = useState(false);
 	const [isMember, setIsMember] = useState(false);
 	const [showJoinRequest, setShowJoinRequest] = useState(false);
-
+	const [editingPost, setEditingPost] = useState(null);
+	const [updatedDescription, setUpdatedDescription] = useState("");
+	
 	useEffect(() => {
 		if (groupId) {
 			const fetchGroupDetails = async () => {
@@ -96,6 +99,7 @@ const GroupDetails = () => {
 		}
 	};
 
+
 	const handleJoinGroup = async () => {
 		try {
 			const existingRequest = members.some(
@@ -158,6 +162,38 @@ const GroupDetails = () => {
 			setError(err.message || "Failed to remove member.");
 		}
 	};
+	const handleEditPost = (post) => {
+		setEditingPost(post);
+		setUpdatedDescription(post.description); // Prefill with existing description
+	};
+	
+	const submitEditPost = async (e) => {
+		e.preventDefault();
+		if (!updatedDescription.trim()) {
+			setError("Post description cannot be empty.");
+			return;
+		}
+		try {
+			const updatedPost = await updateGroupPost(
+				groupId,
+				editingPost.post_id,
+				updatedDescription.trim()
+			);
+			// Update posts with the edited post
+			setPosts(
+				posts.map((post) =>
+					post.post_id === updatedPost.post_id ? updatedPost : post
+				)
+			);
+			setMessage("Post edited successfully.");
+			navigate(0);
+			setEditingPost(null);
+			setUpdatedDescription("");
+		} catch (err) {
+			setError(err.message || "Failed to edit post.");
+		}
+	};
+	
 
 	if (loading || userLoading)
 		return <div className="text-center mt-5">Loading...</div>;
@@ -341,35 +377,73 @@ const GroupDetails = () => {
 					{posts.length > 0 ? (
 						<div className="mt-3">
 							{posts.map((post) => (
-								<div key={post.post_id} className="card mb-3 shadow-sm">
-									<div className="card-body">
-										<p className="card-text">{post.description}</p>
-										<p className="card-subtitle text-muted">
-											<small>
-												Posted by {post.writer_id} on{" "}
-												{new Date(post.creation_date).toLocaleString()}
-											</small>
-										</p>
-										{isOwner || post.writer_id === user?.id ? (
-											<button
-												className="btn btn-danger btn-sm mt-2"
-												onClick={async () => {
-													try {
-														await deleteGroupPost(groupId, post.post_id);
-														setPosts(posts.filter((p) => p.id !== post.post_id));
-														setMessage("Post deleted successfully.");
-														window.location.reload();
-													} catch (err) {
-														setError(err.message || "Failed to delete post.");
-													}
-												}}
-											>
-												Delete
-											</button>
-										) : null}
-									</div>
-								</div>
-							))}
+	<div key={post.post_id} className="card mb-3 shadow-sm">
+		<div className="card-body">
+			{editingPost?.post_id === post.post_id ? (
+				// Edit Form
+				<form onSubmit={submitEditPost}>
+					<div className="mb-3">
+						<textarea
+							className="form-control"
+							value={updatedDescription}
+							onChange={(e) => setUpdatedDescription(e.target.value)}
+							rows="3"
+						></textarea>
+					</div>
+					<div className="d-flex gap-2">
+						<button type="submit" className="btn btn-success btn-sm">
+							Save
+						</button>
+						<button
+							type="button"
+							className="btn btn-secondary btn-sm"
+							onClick={() => setEditingPost(null)}
+						>
+							Cancel
+						</button>
+					</div>
+				</form>
+			) : (
+				// Post View
+				<>
+					<p className="card-text">{post.description}</p>
+					<p className="card-subtitle text-muted">
+						<small>
+							Posted by {post.writer_id} on{" "}
+							{new Date(post.creation_date).toLocaleString()}
+						</small>
+					</p>
+					{(isOwner || post.writer_id === user?.id) && (
+						<div className="d-flex gap-2 mt-2">
+							<button
+								className="btn btn-primary btn-sm"
+								onClick={() => handleEditPost(post)}
+							>
+								Edit
+							</button>
+							<button
+								className="btn btn-danger btn-sm"
+								onClick={async () => {
+									try {
+										await deleteGroupPost(groupId, post.post_id);
+										setPosts(posts.filter((p) => p.id !== post.post_id));
+										setMessage("Post deleted successfully.");
+										navigate(0);
+									} catch (err) {
+										setError(err.message || "Failed to delete post.");
+									}
+								}}
+							>
+								Delete
+							</button>
+						</div>
+					)}
+				</>
+			)}
+		</div>
+	</div>
+))}
+
 						</div>
 					) : (
 						<p>No posts found in this group.</p>

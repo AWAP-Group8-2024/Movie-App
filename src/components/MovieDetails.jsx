@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { FaShare } from "react-icons/fa";
+import { FaEye, FaStar, FaShare } from "react-icons/fa";
 
 import RelatedMovies from "./RelatedMovies.jsx";
 import MovieCredits from "./MovieCredits.jsx";
@@ -14,6 +14,7 @@ import { useUser } from "../UserComponents/UserProvider";
 import { formatRuntime, renderStars } from "./utils.js";
 import FinnKinoSchedule from "./FinnKinoSchedule.jsx";
 import { useFavorite } from "../UserComponents/FavoriteProvider";
+import Reviews from "./Reviews.jsx";
 
 export default function MovieDetails() {
   const { mediaType, id } = useParams();
@@ -64,6 +65,12 @@ export default function MovieDetails() {
     }
   };
 
+    const [shareUrl, setShareUrl] = useState("");
+  
+    useEffect(() => {
+      setShareUrl(window.location.href);
+    }, []);
+
   useEffect(() => {
     const fetchFavoriteStatus = async () => {
       if (!user?.token || !movie) return;
@@ -78,6 +85,8 @@ export default function MovieDetails() {
 
     fetchFavoriteStatus();
   }, [user, movie, checkContentById, setContentInFavorite]);
+
+ 
 
   if (!movie) return <Container className="text-dark">Loading...</Container>;
 
@@ -118,7 +127,7 @@ export default function MovieDetails() {
 
                 <div className="social-buttons">
                   {showShareOptions && (
-                    <SocialSharing url={"localhost"} message={movie.title} movie={movie}/>
+                    <SocialSharing shareUrl={shareUrl} message={movie.title} movie={movie} />
                   )}
                 </div>
               </div>
@@ -132,11 +141,17 @@ export default function MovieDetails() {
               </h1>
 
               <div className="movie-meta">
-                <div className="rating-stars">
-                  {renderStars(movie.vote_average)} (
-                  {movie.vote_average.toFixed(1)}/10)
-                </div>
+              <div className="tmdb-rating">
+                    <FaStar className="star-icon" />
+                    <span>{movie.vote_average?.toFixed(1)}/10</span>
+                  </div>
 
+                  <span className="views">
+                    <FaEye /> {Math.round(movie.popularity)} Views
+                  </span>
+
+                <div className="clearfix"></div>
+                <br/>
                 <div className="cont-movie-details">
                   <span>{new Date(movie.release_date).getFullYear()}</span>
                   <span>{formatRuntime(movie.runtime)}</span>
@@ -152,7 +167,10 @@ export default function MovieDetails() {
                 </div>
               </div>
 
-              <p className="synopsis">{movie.overview}</p>
+              <div className="overview">
+                <h3>Overview</h3>
+                <p>{movie.overview}</p>
+              </div>
 
               <div className="cast-crew">{<MovieCredits movieId={id} />}</div>
             </div>
@@ -166,40 +184,7 @@ export default function MovieDetails() {
             </section>
 
             <section className="review-section">
-              <h3>Be the first to review "{movie.title}"</h3>
-              <Form className="review-form">
-                <Form.Group className="mb-3">
-                  <Form.Label>Your review *</Form.Label>
-                  <Form.Control as="textarea" rows={4} className="" />
-                </Form.Group>
-
-                <Row>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Name *</Form.Label>
-                      <Form.Control type="text" className="" />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Email *</Form.Label>
-                      <Form.Control type="email" className="" />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                <Form.Group className="mb-3">
-                  <Form.Check
-                    type="checkbox"
-                    label="Save my name, email, and website in this browser for the next time I comment."
-                    className="text-light"
-                  />
-                </Form.Group>
-
-                <Button variant="primary" className="submit-btn">
-                  Submit
-                </Button>
-              </Form>
+              <Reviews movieId={id} loggedInUserId={user.id} movieTitle={movie.title} />
             </section>
           </Col>
         </Row>

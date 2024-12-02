@@ -15,3 +15,9 @@ export const getUserFromSession = () => {
     ? JSON.parse(userFromSessionStorage)
     : { id: "", email: "", token: "" };
 };
+
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const options = { day: '2-digit', month: 'short', year: 'numeric' }; // Format: 18 APR 2024
+  return date.toLocaleDateString('en-US', options).toUpperCase();
+};

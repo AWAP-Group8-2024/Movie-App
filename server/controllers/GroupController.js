@@ -270,18 +270,24 @@ export const getAllGroupPosts = async (req, res) => {
   }
 };
 
-export const createPost = async (req, res) => {
+export const createPost = async (req, res, next) => {
   const { groupId } = req.params;
-  const { accountId } = req.body;
-  const { description } = req.body;
+  const { accountId, description } = req.body;
+
+  if (!description) {
+    return next(new ApiError("Missing required fields", 400));
+  }
 
   try {
+    console.log("Creating post:", { groupId, accountId, description });
     const result = await GroupModel.insertPost(groupId, accountId, description);
+    console.log("Post created successfully:", result.rows[0]);
     return res.status(200).json({
       message: "Post created successfully.",
       post: result.rows[0],
     });
   } catch (error) {
+    console.error("Error creating post:", error);
     return next(new ApiError("Server error while createPost", 500));
   }
 };
@@ -310,6 +316,21 @@ export const createGroupObj = (id, name, description, creator_id) => {
     description: description,
     creator_id: creator_id,
   };
+};
+
+export const updatePost = async (req, res) => {
+  const { groupId, postId } = req.params;
+  const { description } = req.body;
+
+  try {
+    const result = await GroupModel.updatePost(groupId, postId, description);
+    return res.status(200).json({
+      message: "Post updated successfully.",
+      post: result.rows[0],
+    });
+  } catch (error) {
+    return next(new ApiError("Server error while updatePost", 500));
+  }
 };
 
 export const isGroupNameValid = (groupName) => {

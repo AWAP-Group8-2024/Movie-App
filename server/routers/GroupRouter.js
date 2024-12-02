@@ -68,5 +68,6 @@ router.delete(
 router.get("/:groupId/posts", GroupController.getAllGroupPosts); // Get all posts
 router.post("/:groupId/posts", GroupController.createPost); // Create a post
 router.delete("/delete/:groupId/posts/:postId", GroupController.deletePost); // Delete a post
+router.put("/edit/:groupId/posts/:postId", GroupController.updatePost); // Edit a post
 
 export default router;

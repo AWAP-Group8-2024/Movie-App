@@ -9,6 +9,7 @@ function SocialSharing({ shareUrl, message, movie }) {
 
     const [showCreatePost, setShowCreatePost] = useState(false);
     const [group, setGroup] = useState(null);
+    console.log(shareUrl)
 
     return (
     

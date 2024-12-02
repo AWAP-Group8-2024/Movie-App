@@ -326,7 +326,9 @@ export const getGroupPosts = async (groupId) => {
   const headers = getAuthHeaders();
   if (!headers) return;
   try {
-    const response = await axios.get(`${API_URL}/api/group/${groupId}/posts`);
+    const response = await axios.get(`${API_URL}/api/group/${groupId}/posts`, {
+      headers,
+    });
     return response.data;
   } catch (error) {
     console.error(`Error fetching posts for group ${groupId}:`, error);
@@ -342,6 +344,7 @@ export const createGroupPost = async (groupId, postDescription) => {
     const response = await axios.post(`${API_URL}/api/group/${groupId}/posts`, {
       accountId,
       description: postDescription,
+      headers,
     });
     return response.data;
   } catch (error) {
@@ -363,7 +366,7 @@ export const updateGroupPost = async (groupId, postId, postDescription) => {
     console.error(`Error updating post for group ${groupId}:`, error);
     throw error;
   }
-}
+};
 
 export const deleteGroupPost = async (groupId, postId) => {
   const headers = getAuthHeaders();
@@ -376,6 +379,73 @@ export const deleteGroupPost = async (groupId, postId) => {
     return response.data;
   } catch (error) {
     console.error(`Error deleting post for group ${groupId}:`, error);
+    throw error;
+  }
+};
+
+// COMMENT SERVICES
+
+// Fetches comments for a post
+export const getCommentsByPostId = async (groupId, postId) => {
+  const headers = getAuthHeaders();
+  if (!headers) return;
+  try {
+    const response = await axios.get(`${API_URL}/api/group/${groupId}/posts/${postId}/comments`, {
+      headers,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching comments for post ${postId}:`, error);
+    throw error;
+  }
+};
+
+// Creates a comment for a post
+export const createComment = async (groupId, postId, commentText) => {
+  const headers = getAuthHeaders();
+  if (!headers) return;
+  try {
+    const response = await axios.post(`${API_URL}/api/group/${groupId}/posts/${postId}/comments`, {
+      content: commentText,
+    }, {
+      headers,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error creating comment for post ${postId}:`, error);
+    throw error;
+  }
+};
+
+// Updates a comment by its ID
+export const updateComment = async (groupId, postId, commentId, commentText) => {
+  const headers = getAuthHeaders();
+  if (!headers) return;
+  try {
+    const response = await axios.put(
+      `${API_URL}/api/group/${groupId}/posts/${postId}/comments/${commentId}`,
+      { content: commentText },
+      { headers }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating comment ${commentId}:`, error);
+    throw error;
+  }
+};
+
+// Deletes a comment by its ID
+export const deleteComment = async (groupId, postId, commentId) => {
+  const headers = getAuthHeaders();
+  if (!headers) return;
+  try {
+    const response = await axios.delete(
+      `${API_URL}/api/group/${groupId}/posts/${postId}/comments/${commentId}`,
+      { headers }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(`Error deleting comment ${commentId}:`, error);
     throw error;
   }
 };

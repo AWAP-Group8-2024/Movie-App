@@ -166,6 +166,9 @@ export default function Navigation() {
               <NavDropdown.Item as={Link} to="/groups/all">
                 View All Groups
               </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/groups/create">
+                Create Group
+              </NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Form

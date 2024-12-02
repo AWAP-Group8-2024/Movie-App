@@ -11,6 +11,7 @@ import ListCategories from "./components/ListCategories";
 import ListFiltered from "./components/ListFiltered";
 import GroupDetail from "./components/GroupComponents/GroupDetails";
 import GroupList from "./components/GroupComponents/GroupList";
+import CreateGroupForm from "./components/GroupComponents/CreateGroupForm";
 import FinKinoMovieError from "./components/FinKinoMovieError";
 import ListFinKino from "./components/ListFinKino";
 import ContentDetails from "./components/ContentDetails";
@@ -58,6 +59,7 @@ function App() {
                 path="/groups/user"
                 element={<GroupList fetchType="user" />}
               />
+              <Route path="/groups/create" element={<CreateGroupForm/>} />
               <Route
                 path="/finnkino/error/:id"
                 element={<FinKinoMovieError />}

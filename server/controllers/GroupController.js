@@ -184,14 +184,22 @@ export const leaveGroup = async (req, res, next) => {
 
 export const deleteGroupByGroupId = async (req, res, next) => {
   try {
-    const { groupId } = req.group.id;
+    const { groupId } = req.params;
     const group = await GroupModel.deleteGroupById(groupId);
+
+    if (!group) {
+      console.error(`Group with ID ${groupId} not found`); // Error log
+      return next(new ApiError("Group not found", 404));
+    }
+
     const response = {
       group: group,
       message: `Group '${group.name}' with ID ${group.id} deleted successfully.`,
     };
+
     return res.status(200).json(response);
   } catch (error) {
+    console.error("Error in deleteGroupByGroupId:", error); // Log error
     return next(new ApiError("Server error while deleteGroupByGroupId", 500));
   }
 };
@@ -260,13 +268,13 @@ export const removeMember = async (req, res, next) => {
   }
 };
 
-export const getAllGroupPosts = async (req, res) => {
+export const getAllGroupPosts = async (req, res, next) => {
   const { groupId } = req.params;
   try {
     const result = await GroupModel.selectAllPosts(groupId);
     return res.status(200).json(result.rows || []);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return next(new ApiError("Server error while getAllGroupPosts", 500));
   }
 };
 
@@ -279,33 +287,46 @@ export const createPost = async (req, res, next) => {
   }
 
   try {
-    console.log("Creating post:", { groupId, accountId, description });
     const result = await GroupModel.insertPost(groupId, accountId, description);
-    console.log("Post created successfully:", result.rows[0]);
     return res.status(200).json({
       message: "Post created successfully.",
       post: result.rows[0],
     });
   } catch (error) {
-    console.error("Error creating post:", error);
     return next(new ApiError("Server error while createPost", 500));
   }
 };
 
-export const deletePost = async (req, res) => {
-  const { groupId } = req.params;
-  const { postId } = req.params;
+export const deletePost = async (req, res, next) => {
+  const { groupId, postId } = req.params;
 
   try {
     const result = await GroupModel.deletePost(groupId, postId);
 
     if (result.rowCount === 0) {
-      return res.status(500).json({ error: error.message });
+      return next(new ApiError("Post not found", 404));
     }
-
     return res.status(200).json({ message: "Post deleted successfully." });
   } catch (error) {
     return next(new ApiError("Server error while deletePost", 500));
+  }
+};
+
+export const updatePost = async (req, res, next) => {
+  const { groupId, postId } = req.params;
+  const { description } = req.body;
+
+  try {
+    const result = await GroupModel.updatePost(groupId, postId, description);
+    if (result.rowCount === 0) {
+      return next(new ApiError("Post not found", 404));
+    }
+    return res.status(200).json({
+      message: "Post updated successfully.",
+      post: result.rows[0],
+    });
+  } catch (error) {
+    return next(new ApiError("Server error while updatePost", 500));
   }
 };
 
@@ -316,21 +337,6 @@ export const createGroupObj = (id, name, description, creator_id) => {
     description: description,
     creator_id: creator_id,
   };
-};
-
-export const updatePost = async (req, res) => {
-  const { groupId, postId } = req.params;
-  const { description } = req.body;
-
-  try {
-    const result = await GroupModel.updatePost(groupId, postId, description);
-    return res.status(200).json({
-      message: "Post updated successfully.",
-      post: result.rows[0],
-    });
-  } catch (error) {
-    return next(new ApiError("Server error while updatePost", 500));
-  }
 };
 
 export const isGroupNameValid = (groupName) => {

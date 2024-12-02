@@ -6,7 +6,7 @@ import avatar from '../components/images/avatar.png';
 import { formatDate } from "./utils.js";
 import {ShareButton } from "../UserComponents/ProfileComponents/BodyComponents/UserInfoCardComponents/Button.jsx";
 
-const url = process.env.REACT_APP_API_URL;
+const url = process.env.REACT_APP_BACKEND_URL;
 
 function Reviews({ movieId, loggedInUserId, movieTitle }) {
     const [reviews, setReviews] = useState([]);

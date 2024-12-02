@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createNewGroup } from "../../services/GroupServices";
 import { useNavigate } from "react-router-dom";
+import Navigation from "../Navigation";
 
 const CreateGroupForm = () => {
 	const [userId, setUserId] = useState(null);
@@ -51,10 +52,11 @@ const CreateGroupForm = () => {
 
 	return (
 		<div>
-			<h2 className="text-center mb-4">Create a New Group</h2>
+			<Navigation />
+			<h2 className="text-center mt-5 mb-4">Create a New Group</h2>
 			{error && <div className="alert alert-danger">{error}</div>}
 			{message && <div className="alert alert-success">{message}</div>}
-			<form onSubmit={handleSubmit} className="p-4 bg-light rounded">
+			<form onSubmit={handleSubmit} className="container mt-5">
 				<div className="mb-3">
 					<input
 						type="text"

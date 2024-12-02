@@ -280,19 +280,34 @@ export const getAllGroupPosts = async (req, res, next) => {
 
 export const createPost = async (req, res, next) => {
   const { groupId } = req.params;
-  const { accountId, description } = req.body;
+  const { description, contentId, contentType } = req.body;
+  const accountId = req.user.id; // Assuming user ID is passed from the authentication middleware
 
-  if (!description) {
+  console.log("Group ID:", groupId);
+  console.log("Account ID:", accountId);
+  console.log("Body:", req.body);
+
+  if (!groupId || !accountId || !description || !contentId || !contentType) {
     return next(new ApiError("Missing required fields", 400));
   }
 
+  const movieId = contentType === "movie" ? `m${contentId}` : `t${contentId}`; // Format movieId based on contentType
+
+  console.log("Generated movieId:", movieId); // Log the movieId for debugging
+
   try {
-    const result = await GroupModel.insertPost(groupId, accountId, description);
+    const result = await GroupModel.insertPost(
+      groupId,
+      accountId,
+      description,
+      movieId
+    ); // Pass only necessary fields
     return res.status(200).json({
       message: "Post created successfully.",
-      post: result.rows[0],
+      post: result,
     });
   } catch (error) {
+    console.error("Error in createPost:", error.message);
     return next(new ApiError("Server error while createPost", 500));
   }
 };
@@ -311,13 +326,32 @@ export const deletePost = async (req, res, next) => {
     return next(new ApiError("Server error while deletePost", 500));
   }
 };
-
 export const updatePost = async (req, res, next) => {
   const { groupId, postId } = req.params;
-  const { description } = req.body;
+  const { description, contentId, contentType } = req.body;
+
+  // Validate required fields
+  if (!description?.trim() || (!contentId && contentType)) {
+    return next(
+      new ApiError("Invalid input: description or content details missing", 400)
+    );
+  }
+
+  let movieId = null;
+  if (contentType && contentId) {
+    movieId = contentType === "movie" ? `m${contentId}` : `t${contentId}`;
+    if (!/^(t|m)[0-9]+$/.test(movieId)) {
+      return next(new ApiError("Invalid movie ID format", 400));
+    }
+  }
 
   try {
-    const result = await GroupModel.updatePost(groupId, postId, description);
+    const result = await GroupModel.updatePost(
+      groupId,
+      postId,
+      description.trim(),
+      movieId
+    );
     if (result.rowCount === 0) {
       return next(new ApiError("Post not found", 404));
     }
@@ -326,7 +360,7 @@ export const updatePost = async (req, res, next) => {
       post: result.rows[0],
     });
   } catch (error) {
-    return next(new ApiError("Server error while updatePost", 500));
+    return next(new ApiError("Server error while updating post", 500));
   }
 };
 

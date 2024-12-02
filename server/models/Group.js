@@ -177,19 +177,21 @@ export const selectAllPosts = async (groupId) => {
   }
 };
 
-export const insertPost = async (groupId, accountId, description) => {
+export const insertPost = async (groupId, accountId, description, movieId) => {
   try {
     const result = await pool.query(
-      "INSERT INTO group_post (group_id, writer_id, description) VALUES ($1,$2,$3) RETURNING *",
-      [groupId, accountId, description]
+      `INSERT INTO group_post (group_id, writer_id, description, movie_id)
+       VALUES ($1, $2, $3, $4) RETURNING *`,
+      [groupId, accountId, description, movieId] // Adjusted to only pass 4 parameters
     );
-    return result;
+    return result.rows[0]; // Returning the inserted post data
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    console.error("Database query failed:", error.message);
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
+
+
 
 export const deletePost = async (groupId, postId) => {
   try {
@@ -205,15 +207,17 @@ export const deletePost = async (groupId, postId) => {
   }
 };
 
-export const updatePost = async (groupId, postId, description) => {
+export const updatePost = async (groupId, postId, description, movie_id) => {
   try {
     const result = await pool.query(
-      "UPDATE group_post SET description = $1 WHERE group_id = $2 AND post_id = $3 RETURNING *",
-      [description, groupId, postId]
+"UPDATE group_post SET description = $1, movie_id = COALESCE($2, movie_id) WHERE group_id = $3 AND post_id = $4 RETURNING *",
+[description, movie_id, groupId, postId]
     );
     return result;
   } catch (error) {
+    console.error("Database query failed:", error.message); // Log the error
     return next(
+
       new ApiError("Internal server error while database queries.", 500)
     );
   }

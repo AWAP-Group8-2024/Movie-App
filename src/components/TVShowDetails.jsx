@@ -10,6 +10,7 @@ import "./TVShowDetails.css";
 import { useUser } from "../UserComponents/UserProvider";
 import { GoBookmark, GoBookmarkFill } from "react-icons/go";
 import { useFavorite } from "../UserComponents/FavoriteProvider";
+import Reviews from "./Reviews.jsx";
 
 export default function TVShowDetails() {
   const { mediaType, id } = useParams();
@@ -21,6 +22,7 @@ export default function TVShowDetails() {
   const [hover, setHover] = useState(0);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const { user } = useUser();
+  const [shareUrl, setShareUrl] = useState("");
   const {
     checkContentById,
     contentInFavorite,
@@ -81,6 +83,14 @@ export default function TVShowDetails() {
     }
   };
 
+
+  
+  useEffect(() => {
+    setShareUrl(window.location.href);
+  }, []);
+
+  console.log(shareUrl)
+
   useEffect(() => {
     const fetchFavoriteStatus = async () => {
       if (!user?.token || !show) return;
@@ -106,32 +116,6 @@ export default function TVShowDetails() {
       </div>
     );
 
-  const renderRatingStars = () => {
-    return (
-      <div className="star-rating">
-        {[...Array(5)].map((star, index) => {
-          const ratingValue = index + 1;
-          return (
-            <label key={index}>
-              <input
-                type="radio"
-                name="rating"
-                value={ratingValue}
-                onClick={() => setRating(ratingValue)}
-              />
-              <FaStar
-                className="star"
-                size={20}
-                color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
-                onMouseEnter={() => setHover(ratingValue)}
-                onMouseLeave={() => setHover(0)}
-              />
-            </label>
-          );
-        })}
-      </div>
-    );
-  };
 
   const renderSeasonsList = () => {
     const availableSeasons = show.seasons?.filter(
@@ -318,7 +302,7 @@ export default function TVShowDetails() {
                 {showShareOptions && (
                   <div className="social-buttons">
                     <SocialSharing
-                      url={window.location.href}
+                      url={shareUrl}
                       message={show.name}
                       movie={show}
                     />
@@ -401,59 +385,8 @@ export default function TVShowDetails() {
               </div>
 
               <section className="review-section">
-                <h3>Add Your Review</h3>
-                <Form className="review-form">
-                  <Form.Group className="mb-4">
-                    <Form.Label>Your Rating</Form.Label>
-                    {renderRatingStars()}
-                  </Form.Group>
-
-                  <Form.Group className="mb-4">
-                    <Form.Label>Your Review</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={4}
-                      placeholder="Write your review here..."
-                      className="dark-textarea"
-                    />
-                  </Form.Group>
-
-                  <Row>
-                    <Col md={6}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Your name"
-                          className="dark-input"
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                          type="email"
-                          placeholder="Your email"
-                          className="dark-input"
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-
-                  <Form.Group className="mb-4">
-                    <Form.Check
-                      type="checkbox"
-                      label="Save my information for next time"
-                      id="save-info"
-                    />
-                  </Form.Group>
-
-                  <Button variant="primary" className="submit-btn">
-                    Submit Review
-                  </Button>
-                </Form>
-              </section>
+              <Reviews movieId={id} loggedInUserId={user.id} movieTitle={show.title} />
+            </section>
             </div>
           </Col>
         </Row>

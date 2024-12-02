@@ -123,6 +123,66 @@
   .submit-btn:hover {
     background-color: #6942a3;
   }
+
+  
+/* Show Meta */
+.show-meta {
+  margin-bottom: 2rem;
+}
+
+.rating-stats {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.tmdb-rating {
+  display: flex;
+  float: left;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  padding-right: 35px;
+}
+
+.star-icon {
+  color: #ffd700;
+}
+
+.views {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+}
+
+.show-details {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+.show-details span:not(:last-child)::after {
+  content: "•";
+  margin-left: 1.5rem;
+}
+
+/* Overview */
+.overview {
+  margin-bottom: 2.5rem;
+}
+
+.overview h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.overview p {
+  line-height: 1.7;
+  color: #333;
+}
   
   /* Responsive  - media query  */
   @media (max-width: 768px) {

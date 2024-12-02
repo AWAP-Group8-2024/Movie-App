@@ -3,6 +3,7 @@ import cors from "cors";
 import favoriteRouter from "./routers/FavoriteRouter.js";
 import userRouter from "./routers/UserRouter.js";
 import groupRouter from "./routers/GroupRouter.js";
+import movieRouter from "./routers/MovieRouter.js";
 
 const port = process.env.PORT;
 const app = express();
@@ -19,6 +20,7 @@ app.get("/api/message", (req, res) => {
 app.use("/api/user", userRouter);
 app.use("/api/favorite", favoriteRouter);
 app.use("/api/group", groupRouter);
+app.use("/movie", movieRouter);
 
 // Global Error handling middleware
 app.use((err, req, res, next) => {

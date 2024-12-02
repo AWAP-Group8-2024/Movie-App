@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from "react";
 import {
 	getGroupByGroupId,
@@ -16,8 +18,7 @@ import Navigation from "../Navigation";
 import { useUser } from "../../UserComponents/UserProvider";
 import JoinRequestList from "./JoinRequestList";
 import "bootstrap/dist/css/bootstrap.min.css";
-import AttachItem from "./AttachItem";
-
+import CommentSection from "./CommentSection";
 const GroupDetails = () => {
 	const navigate = useNavigate();
 	const { groupId } = useParams();
@@ -369,12 +370,9 @@ const GroupDetails = () => {
 								placeholder="Write your post here..."
 							></textarea>
 						</div>
-						<AttachItem />
-						<div>
-							<button type="submit" className="btn btn-primary btn-sm">
-								Submit
-							</button>
-						</div>
+						<button type="submit" className="btn btn-primary btn-sm">
+							Submit
+						</button>
 					</form>
 
 					<h4 className="mt-4">Group Posts</h4>
@@ -410,11 +408,16 @@ const GroupDetails = () => {
 			) : (
 				// Post View
 				<>
-					<p className="card-text">{post.description}</p>
+					<strong className="card-text">{post.description}</strong>
 					<p className="card-subtitle text-muted">
 						<small>
-							Posted by {post.writer_id} on{" "}
-							{new Date(post.creation_date).toLocaleString()}
+							Posted by {post.firstname || post.writer_id} on{" "}
+							{new Date(post.creation_date).toLocaleString("en-US", {
+								day: "numeric",
+								month: "short",
+								hour: "2-digit",
+								minute: "2-digit",
+							})}
 						</small>
 					</p>
 					{(isOwner || post.writer_id === user?.id) && (
@@ -427,10 +430,9 @@ const GroupDetails = () => {
 							</button>
 							<button
 								className="btn btn-danger btn-sm"
-								onClick={async () => {
-									try {
+								onClick={async () => {				try {
 										await deleteGroupPost(groupId, post.post_id);
-										setPosts(posts.filter((p) => p.id !== post.post_id));
+										setPosts(posts.filter((p) => p.post_id !== post.post_id));
 										setMessage("Post deleted successfully.");
 										navigate(0);
 									} catch (err) {
@@ -444,7 +446,10 @@ const GroupDetails = () => {
 					)}
 				</>
 			)}
-		</div>
+									</div>
+									{/* Comment Section */}
+    <CommentSection groupId={groupId} postId={post.post_id} userId={user?.id} />
+ 
 	</div>
 ))}
 

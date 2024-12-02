@@ -359,7 +359,10 @@ export const updateGroupPost = async (groupId, postId, postDescription) => {
   try {
     const response = await axios.put(
       `${API_URL}/api/group/edit/${groupId}/posts/${postId}`,
-      { description: postDescription }
+      {
+        description: postDescription,
+        headers,
+      }
     );
     return response.data;
   } catch (error) {
@@ -374,7 +377,11 @@ export const deleteGroupPost = async (groupId, postId) => {
   try {
     const response = await axios.delete(
       `${API_URL}/api/group/delete/${groupId}/posts/${postId}`,
-      { groupId, postId }
+      {
+        groupId,
+        postId,
+        headers,
+      }
     );
     return response.data;
   } catch (error) {
@@ -390,9 +397,12 @@ export const getCommentsByPostId = async (groupId, postId) => {
   const headers = getAuthHeaders();
   if (!headers) return;
   try {
-    const response = await axios.get(`${API_URL}/api/group/${groupId}/posts/${postId}/comments`, {
-      headers,
-    });
+    const response = await axios.get(
+      `${API_URL}/api/group/${groupId}/posts/${postId}/comments`,
+      {
+        headers,
+      }
+    );
     return response.data;
   } catch (error) {
     console.error(`Error fetching comments for post ${postId}:`, error);
@@ -405,11 +415,15 @@ export const createComment = async (groupId, postId, commentText) => {
   const headers = getAuthHeaders();
   if (!headers) return;
   try {
-    const response = await axios.post(`${API_URL}/api/group/${groupId}/posts/${postId}/comments`, {
-      content: commentText,
-    }, {
-      headers,
-    });
+    const response = await axios.post(
+      `${API_URL}/api/group/${groupId}/posts/${postId}/comments`,
+      {
+        content: commentText,
+      },
+      {
+        headers,
+      }
+    );
     return response.data;
   } catch (error) {
     console.error(`Error creating comment for post ${postId}:`, error);
@@ -418,14 +432,18 @@ export const createComment = async (groupId, postId, commentText) => {
 };
 
 // Updates a comment by its ID
-export const updateComment = async (groupId, postId, commentId, commentText) => {
+export const updateComment = async (
+  groupId,
+  postId,
+  commentId,
+  commentText
+) => {
   const headers = getAuthHeaders();
   if (!headers) return;
   try {
     const response = await axios.put(
       `${API_URL}/api/group/${groupId}/posts/${postId}/comments/${commentId}`,
-      { content: commentText },
-      { headers }
+      { content: commentText, headers }
     );
     return response.data;
   } catch (error) {

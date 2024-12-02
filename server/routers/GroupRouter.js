@@ -2,7 +2,7 @@ import { Router } from "express";
 import dotenv from "dotenv";
 import * as GroupController from "../controllers/GroupController.js";
 import { auth, verifyCreatorIsValid } from "../helpers/auth.js";
-
+import * as CommentController from "../controllers/CommentController.js";
 dotenv.config();
 
 const router = Router();
@@ -73,5 +73,13 @@ router.delete(
   GroupController.deletePost
 ); // Delete a post
 router.put("/edit/:groupId/posts/:postId", auth, GroupController.updatePost); // Edit a post
+
+
+// group comments section
+router.get("/:groupId/posts/:postId/comments", auth, CommentController.getComments); // Get all comments for a post
+router.post("/:groupId/posts/:postId/comments", auth, CommentController.createComment); // Create a comment
+router.delete("/:groupId/posts/:postId/comments/:commentId", auth, CommentController.removeComment); // Delete a comment
+router.put("/:groupId/posts/:postId/comments/:commentId", auth, CommentController.editComment); // Update a comment
+router.get("/user/:userId/comments", auth, CommentController.getUserComments); // Get all comments by a specific user
 
 export default router;

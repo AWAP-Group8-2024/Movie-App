@@ -44,7 +44,7 @@ export default function List({ items, total_pages }) {
             if (event.target.checked) {
                 setGenreIdList([...genreIdList, element.id]);
             } else {
-                setGenreIdList(genreIdList.filter(item => !(item === element.id)));
+                setGenreIdList(genreIdList.filter(item => !(+item === element.id)));
             }
 
             setSearchButton(false);

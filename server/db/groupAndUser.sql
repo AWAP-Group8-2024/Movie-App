@@ -34,9 +34,13 @@ CREATE TABLE group_post (
   group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
   writer_id INTEGER REFERENCES account(id) ON DELETE CASCADE,
   post_id SERIAL PRIMARY KEY,
-  description varchar(255) not null,
-  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  description VARCHAR(255) NOT NULL,
+  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  movie_id VARCHAR(255),
+  CONSTRAINT chk_movie_id_format CHECK (movie_id ~ '^(t|m)[0-9]+$'),
+  CONSTRAINT unique_movie_id_per_group UNIQUE (group_id, movie_id)
 );
+
 
 CREATE TABLE join_requests (
     id SERIAL PRIMARY KEY,

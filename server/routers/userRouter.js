@@ -8,7 +8,7 @@ import {
   updateUserProfile,
   getGroupPendingRequests,
   passwordCheck,
-} from "../controllers/UserController.js";
+} from "../controllers/userController.js";
 
 import { auth } from "../helpers/auth.js";
 

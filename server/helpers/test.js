@@ -8,18 +8,19 @@ const { sign } = jwt;
 
 const __dirname = path.resolve();
 
-const initializeTestDb = async () => {
-  const sql = fs.readFileSync(path.resolve(__dirname, "db.sql"), "utf8");
+export const initializeDB = async () => {
+  const sqlPath = path.resolve(__dirname, "./db/init.sql");
+  const sql = fs.readFileSync(sqlPath, "utf8");
   try {
     await pool.query(sql);
-    console.log("Initialized successfully");
+    console.log("   Initialized successfully");
   } catch (error) {
     console.error("Error initializing the database:", error);
     throw error;
   }
 };
 
-const insertTestUser = async (email, password) => {
+export const insertTestUser = async (email, password) => {
   try {
     const hashedPassword = await hash(password, 10);
     await pool.query("INSERT INTO account (email, password) VALUES ($1, $2)", [
@@ -32,10 +33,7 @@ const insertTestUser = async (email, password) => {
   }
 };
 
-const getToken = (email) => {
+export const getToken = (email) => {
   const token = sign({ user: email }, process.env.JWT_SECRET);
-  // console.log("token from functuin:", token);
   return token;
 };
-
-export { initializeTestDb, insertTestUser, getToken };

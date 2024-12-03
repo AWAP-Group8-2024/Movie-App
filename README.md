@@ -18,7 +18,7 @@
 
 ## :rocket: Start
 
-#### In the root directory, you can run:
+### In the root directory, you can run:
 
 ```sh
 npm start
@@ -33,7 +33,7 @@ npm run build
 
 Builds the app for production to the `build` folder.
 
-#### In the server directory, you can run:
+### In the server directory, you can run:
 
 ```sh
 npm run devStart
@@ -47,13 +47,19 @@ npm run test
 
 Runs the test script for API.
 
+---
+
 ## :video_camera: Video Demostration
 
 tbd
 
+---
+
 ## :page_with_curl: API document
 
 The API document is called openAPI.json which is located on the /server folder,
+
+---
 
 ## :gear: Deployment on Azure Portal
 

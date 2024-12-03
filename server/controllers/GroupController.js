@@ -281,27 +281,22 @@ export const getAllGroupPosts = async (req, res, next) => {
 export const createPost = async (req, res, next) => {
   const { groupId } = req.params;
   const { description, contentId, contentType } = req.body;
-  const accountId = req.user.id; // Assuming user ID is passed from the authentication middleware
+  const accountId = req.user.id;
 
-  console.log("Group ID:", groupId);
-  console.log("Account ID:", accountId);
-  console.log("Body:", req.body);
+  console.log("Request Params Group ID:", groupId);
+  console.log("Request Body:", req.body);
 
-  if (!groupId || !accountId || !description || !contentId || !contentType) {
+  if (!groupId || !accountId || !description) {
     return next(new ApiError("Missing required fields", 400));
   }
 
-  const movieId = contentType === "movie" ? `m${contentId}` : `t${contentId}`; // Format movieId based on contentType
-
-  console.log("Generated movieId:", movieId); // Log the movieId for debugging
+  // Generate movie_id only if contentId and contentType are provided
+  const movieId = contentId && contentType
+    ? (contentType === "movie" ? `m${contentId}` : `t${contentId}`)
+    : null;
 
   try {
-    const result = await GroupModel.insertPost(
-      groupId,
-      accountId,
-      description,
-      movieId
-    ); // Pass only necessary fields
+    const result = await GroupModel.insertPost(groupId, accountId, description, movieId);
     return res.status(200).json({
       message: "Post created successfully.",
       post: result,
@@ -311,6 +306,8 @@ export const createPost = async (req, res, next) => {
     return next(new ApiError("Server error while createPost", 500));
   }
 };
+
+
 
 export const deletePost = async (req, res, next) => {
   const { groupId, postId } = req.params;

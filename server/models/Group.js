@@ -182,14 +182,15 @@ export const insertPost = async (groupId, accountId, description, movieId) => {
     const result = await pool.query(
       `INSERT INTO group_post (group_id, writer_id, description, movie_id)
        VALUES ($1, $2, $3, $4) RETURNING *`,
-      [groupId, accountId, description, movieId] // Adjusted to only pass 4 parameters
+      [groupId, accountId, description, movieId] // Pass null if movieId is not provided
     );
-    return result.rows[0]; // Returning the inserted post data
+    return result.rows[0];
   } catch (error) {
     console.error("Database query failed:", error.message);
     throw new ApiError("Internal server error while database queries.", 500);
   }
 };
+
 
 
 

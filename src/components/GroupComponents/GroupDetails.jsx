@@ -19,6 +19,7 @@ import { useUser } from "../../UserComponents/UserProvider";
 import JoinRequestList from "./JoinRequestList";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CommentSection from "./CommentSection";
+import AttachItem from "./AttachItem";
 const GroupDetails = () => {
 	const navigate = useNavigate();
 	const { groupId } = useParams();
@@ -370,6 +371,7 @@ const GroupDetails = () => {
 								placeholder="Write your post here..."
 							></textarea>
 						</div>
+						<AttachItem />
 						<button type="submit" className="btn btn-primary btn-sm">
 							Submit
 						</button>

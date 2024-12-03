@@ -336,14 +336,19 @@ export const getGroupPosts = async (groupId) => {
   }
 };
 
-export const createGroupPost = async (groupId, postDescription) => {
+export const createGroupPost = async (groupId, postDescription, movieId) => {
   const headers = getAuthHeaders();
   const accountId = getUserFromSession().id;
   if (!headers) return;
+
   try {
-    const response = await axios.post(`${API_URL}/api/group/${groupId}/posts`, {
+    const payload = {
       accountId,
       description: postDescription,
+      ...(movieId && { movie_id: movieId }), // Include movie_id if provided
+    };
+
+    const response = await axios.post(`${API_URL}/api/group/${groupId}/posts`, payload, {
       headers,
     });
     return response.data;
@@ -352,14 +357,20 @@ export const createGroupPost = async (groupId, postDescription) => {
     throw error;
   }
 };
-export const updateGroupPost = async (groupId, postId, postDescription) => {
+export const updateGroupPost = async (groupId, postId, postDescription, movieId) => {
   const headers = getAuthHeaders();
   if (!headers) return;
+
   try {
+    const payload = {
+      description: postDescription,
+      ...(movieId && { movie_id: movieId }), // Include movie_id if provided
+    };
+
     const response = await axios.put(
       `${API_URL}/api/group/edit/${groupId}/posts/${postId}`,
-      { description: postDescription },
-      { headers } // Headers passed correctly here
+      payload,
+      { headers }
     );
     return response.data;
   } catch (error) {

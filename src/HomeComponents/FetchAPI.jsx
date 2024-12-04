@@ -87,7 +87,7 @@ function fetchMovieAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[0].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[0].title}
@@ -106,7 +106,7 @@ function fetchMovieAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[1].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[1].title}
@@ -125,7 +125,7 @@ function fetchMovieAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[2].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[2].title}
@@ -144,7 +144,7 @@ function fetchMovieAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[3].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[3].title}
@@ -162,7 +162,7 @@ function fetchMovieAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[4].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[4].title}
@@ -180,7 +180,7 @@ function fetchMovieAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[5].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[5].title}
@@ -219,7 +219,7 @@ function fetchShowAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[0].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[0].name}
@@ -238,7 +238,7 @@ function fetchShowAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[1].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[1].name}
@@ -257,7 +257,7 @@ function fetchShowAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[2].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[2].name}
@@ -276,7 +276,7 @@ function fetchShowAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[3].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[3].name}
@@ -294,7 +294,7 @@ function fetchShowAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[4].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[4].name}
@@ -312,7 +312,7 @@ function fetchShowAPI(API, setter) {
                   ? noImage
                   : `https://image.tmdb.org/t/p/w500${items[5].poster_path}`
               }
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[5].name}
@@ -351,7 +351,7 @@ function fetchFinKinoEvents(API, setter) {
           >
             <img
               src={items[0].Images.EventLargeImagePortrait._text}
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[0].Title._text}
@@ -368,7 +368,7 @@ function fetchFinKinoEvents(API, setter) {
           >
             <img
               src={items[1].Images.EventLargeImagePortrait._text}
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[1].Title._text}
@@ -385,7 +385,7 @@ function fetchFinKinoEvents(API, setter) {
           >
             <img
               src={items[2].Images.EventLargeImagePortrait._text}
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[2].Title._text}
@@ -402,7 +402,7 @@ function fetchFinKinoEvents(API, setter) {
           >
             <img
               src={items[3].Images.EventLargeImagePortrait._text}
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[3].Title._text}
@@ -418,7 +418,7 @@ function fetchFinKinoEvents(API, setter) {
           >
             <img
               src={items[4].Images.EventLargeImagePortrait._text}
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[4].Title._text}
@@ -434,7 +434,7 @@ function fetchFinKinoEvents(API, setter) {
           >
             <img
               src={items[5].Images.EventLargeImagePortrait._text}
-              className="img-fluid p-1"
+              className="img-fluid rounded p-1"
               alt=""
             />
             {items[5].Title._text}

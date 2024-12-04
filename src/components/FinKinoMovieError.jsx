@@ -9,7 +9,7 @@ export default function FinKinoMovieError() {
         <div>
             <Navigation />
             <Row className='row-cols-auto justify-content-center'>
-                <Col className="fs-3">
+                <Col className="fs-3 p-4">
                     Couldn't find any info about the movie. But you can view it on <a href={`http://www.finnkino.fi/event/${id}`}>FinnKino official website</a>
                 </Col>
             </Row>

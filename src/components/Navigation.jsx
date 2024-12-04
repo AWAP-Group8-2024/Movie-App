@@ -201,7 +201,9 @@ export default function Navigation() {
                   <ListGroup.Item
                     key={item.id}
                     as={Link}
-                    to={`/${item.mediaType}/${item.id}`}
+                    onClick={() => {
+                      window.location.replace(`/${item.mediaType}/${item.id}`);
+                    }}
                     action
                     className="d-flex align-items-center"
                   >

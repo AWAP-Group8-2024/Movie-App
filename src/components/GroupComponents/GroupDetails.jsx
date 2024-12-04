@@ -438,7 +438,8 @@ const GroupDetails = () => {
 				<>
 					<Row className="d-flex justify-content-between">
 						<Col
-							xs={post.movie_id ? 9 : 12}
+							xs={post.movie_id ? 7 : 12}
+							md={post.movie_id ? 9 : 12}
 						>
 							<strong className="card-text">{post.description}</strong>
 						</Col>

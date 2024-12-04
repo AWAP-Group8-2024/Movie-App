@@ -20,7 +20,8 @@ export default function GroupPostMoviePoster({ contentId }) {
 
     return (
         <Col
-            xs={3}
+            xs={5}
+            md={3}
             className="text-center text-decoration-none text-dark"
             as={Link}
             to={`/${formateContentId().media_type}/${formateContentId().id}`}

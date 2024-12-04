@@ -1,4 +1,5 @@
 import * as FavoriteModel from "../models/Favorite.js";
+import { ApiError } from "../helpers/apiError.js";
 
 export const getFavoriteListByAuth = async (req, res, next) => {
   try {

@@ -161,8 +161,9 @@ describe(" Deleting account test", () => {
   const loginEndPoint = `${url}/api/user/login`;
 
   it("should return a 200 response for successful account deletion", async () => {
-    const testBody = { email: "test1@movieapp.com", password: "P1" };
-    const loginRes = await axios.post(loginEndPoint, testBody);
+    const testUser = { email: "testX@movieapp.com", password: "Password123" };
+    await testHelpers.insertTestUser(testUser);
+    const loginRes = await axios.post(loginEndPoint, testUser);
     const user = loginRes.data;
     const token = user.token;
 

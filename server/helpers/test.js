@@ -26,15 +26,15 @@ export const getToken = async (user) => {
   return token;
 };
 
-// export const insertTestUser = async (email, password) => {
-//   try {
-//     const hashedPassword = await hash(password, 10);
-//     await pool.query("INSERT INTO account (email, password) VALUES ($1, $2)", [
-//       email,
-//       hashedPassword,
-//     ]);
-//   } catch (error) {
-//     console.error("Error inserting test user:", error);
-//     throw error;
-//   }
-// };
+export const insertTestUser = async (user) => {
+  try {
+    const hashedPassword = await hash(user.password, 10);
+    await pool.query("INSERT INTO account (email, password) VALUES ($1, $2)", [
+      user.email,
+      hashedPassword,
+    ]);
+  } catch (error) {
+    console.error("Error inserting test user:", error);
+    throw error;
+  }
+};

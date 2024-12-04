@@ -174,26 +174,26 @@ export default function ProfilePage() {
     <div>
       <Navigation />
       <Container>
-        <>
-          {error ? (
-            <ErrorPage message={error} />
-          ) : (
-            <ProfileBody
-              profileData={profileData}
-              isEditing={isEditing}
-              editData={editData}
-              handleInputChange={handleInputChange}
-              isOwnProfile={isOwnProfile}
-              handleSave={handleSave}
-              handleCancel={handleCancel}
-              handleLogout={handleLogout}
-              setShowDeleteModal={setShowDeleteModal}
-              setIsEditing={setIsEditing}
-              handleShare={handleShare}
-              setCreateGroupModalIsOpen={setCreateGroupModalIsOpen}
-            />
-          )}
-        </>
+        {" "}
+        {error ? (
+          <ErrorPage message={error} />
+        ) : (
+          <ProfileBody
+            profileData={profileData}
+            isEditing={isEditing}
+            editData={editData}
+            handleInputChange={handleInputChange}
+            isOwnProfile={isOwnProfile}
+            handleSave={handleSave}
+            handleCancel={handleCancel}
+            handleLogout={handleLogout}
+            setShowDeleteModal={setShowDeleteModal}
+            setIsEditing={setIsEditing}
+            handleShare={handleShare}
+            setCreateGroupModalIsOpen={setCreateGroupModalIsOpen}
+          />
+        )}
+      </Container>
 
       <AccountDeleteModal
         showDeleteModal={showDeleteModal}
@@ -209,6 +209,6 @@ export default function ProfilePage() {
         setNewGroup={setNewGroup}
         handleGroupSubmit={handleGroupSubmit}
       />
-    </Container>
+    </div>
   );
 }

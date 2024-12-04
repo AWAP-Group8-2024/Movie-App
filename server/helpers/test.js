@@ -19,3 +19,22 @@ export const initializeDB = async () => {
     throw error;
   }
 };
+
+export const getToken = async (user) => {
+  const payload = { id: user.id, email: user.email };
+  const token = sign(payload, process.env.JWT_SECRET);
+  return token;
+};
+
+// export const insertTestUser = async (email, password) => {
+//   try {
+//     const hashedPassword = await hash(password, 10);
+//     await pool.query("INSERT INTO account (email, password) VALUES ($1, $2)", [
+//       email,
+//       hashedPassword,
+//     ]);
+//   } catch (error) {
+//     console.error("Error inserting test user:", error);
+//     throw error;
+//   }
+// };

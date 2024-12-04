@@ -1,14 +1,6 @@
 import { Router } from "express";
 import dotenv from "dotenv";
-import {
-  registration,
-  login,
-  getUserProfile,
-  deleteUser,
-  updateUserProfile,
-  getGroupPendingRequests,
-  passwordCheck,
-} from "../controllers/userController.js";
+import * as UserController from "../controllers/userController.js";
 
 import { auth } from "../helpers/auth.js";
 
@@ -16,15 +8,19 @@ dotenv.config();
 
 const router = Router();
 
-router.post("/register", registration);
-router.post("/login", login);
+router.post("/register", UserController.registration);
+router.post("/login", UserController.login);
 
-router.get("/profile/:id", auth, getUserProfile);
-router.put("/profile/:id", auth, updateUserProfile);
+router.get("/profile/:id", auth, UserController.getUserProfile);
+router.put("/profile/:id", auth, UserController.updateUserProfile);
 
-router.post("/passwordCheck", auth, passwordCheck);
-router.delete("/deleteAccount", auth, deleteUser);
+router.post("/passwordCheck", auth, UserController.passwordCheck);
+router.delete("/deleteAccount", auth, UserController.deleteUser);
 
-router.get("/groupPendingRequests", auth, getGroupPendingRequests);
+router.get(
+  "/groupPendingRequests",
+  auth,
+  UserController.getGroupPendingRequests
+);
 
 export default router;

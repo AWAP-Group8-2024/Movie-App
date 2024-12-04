@@ -51,7 +51,6 @@ export const login = async (req, res, next) => {
 
     return res.status(200).json(createUserObj(user.id, user.email, token));
   } catch (error) {
-    console.log("Caught an error:", error);
     return next(new ApiError("Server error while login", 500));
   }
 };

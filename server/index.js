@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // test message
 app.get("/api/message", (req, res) => {
-  res.json({ message: "Test message from backend" });
+  res.json({ message: "Test message from backend!" });
 });
 
 app.use("/api/user", userRouter);

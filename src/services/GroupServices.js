@@ -336,7 +336,7 @@ export const getGroupPosts = async (groupId) => {
   }
 };
 
-export const createGroupPost = async (groupId, postDescription, movieId) => {
+export const createGroupPost = async (groupId, postDescription, movieId, mediaType) => {
   const headers = getAuthHeaders();
   const accountId = getUserFromSession().id;
   if (!headers) return;
@@ -345,7 +345,8 @@ export const createGroupPost = async (groupId, postDescription, movieId) => {
     const payload = {
       accountId,
       description: postDescription,
-      ...(movieId && { movie_id: movieId }), // Include movie_id if provided
+      ...(movieId && { contentId: movieId }), // Include movie_id if provided
+      ...(mediaType && { contentType: mediaType })
     };
 
     const response = await axios.post(`${API_URL}/api/group/${groupId}/posts`, payload, {

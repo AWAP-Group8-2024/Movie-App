@@ -35,6 +35,7 @@ const GroupDetails = () => {
 	const [showJoinRequest, setShowJoinRequest] = useState(false);
 	const [editingPost, setEditingPost] = useState(null);
 	const [updatedDescription, setUpdatedDescription] = useState("");
+	const [chosenMovie, setChosenMovie] = useState(null);
 	
 	useEffect(() => {
 		if (groupId) {
@@ -51,6 +52,7 @@ const GroupDetails = () => {
 					groupPosts.sort(
 						(a, b) => new Date(b.creation_date) - new Date(a.creation_date)
 					);
+					console.log(groupPosts);
 
 					setGroup(groupData);
 					setMembers(groupMembers);
@@ -350,7 +352,9 @@ const GroupDetails = () => {
 							try {
 								const newPost = await createGroupPost(
 									groupId,
-									postDescription
+									postDescription,
+									chosenMovie.content_id,
+									chosenMovie.media_type
 								);
 								setPosts([newPost, ...posts]);
 								e.target.reset();
@@ -371,7 +375,10 @@ const GroupDetails = () => {
 								placeholder="Write your post here..."
 							></textarea>
 						</div>
-						<AttachItem />
+						<AttachItem
+							chosenMovie={chosenMovie}
+							setChosenMovie={setChosenMovie}
+						/>
 						<button type="submit" className="btn btn-primary btn-sm">
 							Submit
 						</button>

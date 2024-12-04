@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { Modal, Button, Col, Row } from "react-bootstrap";
 import { useFavorite } from "../../UserComponents/FavoriteProvider";
 
-export default function AttachItem() {
+export default function AttachItem({ chosenMovie, setChosenMovie }) {
     const [show, setShow] = useState(false);
     const { getUserFavorites } = useFavorite();
     const [favorites, setFavorites] = useState([]);
-    const [chosenMovie, setChosenMovie] = useState(null);
 
     function getFavorites() {
         getUserFavorites(JSON.parse(sessionStorage.getItem('user')).id)

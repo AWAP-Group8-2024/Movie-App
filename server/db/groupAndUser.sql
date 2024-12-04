@@ -51,12 +51,12 @@ CREATE TABLE join_requests (
     response_date TIMESTAMP
 );
 
-INSERT INTO account (email, password) VALUES ('test1@123.com', '$2b$10$.bgHzCIBMOPDcSJ1LHpQgel7W5KlSg53ss9UIbtk1/Bq2r60Nwuu.');
-INSERT INTO account (email, password) VALUES ('test2@123.com', '$2b$10$V/kgVRzhzoS/BaxGqNT/.e8X7aeHToNyJkuckWrJVxDkEoWeouaqC');
-INSERT INTO account (email, password) VALUES ('test3@123.com', '$2b$10$XCncdULQh/pfmE1esyXiTeqJSHmOWHutaWkXMbGCRR6/XqV.EucLi');
-INSERT INTO account (email, password) VALUES ('test4@123.com', '$2b$10$LRr/wfzizgtkNVc43dBXO.1vklFtRTWG6sxHKpiIEVMoNVajMoSc.');
-INSERT INTO account (email, password) VALUES ('test5@123.com', '$2b$10$HqXkzyANdNq0.0CLvqVHWeDSJSuSYyv9y17G8xNs5hZIdIxFK/ZhK');
-INSERT INTO account (email, password) VALUES ('test6@123.com', '$2b$10$yiouJ7CNI1Qf4tswmc8Wr.4gdGXzVmvyTnFwwQDzqsTz/ulynPNuy');
+INSERT INTO account (email, password) VALUES ('test1@movieapp.com', '$2b$10$.bgHzCIBMOPDcSJ1LHpQgel7W5KlSg53ss9UIbtk1/Bq2r60Nwuu.');
+INSERT INTO account (email, password) VALUES ('test2@movieapp.com', '$2b$10$V/kgVRzhzoS/BaxGqNT/.e8X7aeHToNyJkuckWrJVxDkEoWeouaqC');
+INSERT INTO account (email, password) VALUES ('test3@movieapp.com', '$2b$10$XCncdULQh/pfmE1esyXiTeqJSHmOWHutaWkXMbGCRR6/XqV.EucLi');
+INSERT INTO account (email, password) VALUES ('test4@movieapp.com', '$2b$10$LRr/wfzizgtkNVc43dBXO.1vklFtRTWG6sxHKpiIEVMoNVajMoSc.');
+INSERT INTO account (email, password) VALUES ('test5@movieapp.com', '$2b$10$HqXkzyANdNq0.0CLvqVHWeDSJSuSYyv9y17G8xNs5hZIdIxFK/ZhK');
+INSERT INTO account (email, password) VALUES ('test6@movieapp.com', '$2b$10$yiouJ7CNI1Qf4tswmc8Wr.4gdGXzVmvyTnFwwQDzqsTz/ulynPNuy');
 
 INSERT INTO groups  (name, description, creator_id) 
 VALUES ('group1', 'group1 desc', 1), ('group2','group2 desc', 2), ('group3', 'group1 desc', 3);

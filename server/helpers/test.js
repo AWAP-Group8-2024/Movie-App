@@ -19,21 +19,3 @@ export const initializeDB = async () => {
     throw error;
   }
 };
-
-export const insertTestUser = async (email, password) => {
-  try {
-    const hashedPassword = await hash(password, 10);
-    await pool.query("INSERT INTO account (email, password) VALUES ($1, $2)", [
-      email,
-      hashedPassword,
-    ]);
-  } catch (error) {
-    console.error("Error inserting test user:", error);
-    throw error;
-  }
-};
-
-export const getToken = (email) => {
-  const token = sign({ user: email }, process.env.JWT_SECRET);
-  return token;
-};

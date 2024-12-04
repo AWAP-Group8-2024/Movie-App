@@ -19,6 +19,7 @@ export const searchUserByEmail = async (email) => {
     ]);
     return result;
   } catch (error) {
+    console.log("Database query error:", error);
     return next(new ApiError("Server error while database queries", 500));
   }
 };

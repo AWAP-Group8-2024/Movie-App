@@ -211,7 +211,7 @@ export const deletePost = async (groupId, postId) => {
 export const updatePost = async (groupId, postId, description, movie_id) => {
   try {
     const result = await pool.query(
-"UPDATE group_post SET description = $1, movie_id = COALESCE($2, movie_id) WHERE group_id = $3 AND post_id = $4 RETURNING *",
+"UPDATE group_post SET description = $1, movie_id = $2 WHERE group_id = $3 AND post_id = $4 RETURNING *",
 [description, movie_id, groupId, postId]
     );
     return result;

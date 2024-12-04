@@ -38,7 +38,6 @@ CREATE TABLE group_post (
   creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   movie_id VARCHAR(255),
   CONSTRAINT chk_movie_id_format CHECK (movie_id ~ '^(t|m)[0-9]+$'),
-  CONSTRAINT unique_movie_id_per_group UNIQUE (group_id, movie_id)
 );
 
 

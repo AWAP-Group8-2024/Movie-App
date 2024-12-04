@@ -22,6 +22,7 @@ import { Col, Row } from "react-bootstrap";
 import CommentSection from "./CommentSection";
 import AttachItem from "./AttachItem";
 import GroupPostMoviePoster from "./GroupPostMoviePoster";
+import { formatePostContentId } from "../../services/GroupServices";
 const GroupDetails = () => {
 	const navigate = useNavigate();
 	const { groupId } = useParams();
@@ -38,6 +39,7 @@ const GroupDetails = () => {
 	const [editingPost, setEditingPost] = useState(null);
 	const [updatedDescription, setUpdatedDescription] = useState("");
 	const [chosenMovie, setChosenMovie] = useState(null);
+	const [editedMovie, setEditedMovie] = useState(null);
 	
 	useEffect(() => {
 		if (groupId) {
@@ -169,8 +171,18 @@ const GroupDetails = () => {
 		}
 	};
 	const handleEditPost = (post) => {
-		setEditingPost(post);
-		setUpdatedDescription(post.description); // Prefill with existing description
+		const formateContentId = () => formatePostContentId(post.movie_id);
+		fetch(`https://api.themoviedb.org/3/${formateContentId().media_type}/${formateContentId().id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`)
+		.then(res => res.json())
+		.then(json => {
+			setEditedMovie({
+				content_id: json.id,
+				title: json.title || json.name,
+				media_type: formateContentId().media_type
+			});
+			setEditingPost(post);
+			setUpdatedDescription(post.description); // Prefill with existing description
+		})
 	};
 	
 	const submitEditPost = async (e) => {
@@ -183,7 +195,9 @@ const GroupDetails = () => {
 			const updatedPost = await updateGroupPost(
 				groupId,
 				editingPost.post_id,
-				updatedDescription.trim()
+				updatedDescription.trim(),
+				editedMovie?.content_id,
+				editedMovie?.media_type
 			);
 			// Update posts with the edited post
 			setPosts(
@@ -402,6 +416,10 @@ const GroupDetails = () => {
 							rows="3"
 						></textarea>
 					</div>
+					<AttachItem
+						chosenMovie={editedMovie}
+						setChosenMovie={setEditedMovie}
+					/>
 					<div className="d-flex gap-2">
 						<button type="submit" className="btn btn-success btn-sm">
 							Save

@@ -358,14 +358,15 @@ export const createGroupPost = async (groupId, postDescription, movieId, mediaTy
     throw error;
   }
 };
-export const updateGroupPost = async (groupId, postId, postDescription, movieId) => {
+export const updateGroupPost = async (groupId, postId, postDescription, movieId, mediaType) => {
   const headers = getAuthHeaders();
   if (!headers) return;
 
   try {
     const payload = {
       description: postDescription,
-      ...(movieId && { movie_id: movieId }), // Include movie_id if provided
+      ...(movieId && { contentId: movieId }),
+      ...(mediaType && { contentType: mediaType })
     };
 
     const response = await axios.put(
@@ -476,3 +477,17 @@ export const deleteComment = async (groupId, postId, commentId) => {
     throw error;
   }
 };
+
+export function formatePostContentId(contentId) {
+  if (contentId[0] === 'm') {
+      return {
+          media_type: 'movie',
+          id: contentId.replace('m', '')
+      }
+  } else {
+      return {
+          media_type: 'tv',
+          id: contentId.replace('t', '')
+      }
+  }
+}

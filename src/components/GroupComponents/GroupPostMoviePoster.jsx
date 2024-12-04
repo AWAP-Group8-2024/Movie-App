@@ -1,23 +1,12 @@
 import { useState, useEffect } from "react";
 import { Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { formatePostContentId } from "../../services/GroupServices";
 
 export default function GroupPostMoviePoster({ contentId }) {
     const [movie, setMovie] = useState('');
 
-    function formateContentId() {
-        if (contentId[0] === 'm') {
-            return {
-                media_type: 'movie',
-                id: contentId.replace('m', '')
-            }
-        } else {
-            return {
-                media_type: 'tv',
-                id: contentId.replace('t', '')
-            }
-        }
-    }
+    const formateContentId = () => formatePostContentId(contentId);
 
     function getPoster() {
         fetch(`https://api.themoviedb.org/3/${formateContentId().media_type}/${formateContentId().id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`)

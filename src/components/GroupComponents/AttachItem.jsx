@@ -30,7 +30,7 @@ export default function AttachItem({ chosenMovie, setChosenMovie }) {
         >
             <Modal.Header closeButton>
             <Modal.Title id="ChoosingItem">
-                Choose movie or tv show
+                Choose movie or tv show from your favorites
             </Modal.Title>
             </Modal.Header>
             <Modal.Body>

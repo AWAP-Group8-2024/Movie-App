@@ -345,7 +345,7 @@ export const createGroupPost = async (groupId, postDescription, movieId, mediaTy
     const payload = {
       accountId,
       description: postDescription,
-      ...(movieId && { contentId: movieId }), // Include movie_id if provided
+      ...(movieId && { contentId: movieId }),
       ...(mediaType && { contentType: mediaType })
     };
 

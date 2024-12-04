@@ -18,8 +18,10 @@ import Navigation from "../Navigation";
 import { useUser } from "../../UserComponents/UserProvider";
 import JoinRequestList from "./JoinRequestList";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Col, Row } from "react-bootstrap";
 import CommentSection from "./CommentSection";
 import AttachItem from "./AttachItem";
+import GroupPostMoviePoster from "./GroupPostMoviePoster";
 const GroupDetails = () => {
 	const navigate = useNavigate();
 	const { groupId } = useParams();
@@ -52,7 +54,6 @@ const GroupDetails = () => {
 					groupPosts.sort(
 						(a, b) => new Date(b.creation_date) - new Date(a.creation_date)
 					);
-					console.log(groupPosts);
 
 					setGroup(groupData);
 					setMembers(groupMembers);
@@ -353,8 +354,8 @@ const GroupDetails = () => {
 								const newPost = await createGroupPost(
 									groupId,
 									postDescription,
-									chosenMovie.content_id,
-									chosenMovie.media_type
+									chosenMovie?.content_id,
+									chosenMovie?.media_type
 								);
 								setPosts([newPost, ...posts]);
 								e.target.reset();
@@ -417,7 +418,14 @@ const GroupDetails = () => {
 			) : (
 				// Post View
 				<>
-					<strong className="card-text">{post.description}</strong>
+					<Row className="d-flex justify-content-between">
+						<Col
+							xs={post.movie_id ? 9 : 12}
+						>
+							<strong className="card-text">{post.description}</strong>
+						</Col>
+						{post.movie_id ? <GroupPostMoviePoster contentId={post.movie_id}/> : null}
+					</Row>
 					<p className="card-subtitle text-muted">
 						<small>
 							Posted by {post.firstname || post.writer_id} on{" "}

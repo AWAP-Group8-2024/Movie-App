@@ -30,13 +30,39 @@ export default function List({ items, total_pages }) {
     const [body, setBody] = useState(null);
 
     let turnPage = (
-        <Row className="justify-content-center row-cols-auto">
-            {page === 1 ? null :
-            <Col as={Link} onClick={() => {window.location.replace(window.location.href.replace(`page=${page}`, `page=${page - 1}`))}} className="text-decoration-none text-dark">{`<-`}</Col>}
-            <Col>{page}</Col>
-            {page >= total_pages ? null :
-            <Col as={Link} onClick={() => {window.location.replace(window.location.href.replace(`page=${page}`, `page=${page + 1}`))}} className="text-decoration-none text-dark">{`->`}</Col>}
-        </Row>
+        <div
+            className="justify-content-center d-flex w-100 mt-3 mb-4"
+        >
+
+            <Col
+                xs={1}
+                as={Link}
+                onClick={() => {
+                    window.location.replace(window.location.href.replace(`page=${page}`, `page=${page - 1}`))
+                }}
+                className="text-decoration-none text-dark text-center fw-bold"
+            >
+                {page === 1 ? null : `<`}
+            </Col>
+
+            <Col
+                xs={1}
+                className="text-center"
+            >
+                {page}
+            </Col>
+
+            <Col
+                xs={1}
+                as={Link}
+                onClick={() => {
+                    window.location.replace(window.location.href.replace(`page=${page}`, `page=${page + 1}`))
+                }}
+                className="text-decoration-none text-dark text-center fw-bold"
+            >
+                {page >= total_pages ? null : `>`}
+            </Col>
+        </div>
     );
 
     function createGenreFilter(element) {
@@ -51,9 +77,18 @@ export default function List({ items, total_pages }) {
         }
 
         filterGenres.push(
-            <Col key={element.id}>
-                <input type="checkbox" className="me-2" onChange={checkClick} defaultChecked={currentGenres ? currentGenres.includes(element.id.toString()) : false}/>
-                <label>{element.name}</label>
+            <Col
+                key={element.id}
+            >
+                <input
+                    type="checkbox"
+                    className="me-2"
+                    onChange={checkClick}
+                    defaultChecked={currentGenres ? currentGenres.includes(element.id.toString()) : false}
+                />
+                <label>
+                    {element.name}
+                </label>
             </Col>
         );
     }
@@ -103,10 +138,26 @@ export default function List({ items, total_pages }) {
         let setter = [];
         items.forEach((element, i) => {
             setter.push(
-                <Col xs={6} md={3} className="text-decoration-none text-dark p-2" as={Link} to={element.title ? `/movie/${element.id}` : `/tv/${element.id}`} key={i}>
-                    <div className="border border-1 border-dark rounded p-2 text-center h-100 d-flex flex-column">
-                        <img src={element.poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${element.poster_path}`} alt="failed to load poster" className="img-fluid p-1"/>
-                        <div className="mt-auto">{element.title ? element.title : element.name}</div>
+                <Col
+                    xs={6}
+                    md={3}
+                    className="text-decoration-none text-dark p-2"
+                    as={Link}
+                    to={element.title ? `/movie/${element.id}` : `/tv/${element.id}`} key={i}
+                >
+                    <div
+                        className="border border-1 border-dark rounded p-2 text-center h-100 d-flex flex-column"
+                    >
+                        <img
+                            src={element.poster_path === null ? noImage : `https://image.tmdb.org/t/p/w500${element.poster_path}`}
+                            alt="failed to load poster"
+                            className="img-fluid p-1"
+                        />
+                        <div
+                            className="mt-auto"
+                        >
+                            {element.title ? element.title : element.name}
+                        </div>
                     </div>
                 </Col> 
             );
@@ -159,48 +210,52 @@ export default function List({ items, total_pages }) {
 
     if (!window.location.href.includes('finnkino') && !window.location.href.includes('search')) {
         filters = (
-            <Accordion defaultActiveKey={genreIdList.length === 0 && (currentYear === '' || currentYear == null) && rating === 0 ? '' : '0'}>
-                <Accordion.Item eventKey="0">
-                    <Accordion.Header><Col className="fs-3">Filters</Col></Accordion.Header>
-                    <Accordion.Body>
-                        <Row className="row-cols-auto">
-                            <Col className="fs-4">
-                                Genres:
-                            </Col>
-                        </Row>
-                        <Row className="row-cols-auto">
-                            {filterGenres}
-                        </Row>
-                        <Row className="row-cols-auto">
-                            <Col className="fs-4">
-                                Release year:
-                            </Col>
-                        </Row>
-                        <Row className="row-cols-auto">
-                            {filterYear}
-                        </Row>
-                        <Row className="row-cols-auto">
-                            <Col className="fs-4">
-                                Rating:
-                            </Col>
-                        </Row>
-                        <Row className="row-cols-auto">
-                            <Col className="fs-4">{stars}</Col>
-                        </Row>
-                        <Row className="justify-content-center row-cols-auto">
-                            <Col>
-                                <Button variant="outline-dark" disabled={searchButton} onClick={() => {
-                                    if (condition.includes('tv')) {
-                                        window.location.replace(`/filtered/tv?genres=${genreIdList.join(',')}&year=${year}&rating=${rating}&page=1`)
-                                    } else {
-                                        window.location.replace(`/filtered/movie?genres=${genreIdList.join(',')}&year=${year}&rating=${rating}&page=1`)
-                                    }
-                                }}>Show results</Button>
-                            </Col>
-                        </Row>
-                    </Accordion.Body>
-                </Accordion.Item>
-            </Accordion>
+            <Container
+                className="mt-3 mb-2"
+            >
+                <Accordion defaultActiveKey={genreIdList.length === 0 && (currentYear === '' || currentYear == null) && rating === 0 ? '' : '0'}>
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header><Col className="fs-3">Filters</Col></Accordion.Header>
+                        <Accordion.Body>
+                            <Row className="row-cols-auto">
+                                <Col className="fs-4">
+                                    Genres:
+                                </Col>
+                            </Row>
+                            <Row className="row-cols-auto">
+                                {filterGenres}
+                            </Row>
+                            <Row className="row-cols-auto">
+                                <Col className="fs-4">
+                                    Release year:
+                                </Col>
+                            </Row>
+                            <Row className="row-cols-auto">
+                                {filterYear}
+                            </Row>
+                            <Row className="row-cols-auto">
+                                <Col className="fs-4">
+                                    Rating:
+                                </Col>
+                            </Row>
+                            <Row className="row-cols-auto">
+                                <Col className="fs-4">{stars}</Col>
+                            </Row>
+                            <Row className="justify-content-center row-cols-auto">
+                                <Col>
+                                    <Button variant="outline-dark" disabled={searchButton} onClick={() => {
+                                        if (condition.includes('tv')) {
+                                            window.location.replace(`/filtered/tv?genres=${genreIdList.join(',')}&year=${year}&rating=${rating}&page=1`)
+                                        } else {
+                                            window.location.replace(`/filtered/movie?genres=${genreIdList.join(',')}&year=${year}&rating=${rating}&page=1`)
+                                        }
+                                    }}>Show results</Button>
+                                </Col>
+                            </Row>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+            </Container>
         )
     }
 

@@ -174,43 +174,45 @@ export default function ProfilePage() {
   };
 
   return (
-    <Container>
+    <div>
       <Navigation />
-      <>
-        {error ? (
-          <ErrorPage message={error} />
-        ) : (
-          <ProfileBody
-            profileData={profileData}
-            isEditing={isEditing}
-            editData={editData}
-            handleInputChange={handleInputChange}
-            isOwnProfile={isOwnProfile}
-            handleSave={handleSave}
-            handleCancel={handleCancel}
-            handleLogout={handleLogout}
-            setShowDeleteModal={setShowDeleteModal}
-            setIsEditing={setIsEditing}
-            handleShare={handleShare}
-            setCreateGroupModalIsOpen={setCreateGroupModalIsOpen}
-          />
-        )}
-      </>
+      <Container>
+        <>
+          {error ? (
+            <ErrorPage message={error} />
+          ) : (
+            <ProfileBody
+              profileData={profileData}
+              isEditing={isEditing}
+              editData={editData}
+              handleInputChange={handleInputChange}
+              isOwnProfile={isOwnProfile}
+              handleSave={handleSave}
+              handleCancel={handleCancel}
+              handleLogout={handleLogout}
+              setShowDeleteModal={setShowDeleteModal}
+              setIsEditing={setIsEditing}
+              handleShare={handleShare}
+              setCreateGroupModalIsOpen={setCreateGroupModalIsOpen}
+            />
+          )}
+        </>
 
-      <AccountDeleteModal
-        showDeleteModal={showDeleteModal}
-        setShowDeleteModal={setShowDeleteModal}
-        handleDelete={handleDelete}
-        userConfirm={userConfirm}
-        setUserConfirm={setUserConfirm}
-      />
-      <CreateGroupModal
-        showCreateGroupModal={createGroupModalIsOpen}
-        setShowCreateGroupModal={setCreateGroupModalIsOpen}
-        newGroup={newGroup}
-        setNewGroup={setNewGroup}
-        handleGroupSubmit={handleGroupSubmit}
-      />
-    </Container>
+        <AccountDeleteModal
+          showDeleteModal={showDeleteModal}
+          setShowDeleteModal={setShowDeleteModal}
+          handleDelete={handleDelete}
+          userConfirm={userConfirm}
+          setUserConfirm={setUserConfirm}
+        />
+        <CreateGroupModal
+          showCreateGroupModal={createGroupModalIsOpen}
+          setShowCreateGroupModal={setCreateGroupModalIsOpen}
+          newGroup={newGroup}
+          setNewGroup={setNewGroup}
+          handleGroupSubmit={handleGroupSubmit}
+        />
+      </Container>
+    </div>
   );
 }

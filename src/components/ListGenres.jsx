@@ -1,4 +1,4 @@
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col, Container, Button } from "react-bootstrap";
 import { movieGenres } from "./movieGenres";
 import Navigation from "./Navigation";
 import { Link } from "react-router-dom";
@@ -12,17 +12,30 @@ export default function ListGenres() {
             for (let n = 0; n < 4; n++) {
                 if (movieGenres[i * 4 + n]) {
                     row.push(
-                        <Col key={i * 4 + n} xs={6} md={3} className='text-decoration-none text-dark p-2 fw-bold fs-4'  as={Link} to={`/filtered/movie?genres=${movieGenres[i * 4 + n].id}&page=1`}>
-                            <div className='border border-1 border-dark rounded p-2 h-100 d-flex align-items-center justify-content-center text-center'>
+                        <Col
+                            key={i * 4 + n}
+                            xs={6}
+                            md={3}
+                            className="p-2"
+                        >
+                            <Button
+                                className='h-100 w-100 d-flex justify-content-center align-items-center fs-4 fw-bold'
+                                as={Link}
+                                to={`/filtered/movie?genres=${movieGenres[i * 4 + n].id}&page=1`}
+                                variant="outline-dark"
+                            >
                                 {movieGenres[i * 4 + n].name}
-                            </div>
+                            </Button>
                         </Col>
                     );
                     
                 }
             }
             body.push(
-                <Row key={i} className="d-flex justify-content-around mb-3 flex-grow-1">
+                <Row
+                    key={i}
+                    className="d-flex justify-content-around mb-3 flex-grow-1"
+                >
                     {row}
                 </Row>
             );

@@ -54,6 +54,14 @@ export default function AttachItem({ chosenMovie, setChosenMovie }) {
                             {element.title}
                         </Col>
                     ))}
+                    {favorites.length === 0 ?
+                    <Col
+                        className="text-center"
+                    >
+                        You have no movies in your favorite list.
+                        You can find something you enjoy <a href="/list/movie_popular?page=1">here</a>
+                    </Col> :
+                    null}
                 </Row>
             </Modal.Body>
             {chosenMovie ?

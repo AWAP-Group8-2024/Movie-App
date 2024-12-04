@@ -9,7 +9,7 @@ export default function FinKinoMovies() {
     useEffect(() => {fetchFinKinoEvents(`https://www.finnkino.fi/xml/Events/`, setPosterList)}, []);
 
     return (
-        <Container className="border border-1 border-dark rounded mt-5">
+        <Container className="border border-1 border-dark rounded mt-5 mb-5">
             <Row className="fs-4 row-cols-auto d-flex justify-content-between">
                 <Col className="text-start fw-bold">
                     Watch in FinKino

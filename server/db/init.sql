@@ -9,7 +9,6 @@ DROP TABLE IF EXISTS account;
 COMMIT;
 
 BEGIN;
-
 CREATE TABLE account (
     id SERIAL PRIMARY KEY,
     email VARCHAR(50) UNIQUE NOT NULL,
@@ -37,8 +36,10 @@ CREATE TABLE group_post (
   group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
   writer_id INTEGER REFERENCES account(id) ON DELETE CASCADE,
   post_id SERIAL PRIMARY KEY,
-  description varchar(255) not null,
-  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  description VARCHAR(255) NOT NULL,
+  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  movie_id VARCHAR(255),
+  CONSTRAINT chk_movie_id_format CHECK (movie_id ~ '^(t|m)[0-9]+$')
 );
 
 CREATE TABLE join_requests (
@@ -69,17 +70,18 @@ CREATE TABLE review (
     reviewer_email VARCHAR(50) NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+COMMIT;
 
+BEGIN;
 
+INSERT INTO account (email, password) VALUES ('test1@movieapp.com', '$2a$10$YLdwZAOK8qik1txBTMmFpesuL.tcZUqRg.nK7FnKII3RQ3nInhzUq');
+INSERT INTO account (email, password) VALUES ('test2@movieapp.com', '$2a$10$VGvrQ4yMitvFbJHp7mXymeR5UQIOTP0iSr3xRC9q2GKO1enWXxRe.');
+INSERT INTO account (email, password) VALUES ('test3@movieapp.com', '$2a$10$MbHf12hmdVAi3o4dbhTVue0yKJY/xXCfEKOydmGhaCi9sE0tOPDe2');
+INSERT INTO account (email, password) VALUES ('test4@movieapp.com', '$2a$10$.fd0u2XdtZZ8AEC7C12uj.muHY2aeqrCUZ6K18YpaM4gCBMkQBlAa');
+INSERT INTO account (email, password) VALUES ('test5@movieapp.com', '$2a$10$/OTHt5rQqYgBJEwzn0PcbuO5mJA2ekWSFJUDsbq0iaELqT/51ozJ6');
+INSERT INTO account (email, password) VALUES ('test6@movieapp.com', '$2a$10$aMGxZ8QN6yTZK.MjxAKX8uKvVSlw2rDeUq8Xt1W7bEyfCkYEPEJNi');
 
-INSERT INTO account (email, password) VALUES ('test1@movieapp.com', '$2b$10$.bgHzCIBMOPDcSJ1LHpQgel7W5KlSg53ss9UIbtk1/Bq2r60Nwuu.');
-INSERT INTO account (email, password) VALUES ('test2@movieapp.com', '$2b$10$V/kgVRzhzoS/BaxGqNT/.e8X7aeHToNyJkuckWrJVxDkEoWeouaqC');
-INSERT INTO account (email, password) VALUES ('test3@movieapp.com', '$2b$10$XCncdULQh/pfmE1esyXiTeqJSHmOWHutaWkXMbGCRR6/XqV.EucLi');
-INSERT INTO account (email, password) VALUES ('test4@movieapp.com', '$2b$10$LRr/wfzizgtkNVc43dBXO.1vklFtRTWG6sxHKpiIEVMoNVajMoSc.');
-INSERT INTO account (email, password) VALUES ('test5@movieapp.com', '$2b$10$HqXkzyANdNq0.0CLvqVHWeDSJSuSYyv9y17G8xNs5hZIdIxFK/ZhK');
-INSERT INTO account (email, password) VALUES ('test6@movieapp.com', '$2b$10$yiouJ7CNI1Qf4tswmc8Wr.4gdGXzVmvyTnFwwQDzqsTz/ulynPNuy');
-
-INSERT INTO groups  (name, description, creator_id) 
+INSERT INTO groups (name, description, creator_id) 
 VALUES ('group1', 'group1 desc', 1), ('group2','group2 desc', 2), ('group3', 'group1 desc', 3);
 
 INSERT INTO group_account (group_id, account_id) VALUES (1, 1);
@@ -98,4 +100,22 @@ INSERT INTO join_requests (group_id, account_id) VALUES (3, 6);
 
 INSERT INTO group_post (group_id, writer_id, description) VALUES (1, 1, 'post1');
 INSERT INTO group_post (group_id, writer_id,  description) VALUES (2, 2, 'post2');
+
+INSERT INTO favorite (id, account_id, content_id, title, media_type, poster_path, added_date)
+VALUES
+    (1, 1, 912649, 'Venom: The Last Dance', 'movie', '/aosm8NMQ3UyoBVpSxyimorCQykC.jpg', '2024-12-04 18:47:55.266097'),
+    (2, 1, 1106739, 'Juror #2', 'movie', '/ugQkpGajKFQ8eyOEhGheR0HfWQ.jpg', '2024-12-04 18:47:59.352444'),
+    (3, 1, 1241982, 'Moana 2', 'movie', '/yh64qw9mgXBvlaWDi7Q9tpUBAvH.jpg', '2024-12-04 19:01:30.252438'),
+    (4, 1, 38715, 'Sinterklaasjournaal', 'tv', '/thOkUNMen2b4KJKeH2k02jNCcI2.jpg', '2024-12-04 19:01:35.048317'),
+    (5, 1, 402431, 'Wicked', 'movie', '/xDGbZ0JJ3mYaGKy4Nzd9Kph6M9L.jpg', '2024-12-04 19:01:38.594947'),
+    (6, 1, 645757, 'That Christmas', 'movie', '/bX6dx2U4hOk1esI7mYwtD3cEKdC.jpg', '2024-12-04 19:01:42.201784'),
+    (7, 1, 113779, 'Hallo Hessen', 'tv', '/zRGme9GL0H5RmwzxKYzoXafcRDp.jpg', '2024-12-04 19:01:45.674308'),
+    (8, 1, 248890, 'Ready Steady Cook South Africa', 'tv', '/30xX4IMbgnMbQwo76xM4BOSokZO.jpg', '2024-12-04 19:01:52.182516'),
+    (9, 1, 18770, 'Gran Hermano', 'tv', '/gQ0Emh2LT047Fip2HWye3NkrkQB.jpg', '2024-12-04 19:01:57.284802'),
+    (10, 1, 94722, 'Tagesschau', 'tv', '/7dFZJ2ZJJdcmkp05B9NWlqTJ5tq.jpg', '2024-12-04 19:02:01.064205'),
+    (11, 1, 261033, 'The Agent', 'tv', '/qUtgaa43jTELs0Tdw55aIukt9yn.jpg', '2024-12-04 19:02:05.548554'),
+    (12, 1, 791042, 'Levels', 'movie', '/y1xm0jMIlx9Oo2a3jWNyLGm43sJ.jpg', '2024-12-04 19:02:10.927379'),
+    (13, 1, 1034541, 'Terrifier 3', 'movie', '/63xYQj1BwRFielxsBDXvHIJyXVm.jpg', '2024-12-04 19:02:14.087972'),
+    (14, 1, 995803, 'Arena Wars', 'movie', '/4dRtXjk1rcsZlaMJpBn6Nh9cTfO.jpg', '2024-12-04 19:02:18.08618');
+
 COMMIT;

@@ -1,6 +1,7 @@
 import { pool } from "../helpers/db.js";
 
 export const insertUser = async (email, hashedPassword) => {
+  console.log("hashedPassword: ", hashedPassword);
   try {
     const result = await pool.query(
       "INSERT INTO account (email,password) values ($1,$2) returning *",

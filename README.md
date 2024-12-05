@@ -20,9 +20,11 @@
 
 - [Introduction](#bulb-introduction)
 - [Start](#rocket-start)
-- [Video Demostration](#video_camera-video-demostration)
+- [UI Diagram](#video_camera-video-demostration)
+- [Database Structure](#video_camera-video-demostration)
 - [API document](#page_with_curl-api-document)
 - [Deployment](#gear-deployment)
+- [Video Demostration](#video_camera-video-demostration)
 - [Contacts](#email-contacts)
 
 ## :bulb: Introduction
@@ -39,6 +41,8 @@ In this project, we use
 - <img src="https://img.shields.io/badge/Deployment-Azure Portal-008ad7">
 
 ## :rocket: Start
+
+#### :wrench: Install dependencies and create enviroment variables.
 
 ```sh
 # clone the repository.
@@ -76,16 +80,20 @@ DB_PORT = 5432
 JWT_SECRET = JWTSecretForEncryption
 ```
 
-To establish the database, we use **pgAdmin 4** in our case.
-**Make sure the databse parameters are matched with the .env file**
+#### :wrench: Establish database
+
+We use **pgAdmin 4** to establish the database in our project.
+Make sure the database parameters are matched with the .env file
+
 ![server name](/public/photo/db-1.png)
 ![server parameters](/public/photo/db-2.png)
 
-Initialize and create the database by executing the query commands which is in /server/db/init.sql
+#### :wrench: Initialize and create the database
+
 ![init db file](/public/photo/init-db-1.png)
 ![init db](/public/photo/init-db-2.png)
 
-To run the app for development.
+#### :wrench: Run the app for development.
 
 ```sh
 # run the backend under the server folder
@@ -96,24 +104,36 @@ npm run devStart
 npm start
 ```
 
-To run the backend test script.
+#### :wrench: Run the backend test script.
 
 ```sh
 cd server
 npm run test
+
 ```
+
+## :art: UI Diagram
+
+TDB
+
+## :floppy_disk: Database Structure
+
+TBD
 
 ## :video_camera: Video Demostration
 
-tbd
+TBD
 
 ## :page_with_curl: API document
 
 The openAPI.json describes the API specification for this project which is located under the **server** folder.
+![API document](/public/photo/API-document.png)
 
 ## :gear: Deployment
 
-##### GitHub Secrets are needed for deploying a static web app on Azure by using GitHub Actions - for frontend env
+#### :wrench: Create GitHub Secrets
+
+GitHub Secrets are necessary for deploying a static web app on Azure.
 
 ```sh
 # create GitHub secrets for GitHub Actions - for frontend
@@ -124,19 +144,24 @@ gh secret set REACT_APP_TMDB_API_KEY --body TheAPIKeyFromTMDB --env development
 gh secret list --env development
 ```
 
-##### Enviroment Variables are needed for deploying a web service on Azure by using GitHub Actions - for backend env
+#### :wrench: Enviroment Variables on Azure
+
+Establishing enviroment variables are necessary for deploying a web service on Azure.
 
 ![azure backend env](/public/photo/azureEnv.png)
+
+#### :tada: Visit our app on Azure!
 
 Of course you're very welcome to visit our site on Azure Portal and try it by yourself!
 This is our site. [Movie App](https://mango-rock-0b5b48e10.5.azurestaticapps.net/)
 
 ## :email: Contacts
 
-- **Email**: Send us your questions or support requests.
-  [Ahn Sungmin](mailto:asungmin24@students.oamk.fi)
-  [Egor Ugriumov](mailto:t3ugeg00@students.oamk.fi)
-  [Hamim Ifty](mailto:hifty24@students.oamk.fi)
-  [Jasintha Weerappu Hettiarachchige](mailto:t3weja00@students.oamk.fi)
-  [Roman Shrestha](mailto:t3shro00@students.oamk.fi)
-  [Sam Chou](mailto:t3chsa01@students.oamk.fi)
+**Send us your questions or support requests.**
+
+- [Ahn Sungmin](mailto:asungmin24@students.oamk.fi)
+- [Egor Ugriumov](mailto:t3ugeg00@students.oamk.fi)
+- [Hamim Ifty](mailto:hifty24@students.oamk.fi)
+- [Jasintha Weerappu Hettiarachchige](mailto:t3weja00@students.oamk.fi)
+- [Roman Shrestha](mailto:t3shro00@students.oamk.fi)
+- [Sam Chou](mailto:t3chsa01@students.oamk.fi)

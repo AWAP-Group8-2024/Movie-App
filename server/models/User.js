@@ -1,4 +1,5 @@
 import { pool } from "../helpers/db.js";
+import { ApiError } from "../helpers/apiError.js";
 
 export const insertUser = async (email, hashedPassword) => {
   console.log("hashedPassword: ", hashedPassword);
@@ -9,7 +10,7 @@ export const insertUser = async (email, hashedPassword) => {
     );
     return result;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -21,7 +22,7 @@ export const searchUserByEmail = async (email) => {
     return result;
   } catch (error) {
     console.log("Database query error:", error);
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -32,7 +33,7 @@ export const searchUserById = async (id) => {
     ]);
     return result;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -41,7 +42,7 @@ export const deleteUserById = async (id) => {
     const result = await pool.query("DELETE FROM account WHERE id = $1", [id]);
     return result;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -53,7 +54,7 @@ export const getGroupPendingRequestsById = async (id) => {
     );
     return result.rows;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -65,7 +66,7 @@ export const isEmailExisting = async (email) => {
     );
     return emailCheck.rowCount > 0;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -90,6 +91,6 @@ export const updateUserById = async (id, updateInfo) => {
     const result = await pool.query(query, values);
     return result.rows[0];
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };

@@ -1,5 +1,5 @@
 import { pool } from "../helpers/db.js";
-
+import { ApiError } from "../helpers/apiError.js";
 export const getFavoriteListByUserId = async (id) => {
   try {
     const result = await pool.query(
@@ -8,7 +8,7 @@ export const getFavoriteListByUserId = async (id) => {
     );
     return result;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -21,7 +21,7 @@ export const addContentToFavoriteList = async (id, content) => {
     );
     return result;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -34,7 +34,7 @@ export const isFavorite = async (id, content_id) => {
 
     return result.rowCount > 0;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -46,6 +46,6 @@ export const deleteFavorite = async (content_id) => {
     );
     return result;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };

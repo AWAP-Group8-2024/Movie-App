@@ -30,7 +30,6 @@ export const insertContentToFavorite = async (req, res, next) => {
         .status(400)
         .json({ message: "All content fields are required" });
     }
-
     const result = await FavoriteModel.addContentToFavoriteList(id, content);
     return res.status(200).json(result.rows || []);
   } catch (error) {

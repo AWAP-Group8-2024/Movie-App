@@ -1,4 +1,5 @@
 import { pool } from "../helpers/db.js";
+import { ApiError } from "../helpers/apiError.js";
 
 export const getReview = async (movieId) => {
   try {
@@ -10,7 +11,7 @@ export const getReview = async (movieId) => {
     );
     return result;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -28,7 +29,7 @@ export const addReview = async (
     );
     return result;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -42,7 +43,7 @@ export const editReview = async (id, description, rating) => {
     );
     return result;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -54,6 +55,6 @@ export const deleteReview = async (reviewId) => {
     );
     return result;
   } catch (error) {
-    return next(new ApiError("Server error while database queries", 500));
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };

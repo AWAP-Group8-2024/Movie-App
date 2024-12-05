@@ -19,7 +19,7 @@ export const insertComment = async (postId, accountId, content) => {
 export const getCommentsForPost = async (postId) => {
     try {
         const query = `
-            SELECT c.id, c.content, c.creation_date, a.firstname, a.lastname
+            SELECT c.id, c.writer_id, c.content, c.creation_date, a.firstname, a.lastname
             FROM comment c
             JOIN account a ON c.writer_id = a.id
             WHERE c.post_id = $1

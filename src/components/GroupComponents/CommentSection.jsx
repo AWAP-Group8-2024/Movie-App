@@ -59,9 +59,15 @@ const CommentSection = ({ groupId, postId, userId }) => {
       <h5 className="mb-4">Comments</h5>
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <div className="list-group">
+      <div
+        className="list-group overflow-auto"
+        style={comments.length > 2 ? {height: '225px'} : null}
+      >
         {comments.map((comment) => (
-          <div key={comment.id} className="list-group-item mb-3 p-3 shadow-sm rounded">
+          <div
+            key={comment.id}
+            className="list-group-item mb-3 p-3 shadow-sm rounded"
+          >
             <div className="d-flex justify-content-between align-items-center">
               <p className="mb-0">{comment.content}</p>
               {userId === comment.writer_id && (
@@ -74,7 +80,7 @@ const CommentSection = ({ groupId, postId, userId }) => {
               )}
             </div>
             <small className="text-muted">
-              Posted by {comment.firstname + " " + comment.lastname || comment.writer_id} on{" "}
+              Posted by {`${comment.firstname || ''} ${comment.lastname || ''}`.trim() || comment.writer_id} on{" "}
               {new Date(comment.creation_date).toLocaleString("en-US", {
 								day: "numeric",
 								month: "short",

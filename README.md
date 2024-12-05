@@ -18,12 +18,12 @@
 
 ## :books: Table of the content
 
-- [Introduction](#-Introduction)
-- [Start](#-Start)
-- [Video Demostration](#-Video-Demostration)
-- [API document](#-API-document)
-- [Deployment](#-Deployment)
-- [Contacts](#%EF%B8%8F-contacts)
+- [Introduction](#bulb-introduction)
+- [Start](#rocket-start)
+- [Video Demostration](#video_camera-video-demostration)
+- [API document](#page_with_curl-api-document)
+- [Deployment](#gear-deployment)
+- [Contacts](#email-contacts)
 
 ## :bulb: Introduction
 
@@ -34,10 +34,13 @@
 ```sh
 # clone the repository.
 git clone https://github.com/AWAP-Group8-2024/Movie-App
+
 # install the dependencies in the root folder for the frontend.
 npm install
+
 # change directory to the server folder.
 cd server
+
 # install the dependencies in the server folder for the backend.
 npm install
 
@@ -52,6 +55,7 @@ REACT_APP_BACKEND_URL = http://localhost:5000
 # create environment variables in the server folder for the backend.
 cd server
 echo  > .env
+
 # environment variables for the backend.
 PORT = 5000
 SERVER_URL = http://localhost:5000
@@ -77,6 +81,7 @@ npm start
 To run the backend test script.
 
 ```sh
+cd server
 npm run test
 ```
 
@@ -102,6 +107,7 @@ gh secret list --env development
 ```
 
 [Azure Portal](https://mango-rock-0b5b48e10.5.azurestaticapps.net/)
+
 Of course you're very welcome to visit our site on Azure Portal and try it by yourself!
 
 ## :email: Contacts

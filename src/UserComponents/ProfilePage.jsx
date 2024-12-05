@@ -174,7 +174,6 @@ export default function ProfilePage() {
     <div>
       <Navigation />
       <Container>
-        {" "}
         {error ? (
           <ErrorPage message={error} />
         ) : (

@@ -4,7 +4,6 @@ import { useUser } from "../UserComponents/UserProvider";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import avatar from "../components/images/avatar.png";
 import { formatDate } from "./utils.js";
-import { ShareButton } from "../UserComponents/ProfileComponents/BodyComponents/UserInfoCardComponents/Button.jsx";
 
 // Retrieves the token and alerts if the user is not authenticated
 const getAuthToken = () => {
@@ -20,9 +19,9 @@ const getAuthHeaders = () => {
   const token = getAuthToken();
   return token
     ? {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      }
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    }
     : null;
 };
 
@@ -36,7 +35,6 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
   const [newReview, setNewReview] = useState({ text: "", rating: 0 });
   const [editingReview, setEditingReview] = useState(false);
   const { user } = useUser();
-  const currentRating = 0;
 
   useEffect(() => {
     // Fetch reviews for the movie
@@ -48,7 +46,7 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
       // Check if the logged-in user has already reviewed
 
       const userReview = data.find((review) => review.user_id === loggedInUserId);
-            setUserReview(userReview); 
+      setUserReview(userReview);
     };
 
     fetchReviews();
@@ -77,10 +75,10 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
   const handleReviewSubmit = async () => {
     if (userReview) {
       // Update review
-      
+
       await fetch(`${url}/api/movie/editReview/${userReview.id}`, {
         method: "PUT",
-        
+
         headers,
         body: JSON.stringify({
           description: newReview.text,
@@ -137,6 +135,7 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
               <div className="d-flex mb-2" style={{ float: "right" }}>
                 <div className="me-2 ">
                   <ReactStars
+                    key={review.rating}
                     count={5} // Total stars
                     value={review.rating} // Current rating
                     size={30} // Size of stars
@@ -195,6 +194,7 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
           <h6 className="d-flex p-2">
             Your Rating &nbsp;
             <ReactStars
+              key={newReview.rating}
               count={5} // Total stars
               value={newReview.rating} // Current rating
               onChange={(rating) => setNewReview({ ...newReview, rating })} // Update rating

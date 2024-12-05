@@ -20,8 +20,8 @@
 
 - [Introduction](#bulb-introduction)
 - [Start](#rocket-start)
-- [UI Diagram](#video_camera-video-demostration)
-- [Database Structure](#video_camera-video-demostration)
+- [UI Diagram](#art-ui-diagram)
+- [Database Structure](#floppy_disk-database-structure)
 - [API document](#page_with_curl-api-document)
 - [Deployment](#gear-deployment)
 - [Video Demostration](#video_camera-video-demostration)

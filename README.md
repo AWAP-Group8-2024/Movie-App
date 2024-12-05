@@ -153,6 +153,7 @@ Establishing enviroment variables are necessary for deploying a web service on A
 #### :tada: Visit our app on Azure!
 
 Of course you're very welcome to visit our site on Azure Portal and try it by yourself!
+
 This is our site. [Movie App](https://mango-rock-0b5b48e10.5.azurestaticapps.net/)
 
 ## :email: Contacts

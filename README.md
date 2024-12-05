@@ -76,6 +76,14 @@ DB_PORT = 5432
 JWT_SECRET = JWTSecretForEncryption
 ```
 
+To establish the database, we use **pgAdmin 4** in our case.
+![server name](/public/photo/db-1.png)
+![server parameters](/public/photo/db-2.png)
+
+Initialize and create the database by executing the query commands which is in /server/db/init.sql
+![init db file](/public/photo/init-db-1.png)
+![init db](/public/photo/init-db-2.png)
+
 To run the app for development.
 
 ```sh
@@ -117,7 +125,7 @@ gh secret list --env development
 
 ##### Enviroment Variables are needed for deploying a web service on azure by using GitHub Actions - for backend env
 
-![alt text](image.png)
+![azure backend env](/public/photo/azureEnv.png)
 
 Of course you're very welcome to visit our site on Azure Portal and try it by yourself!
 This is our site. [Movie App](https://mango-rock-0b5b48e10.5.azurestaticapps.net/)

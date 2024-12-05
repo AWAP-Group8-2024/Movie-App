@@ -6,6 +6,28 @@ import avatar from "../components/images/avatar.png";
 import { formatDate } from "./utils.js";
 import { ShareButton } from "../UserComponents/ProfileComponents/BodyComponents/UserInfoCardComponents/Button.jsx";
 
+// Retrieves the token and alerts if the user is not authenticated
+const getAuthToken = () => {
+  const token = JSON.parse(sessionStorage.getItem("user"))?.token;
+  if (!token) {
+    throw new Error("User not authenticated");
+  }
+  return token;
+};
+
+// Sets common headers for authorized requests
+const getAuthHeaders = () => {
+  const token = getAuthToken();
+  return token
+    ? {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    : null;
+};
+
+const headers = getAuthHeaders();
+
 const url = process.env.REACT_APP_BACKEND_URL;
 
 function Reviews({ movieId, loggedInUserId, movieTitle }) {
@@ -19,14 +41,14 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
   useEffect(() => {
     // Fetch reviews for the movie
     const fetchReviews = async () => {
-      const response = await fetch(`${url}/movie/reviews/${movieId}`);
+      const response = await fetch(`${url}/api/movie/reviews/${movieId}`);
       const data = await response.json();
       setReviews(data);
 
       // Check if the logged-in user has already reviewed
 
-      /* const userReview = data.find((review) => review.user_id === loggedInUserId);
-            setUserReview(userReview); */
+      const userReview = data.find((review) => review.user_id === loggedInUserId);
+            setUserReview(userReview); 
     };
 
     fetchReviews();
@@ -41,12 +63,12 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
   const handleDeleteReview = async (userReview) => {
     // Confirm delete action
     if (window.confirm("Are you sure you want to delete this review?")) {
-      await fetch(`${url}/movie/reviews/${userReview}`, {
+      await fetch(`${url}/api/movie/reviews/${userReview}`, {
         method: "DELETE",
       });
 
       // Refresh reviews
-      const response = await fetch(`${url}/movie/reviews/${movieId}`);
+      const response = await fetch(`${url}/api/movie/reviews/${movieId}`);
       const data = await response.json();
       setReviews(data);
     }
@@ -55,9 +77,11 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
   const handleReviewSubmit = async () => {
     if (userReview) {
       // Update review
-      await fetch(`${url}/movie/editReview/${userReview.id}`, {
+      
+      await fetch(`${url}/api/movie/editReview/${userReview.id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        
+        headers,
         body: JSON.stringify({
           description: newReview.text,
           rating: newReview.rating,
@@ -65,9 +89,9 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
       });
     } else {
       // Post new review
-      await fetch(`${url}/movie/addReview`, {
+      await fetch(`${url}/api/movie/addReview`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
           movie_id: movieId,
           user_id: loggedInUserId,
@@ -81,7 +105,7 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
     setNewReview({ text: "", rating: 0 });
     setEditingReview(false);
     // Refresh reviews
-    const response = await fetch(`${url}/movie/reviews/${movieId}`);
+    const response = await fetch(`${url}/api/movie/reviews/${movieId}`);
     const data = await response.json();
     setReviews(data);
   };

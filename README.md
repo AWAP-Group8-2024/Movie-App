@@ -100,11 +100,11 @@ tbd
 
 ## :page_with_curl: API document
 
-The API document is called openAPI.json which is located on the /server folder.
+The openAPI.json describes the API specification for this project which is located under the **server** folder.
 
 ## :gear: Deployment
 
-#### GitHub secrets are needed for deploying a static web app on azure by using GitHub Actions - for frontend env
+##### GitHub secrets are needed for deploying a static web app on azure by using GitHub Actions - for frontend env
 
 ```sh
 # create GitHub secrets for GitHub Actions - for frontend
@@ -115,7 +115,7 @@ gh secret set REACT_APP_TMDB_API_KEY --body TheAPIKeyFromTMDB --env development
 gh secret list --env development
 ```
 
-#### Enviroment Variables are needed for deploying a web service on azure by using GitHub Actions - for backend env
+##### Enviroment Variables are needed for deploying a web service on azure by using GitHub Actions - for backend env
 
 ![alt text](image.png)
 

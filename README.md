@@ -77,6 +77,7 @@ JWT_SECRET = JWTSecretForEncryption
 ```
 
 To establish the database, we use **pgAdmin 4** in our case.
+**Make sure the databse parameters are matched with the .env file**
 ![server name](/public/photo/db-1.png)
 ![server parameters](/public/photo/db-2.png)
 
@@ -112,7 +113,7 @@ The openAPI.json describes the API specification for this project which is locat
 
 ## :gear: Deployment
 
-##### GitHub secrets are needed for deploying a static web app on azure by using GitHub Actions - for frontend env
+##### GitHub Secrets are needed for deploying a static web app on Azure by using GitHub Actions - for frontend env
 
 ```sh
 # create GitHub secrets for GitHub Actions - for frontend
@@ -123,7 +124,7 @@ gh secret set REACT_APP_TMDB_API_KEY --body TheAPIKeyFromTMDB --env development
 gh secret list --env development
 ```
 
-##### Enviroment Variables are needed for deploying a web service on azure by using GitHub Actions - for backend env
+##### Enviroment Variables are needed for deploying a web service on Azure by using GitHub Actions - for backend env
 
 ![azure backend env](/public/photo/azureEnv.png)
 

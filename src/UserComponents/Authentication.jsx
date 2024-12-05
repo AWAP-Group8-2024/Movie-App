@@ -14,9 +14,11 @@ export default function Authentication({ authenticationMode }) {
   const { user, setUser, signUp, signIn } = useUser();
   const navigate = useNavigate();
   const [password, setPassword] = useState(""); // Local password state
+  const [inputDisabled, setInputDisabled] = useState(false);
 
   const handleClick = async (e) => {
     e.preventDefault();
+    setInputDisabled(true);
     const userData = { ...user, password }; // Include password for sign-up/sign-in
     try {
       if (authenticationMode === AuthenticationMode.Register) {
@@ -33,6 +35,7 @@ export default function Authentication({ authenticationMode }) {
           : error;
       alert(message);
     }
+    setInputDisabled(false);
   };
 
   return (
@@ -44,7 +47,9 @@ export default function Authentication({ authenticationMode }) {
             ? "Login"
             : "Register"}
         </div>
-        <form className="auth_form">
+        <form
+          className="auth_form"
+        >
           <div>
             <input
               type="email"
@@ -53,6 +58,7 @@ export default function Authentication({ authenticationMode }) {
               onChange={(e) =>
                 setUser((prevUser) => ({ ...prevUser, email: e.target.value }))
               }
+              disabled={inputDisabled}
             />
           </div>
           <div>
@@ -66,6 +72,7 @@ export default function Authentication({ authenticationMode }) {
                   password: e.target.value,
                 }))
               }
+              disabled={inputDisabled}
             />
           </div>
           <div align="center">
@@ -74,6 +81,7 @@ export default function Authentication({ authenticationMode }) {
                 variant="dark"
                 className="ms-0 ms-lg-2 mt-2 mt-lg-0"
                 onClick={handleClick}
+                disabled={inputDisabled}
               >
                 Log in
               </Button>
@@ -82,6 +90,7 @@ export default function Authentication({ authenticationMode }) {
                 variant="success"
                 className="ms-0 ms-lg-2 mt-2 mt-lg-0"
                 onClick={handleClick}
+                disabled={inputDisabled}
               >
                 Submit
               </Button>

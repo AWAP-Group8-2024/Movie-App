@@ -100,9 +100,6 @@ export default function ProfilePage() {
     // setGroups,
     // setFavorites,
   ]);
-  // if (error) {
-  //   return <ErrorPage message={error} />;
-  // }
 
   const handleDelete = async () => {
     try {
@@ -174,9 +171,9 @@ export default function ProfilePage() {
   };
 
   return (
-    <Container>
+    <div>
       <Navigation />
-      <>
+      <Container>
         {error ? (
           <ErrorPage message={error} />
         ) : (
@@ -195,7 +192,7 @@ export default function ProfilePage() {
             setCreateGroupModalIsOpen={setCreateGroupModalIsOpen}
           />
         )}
-      </>
+      </Container>
 
       <AccountDeleteModal
         showDeleteModal={showDeleteModal}
@@ -211,6 +208,6 @@ export default function ProfilePage() {
         setNewGroup={setNewGroup}
         handleGroupSubmit={handleGroupSubmit}
       />
-    </Container>
+    </div>
   );
 }

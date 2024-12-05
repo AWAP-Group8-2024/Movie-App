@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { Modal, Button, Col, Row } from "react-bootstrap";
 import { useFavorite } from "../../UserComponents/FavoriteProvider";
 
-export default function AttachItem() {
+export default function AttachItem({ chosenMovie, setChosenMovie }) {
     const [show, setShow] = useState(false);
     const { getUserFavorites } = useFavorite();
     const [favorites, setFavorites] = useState([]);
-    const [chosenMovie, setChosenMovie] = useState(null);
 
     function getFavorites() {
         getUserFavorites(JSON.parse(sessionStorage.getItem('user')).id)
@@ -31,7 +30,7 @@ export default function AttachItem() {
         >
             <Modal.Header closeButton>
             <Modal.Title id="ChoosingItem">
-                Choose movie or tv show
+                Choose movie or tv show from your favorites
             </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -55,6 +54,14 @@ export default function AttachItem() {
                             {element.title}
                         </Col>
                     ))}
+                    {favorites.length === 0 ?
+                    <Col
+                        className="text-center"
+                    >
+                        You have no movies in your favorite list.
+                        You can find something you enjoy <a href="/list/movie_popular?page=1">here</a>
+                    </Col> :
+                    null}
                 </Row>
             </Modal.Body>
             {chosenMovie ?

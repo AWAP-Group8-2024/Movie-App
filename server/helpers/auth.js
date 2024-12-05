@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { createUserObj } from "../controllers/UserController.js";
+import { createUserObj } from "../controllers/userController.js";
 import { createGroupObj } from "../controllers/GroupController.js";
 import { getGroupDetails, getGroupsInfoByUserId } from "../models/Group.js";
 import { ApiError } from "./apiError.js";

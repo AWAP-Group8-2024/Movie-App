@@ -53,8 +53,10 @@ export default function ShareToGroup({ setShowCreatePost, setGroup }) {
                         {groups.map((element, i) => {
                             return (
                                 <Col key={i} xs={3} className='p-2 fs-4'>
-                                    <div className='border border-1 border-dark rounded p-2 h-100 d-flex align-items-center justify-content-center text-center flex-column'>
-                                        <div className="h-100 d-flex align-items-center">
+                                    <div
+                                        className='border border-1 border-dark rounded p-2 h-100 d-flex align-items-center justify-content-center text-center flex-column'
+                                    >
+                                        <div className="h-100 d-flex align-items-center mb-3">
                                             {element.name}
                                         </div>
                                         <Button

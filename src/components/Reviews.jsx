@@ -19,7 +19,7 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
   useEffect(() => {
     // Fetch reviews for the movie
     const fetchReviews = async () => {
-      const response = await fetch(`${url}movie/reviews/${movieId}`);
+      const response = await fetch(`${url}/movie/reviews/${movieId}`);
       const data = await response.json();
       setReviews(data);
 

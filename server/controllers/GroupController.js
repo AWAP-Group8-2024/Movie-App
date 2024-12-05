@@ -280,22 +280,34 @@ export const getAllGroupPosts = async (req, res, next) => {
 
 export const createPost = async (req, res, next) => {
   const { groupId } = req.params;
-  const { accountId, description } = req.body;
+  const { description, contentId, contentType } = req.body;
+  const accountId = req.user.id;
 
-  if (!description) {
+  console.log("Request Params Group ID:", groupId);
+  console.log("Request Body:", req.body);
+
+  if (!groupId || !accountId || !description) {
     return next(new ApiError("Missing required fields", 400));
   }
 
+  // Generate movie_id only if contentId and contentType are provided
+  const movieId = contentId && contentType
+    ? (contentType === "movie" ? `m${contentId}` : `t${contentId}`)
+    : null;
+
   try {
-    const result = await GroupModel.insertPost(groupId, accountId, description);
+    const result = await GroupModel.insertPost(groupId, accountId, description, movieId);
     return res.status(200).json({
       message: "Post created successfully.",
-      post: result.rows[0],
+      post: result,
     });
   } catch (error) {
+    console.error("Error in createPost:", error.message);
     return next(new ApiError("Server error while createPost", 500));
   }
 };
+
+
 
 export const deletePost = async (req, res, next) => {
   const { groupId, postId } = req.params;
@@ -311,13 +323,32 @@ export const deletePost = async (req, res, next) => {
     return next(new ApiError("Server error while deletePost", 500));
   }
 };
-
 export const updatePost = async (req, res, next) => {
   const { groupId, postId } = req.params;
-  const { description } = req.body;
+  const { description, contentId, contentType } = req.body;
+
+  // Validate required fields
+  if (!description?.trim() || (!contentId && contentType)) {
+    return next(
+      new ApiError("Invalid input: description or content details missing", 400)
+    );
+  }
+
+  let movieId = null;
+  if (contentType && contentId) {
+    movieId = contentType === "movie" ? `m${contentId}` : `t${contentId}`;
+    if (!/^(t|m)[0-9]+$/.test(movieId)) {
+      return next(new ApiError("Invalid movie ID format", 400));
+    }
+  }
 
   try {
-    const result = await GroupModel.updatePost(groupId, postId, description);
+    const result = await GroupModel.updatePost(
+      groupId,
+      postId,
+      description.trim(),
+      movieId
+    );
     if (result.rowCount === 0) {
       return next(new ApiError("Post not found", 404));
     }
@@ -326,7 +357,7 @@ export const updatePost = async (req, res, next) => {
       post: result.rows[0],
     });
   } catch (error) {
-    return next(new ApiError("Server error while updatePost", 500));
+    return next(new ApiError("Server error while updating post", 500));
   }
 };
 

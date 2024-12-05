@@ -1,4 +1,5 @@
 import * as FavoriteModel from "../models/Favorite.js";
+import { ApiError } from "../helpers/apiError.js";
 
 export const getFavoriteListByAuth = async (req, res, next) => {
   try {
@@ -29,7 +30,6 @@ export const insertContentToFavorite = async (req, res, next) => {
         .status(400)
         .json({ message: "All content fields are required" });
     }
-
     const result = await FavoriteModel.addContentToFavoriteList(id, content);
     return res.status(200).json(result.rows || []);
   } catch (error) {

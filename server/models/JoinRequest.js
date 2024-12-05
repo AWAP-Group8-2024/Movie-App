@@ -1,4 +1,5 @@
 import { pool } from "../helpers/db.js";
+import { ApiError } from "../helpers/apiError.js";
 
 export const createJoinRequest = async (groupId, accountId) => {
   try {
@@ -10,9 +11,7 @@ export const createJoinRequest = async (groupId, accountId) => {
     const { rows } = await pool.query(query, [groupId, accountId]);
     return rows[0];
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -24,9 +23,7 @@ export const cancelRequest = async (groupId, accountId) => {
     const result = await pool.query(query, [groupId, accountId]);
     return result;
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -41,9 +38,7 @@ export const getPendingRequests = async (groupId) => {
     const { rows } = await pool.query(query, [groupId]);
     return rows;
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -58,9 +53,7 @@ export const updateJoinRequestStatus = async (requestId, status) => {
     const { rows } = await pool.query(query, [status, requestId]);
     return rows[0];
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -75,8 +68,6 @@ export const deleteJoinRequest = async (requestId, status) => {
     const { rows } = await pool.query(query, [status, requestId]);
     return rows[0];
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };

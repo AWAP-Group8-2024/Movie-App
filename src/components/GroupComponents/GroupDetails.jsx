@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from "react";
 import {
 	getGroupByGroupId,
@@ -16,8 +18,11 @@ import Navigation from "../Navigation";
 import { useUser } from "../../UserComponents/UserProvider";
 import JoinRequestList from "./JoinRequestList";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Col, Row } from "react-bootstrap";
+import CommentSection from "./CommentSection";
 import AttachItem from "./AttachItem";
-
+import GroupPostMoviePoster from "./GroupPostMoviePoster";
+import { formatePostContentId } from "../../services/GroupServices";
 const GroupDetails = () => {
 	const navigate = useNavigate();
 	const { groupId } = useParams();
@@ -33,6 +38,8 @@ const GroupDetails = () => {
 	const [showJoinRequest, setShowJoinRequest] = useState(false);
 	const [editingPost, setEditingPost] = useState(null);
 	const [updatedDescription, setUpdatedDescription] = useState("");
+	const [chosenMovie, setChosenMovie] = useState(null);
+	const [editedMovie, setEditedMovie] = useState(null);
 	
 	useEffect(() => {
 		if (groupId) {
@@ -164,8 +171,18 @@ const GroupDetails = () => {
 		}
 	};
 	const handleEditPost = (post) => {
-		setEditingPost(post);
-		setUpdatedDescription(post.description); // Prefill with existing description
+		const formateContentId = () => formatePostContentId(post.movie_id);
+		fetch(`https://api.themoviedb.org/3/${formateContentId().media_type}/${formateContentId().id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`)
+		.then(res => res.json())
+		.then(json => {
+			setEditedMovie({
+				content_id: json.id,
+				title: json.title || json.name,
+				media_type: formateContentId().media_type
+			});
+			setEditingPost(post);
+			setUpdatedDescription(post.description); // Prefill with existing description
+		})
 	};
 	
 	const submitEditPost = async (e) => {
@@ -178,7 +195,9 @@ const GroupDetails = () => {
 			const updatedPost = await updateGroupPost(
 				groupId,
 				editingPost.post_id,
-				updatedDescription.trim()
+				updatedDescription.trim(),
+				editedMovie?.content_id,
+				editedMovie?.media_type
 			);
 			// Update posts with the edited post
 			setPosts(
@@ -348,7 +367,9 @@ const GroupDetails = () => {
 							try {
 								const newPost = await createGroupPost(
 									groupId,
-									postDescription
+									postDescription,
+									chosenMovie?.content_id,
+									chosenMovie?.media_type
 								);
 								setPosts([newPost, ...posts]);
 								e.target.reset();
@@ -369,12 +390,13 @@ const GroupDetails = () => {
 								placeholder="Write your post here..."
 							></textarea>
 						</div>
-						<AttachItem />
-						<div>
-							<button type="submit" className="btn btn-primary btn-sm">
-								Submit
-							</button>
-						</div>
+						<AttachItem
+							chosenMovie={chosenMovie}
+							setChosenMovie={setChosenMovie}
+						/>
+						<button type="submit" className="btn btn-primary btn-sm">
+							Submit
+						</button>
 					</form>
 
 					<h4 className="mt-4">Group Posts</h4>
@@ -394,6 +416,10 @@ const GroupDetails = () => {
 							rows="3"
 						></textarea>
 					</div>
+					<AttachItem
+						chosenMovie={editedMovie}
+						setChosenMovie={setEditedMovie}
+					/>
 					<div className="d-flex gap-2">
 						<button type="submit" className="btn btn-success btn-sm">
 							Save
@@ -410,11 +436,24 @@ const GroupDetails = () => {
 			) : (
 				// Post View
 				<>
-					<p className="card-text">{post.description}</p>
+					<Row className="d-flex justify-content-between">
+						<Col
+							xs={post.movie_id ? 7 : 12}
+							md={post.movie_id ? 9 : 12}
+						>
+							<strong className="card-text">{post.description}</strong>
+						</Col>
+						{post.movie_id ? <GroupPostMoviePoster contentId={post.movie_id}/> : null}
+					</Row>
 					<p className="card-subtitle text-muted">
 						<small>
-							Posted by {post.writer_id} on{" "}
-							{new Date(post.creation_date).toLocaleString()}
+							Posted by {post.firstname || post.writer_id} on{" "}
+							{new Date(post.creation_date).toLocaleString("en-US", {
+								day: "numeric",
+								month: "short",
+								hour: "2-digit",
+								minute: "2-digit",
+							})}
 						</small>
 					</p>
 					{(isOwner || post.writer_id === user?.id) && (
@@ -427,10 +466,9 @@ const GroupDetails = () => {
 							</button>
 							<button
 								className="btn btn-danger btn-sm"
-								onClick={async () => {
-									try {
+								onClick={async () => {				try {
 										await deleteGroupPost(groupId, post.post_id);
-										setPosts(posts.filter((p) => p.id !== post.post_id));
+										setPosts(posts.filter((p) => p.post_id !== post.post_id));
 										setMessage("Post deleted successfully.");
 										navigate(0);
 									} catch (err) {
@@ -444,7 +482,10 @@ const GroupDetails = () => {
 					)}
 				</>
 			)}
-		</div>
+									</div>
+									{/* Comment Section */}
+    <CommentSection groupId={groupId} postId={post.post_id} userId={user?.id} />
+ 
 	</div>
 ))}
 

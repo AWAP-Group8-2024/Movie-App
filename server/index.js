@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import favoriteRouter from "./routers/FavoriteRouter.js";
-import userRouter from "./routers/UserRouter.js";
+import userRouter from "./routers/userRouter.js";
 import groupRouter from "./routers/GroupRouter.js";
 import movieRouter from "./routers/MovieRouter.js";
 
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // test message
 app.get("/api/message", (req, res) => {
-  res.json({ message: "Test message from backend" });
+  res.json({ message: "Test message from backend!" });
 });
 
 app.use("/api/user", userRouter);

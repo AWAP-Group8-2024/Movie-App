@@ -34,9 +34,20 @@ CREATE TABLE group_post (
   group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
   writer_id INTEGER REFERENCES account(id) ON DELETE CASCADE,
   post_id SERIAL PRIMARY KEY,
-  description varchar(255) not null,
-  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  description VARCHAR(255) NOT NULL,
+  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  movie_id VARCHAR(255),
+  CONSTRAINT chk_movie_id_format CHECK (movie_id ~ '^(t|m)[0-9]+$')
 );
+
+CREATE TABLE comment (
+    id SERIAL PRIMARY KEY,
+    post_id INTEGER REFERENCES group_post(post_id) ON DELETE CASCADE,  
+    writer_id INTEGER REFERENCES account(id) ON DELETE CASCADE, 
+    content VARCHAR(500) NOT NULL,        
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+);
+
 
 CREATE TABLE join_requests (
     id SERIAL PRIMARY KEY,
@@ -47,12 +58,12 @@ CREATE TABLE join_requests (
     response_date TIMESTAMP
 );
 
-INSERT INTO account (email, password) VALUES ('test1@123.com', '$2b$10$.bgHzCIBMOPDcSJ1LHpQgel7W5KlSg53ss9UIbtk1/Bq2r60Nwuu.');
-INSERT INTO account (email, password) VALUES ('test2@123.com', '$2b$10$V/kgVRzhzoS/BaxGqNT/.e8X7aeHToNyJkuckWrJVxDkEoWeouaqC');
-INSERT INTO account (email, password) VALUES ('test3@123.com', '$2b$10$XCncdULQh/pfmE1esyXiTeqJSHmOWHutaWkXMbGCRR6/XqV.EucLi');
-INSERT INTO account (email, password) VALUES ('test4@123.com', '$2b$10$LRr/wfzizgtkNVc43dBXO.1vklFtRTWG6sxHKpiIEVMoNVajMoSc.');
-INSERT INTO account (email, password) VALUES ('test5@123.com', '$2b$10$HqXkzyANdNq0.0CLvqVHWeDSJSuSYyv9y17G8xNs5hZIdIxFK/ZhK');
-INSERT INTO account (email, password) VALUES ('test6@123.com', '$2b$10$yiouJ7CNI1Qf4tswmc8Wr.4gdGXzVmvyTnFwwQDzqsTz/ulynPNuy');
+INSERT INTO account (email, password) VALUES ('test1@movieapp.com', '$2a$10$YLdwZAOK8qik1txBTMmFpesuL.tcZUqRg.nK7FnKII3RQ3nInhzUq');
+INSERT INTO account (email, password) VALUES ('test2@movieapp.com', '$2a$10$VGvrQ4yMitvFbJHp7mXymeR5UQIOTP0iSr3xRC9q2GKO1enWXxRe.');
+INSERT INTO account (email, password) VALUES ('test3@movieapp.com', '$2a$10$MbHf12hmdVAi3o4dbhTVue0yKJY/xXCfEKOydmGhaCi9sE0tOPDe2');
+INSERT INTO account (email, password) VALUES ('test4@movieapp.com', '$2a$10$.fd0u2XdtZZ8AEC7C12uj.muHY2aeqrCUZ6K18YpaM4gCBMkQBlAa');
+INSERT INTO account (email, password) VALUES ('test5@movieapp.com', '$2a$10$/OTHt5rQqYgBJEwzn0PcbuO5mJA2ekWSFJUDsbq0iaELqT/51ozJ6');
+INSERT INTO account (email, password) VALUES ('test6@movieapp.com', '$2a$10$aMGxZ8QN6yTZK.MjxAKX8uKvVSlw2rDeUq8Xt1W7bEyfCkYEPEJNi');
 
 INSERT INTO groups  (name, description, creator_id) 
 VALUES ('group1', 'group1 desc', 1), ('group2','group2 desc', 2), ('group3', 'group1 desc', 3);
@@ -75,7 +86,3 @@ INSERT INTO group_post (group_id, writer_id, description) VALUES (1, 1, 'post1')
 INSERT INTO group_post (group_id, writer_id,  description) VALUES (2, 2, 'post2');
 
 COMMIT;
-
--- SELECT * from account;
--- SELECT * from groups;
--- SELECT * FROM group_account;

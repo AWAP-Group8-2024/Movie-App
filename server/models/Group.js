@@ -1,4 +1,5 @@
 import { pool } from "../helpers/db.js";
+import { ApiError } from "../helpers/apiError.js";
 
 export const getAllGroups = async () => {
   const result = await pool.query("SELECT * from groups");
@@ -18,9 +19,7 @@ export const getGroupsInfoByUserId = async (id) => {
     const result = await pool.query(query, [id]);
     return result;
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -32,9 +31,7 @@ export const insertNewGroup = async (name, description, creator_id) => {
     );
     return result;
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -46,9 +43,7 @@ export const insertUserGroupAssociation = async (group_id, user_id) => {
     );
     return result;
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -60,9 +55,7 @@ export const getGroupDetails = async (groupId) => {
     );
     return result.rows[0];
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -75,9 +68,7 @@ export const updateGroupDetails = async (groupId, name, description) => {
     );
     return result.rows[0];
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -92,9 +83,7 @@ export const getGroupMembers = async (groupId) => {
     const { rows } = await pool.query(query, [groupId]);
     return rows;
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -110,9 +99,7 @@ export const leaveGroup = async (groupId, userId) => {
     const { rows } = await pool.query(query, values);
     return rows[0];
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -124,9 +111,7 @@ export const deleteGroupById = async (groupId) => {
     );
     return rows[0];
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -139,9 +124,7 @@ export const addUserToGroup = async (groupId, accountId) => {
     const result = await pool.query(query, [groupId, accountId]);
     return result;
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -157,9 +140,7 @@ export const removeUserFromGroup = async (groupId, memberId) => {
     const { rows } = await pool.query(query, values);
     return rows[0];
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -171,23 +152,20 @@ export const selectAllPosts = async (groupId) => {
     );
     return result;
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
-export const insertPost = async (groupId, accountId, description) => {
+export const insertPost = async (groupId, accountId, description, movieId) => {
   try {
     const result = await pool.query(
-      "INSERT INTO group_post (group_id, writer_id, description) VALUES ($1,$2,$3) RETURNING *",
-      [groupId, accountId, description]
+      `INSERT INTO group_post (group_id, writer_id, description, movie_id)
+       VALUES ($1, $2, $3, $4) RETURNING *`,
+      [groupId, accountId, description, movieId] // Pass null if movieId is not provided
     );
-    return result;
+    return result.rows[0];
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
@@ -199,22 +177,18 @@ export const deletePost = async (groupId, postId) => {
     );
     return result;
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };
 
-export const updatePost = async (groupId, postId, description) => {
+export const updatePost = async (groupId, postId, description, movie_id) => {
   try {
     const result = await pool.query(
-      "UPDATE group_post SET description = $1 WHERE group_id = $2 AND post_id = $3 RETURNING *",
-      [description, groupId, postId]
+      "UPDATE group_post SET description = $1, movie_id = $2 WHERE group_id = $3 AND post_id = $4 RETURNING *",
+      [description, movie_id, groupId, postId]
     );
     return result;
   } catch (error) {
-    return next(
-      new ApiError("Internal server error while database queries.", 500)
-    );
+    throw new ApiError("Internal server error while database queries.", 500);
   }
 };

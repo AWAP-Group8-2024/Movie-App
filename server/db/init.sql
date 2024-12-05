@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS group_account;
 DROP TABLE IF EXISTS group_post;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS account;
+DROP TABLE IF EXISTS comment;
 COMMIT;
 
 BEGIN;
@@ -70,6 +71,15 @@ CREATE TABLE review (
     reviewer_email VARCHAR(50) NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE comment (
+    id SERIAL PRIMARY KEY,
+    post_id INTEGER REFERENCES group_post(post_id) ON DELETE CASCADE,  
+    writer_id INTEGER REFERENCES account(id) ON DELETE CASCADE, 
+    content VARCHAR(500) NOT NULL,        
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+);
+
 COMMIT;
 
 BEGIN;

@@ -2,17 +2,17 @@
 
 <p>
   
-<img alt="Nodejs Badge" longdesc="Supports Expo iOS" src="https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+<img alt="Nodejs Badge" longdesc="Nodejs Badge" src="https://img.shields.io/badge/Node%20js-3c873a?style=for-the-badge&logo=nodedotjs&logoColor=white" />
 
-<img alt="PostgreSQL Badge" longdesc="Supports Expo iOS" src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
+<img alt="PostgreSQL Badge" longdesc="PostgreSQL Badge" src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />
 
-<img alt="Javascript Badge" longdesc="Supports Expo iOS" src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" />
+<img alt="React Badge" longdesc="React Badge" src="https://img.shields.io/badge/React-303030?style=for-the-badge&logo=react&logoColor=61DAFB" />
 
-<img alt="Javascript Badge" longdesc="Supports Expo iOS" src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+<img alt="Bootstrap Badge" longdesc="Bootstrap Badge" src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white" />
 
-<img alt="PostgreSQL Badge" longdesc="Supports Expo iOS" src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white" />
+<img alt="Javascript Badge" longdesc="Javascript Badge" src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" />
 
-<img alt="PostgreSQL Badge" longdesc="Supports Expo iOS" src="https://img.shields.io/badge/microsoft%20azure-0089D6?style=for-the-badge&logo=microsoft-azure&logoColor=white" />
+<img alt="Microsoft Azure Badge" longdesc="microsoft azure Badge" src="https://img.shields.io/badge/microsoft%20azure-008ad7?style=for-the-badge&logo=microsoft-azure&logoColor=white" />
 
 </p>
 
@@ -28,6 +28,15 @@
 ## :bulb: Introduction
 
 **MovieApp** is an application that users can browser the medias they are interested in, save and share the contents to their friends, or create a group to discuss about the newest trending movies.
+
+In this project, we use
+
+- <img src="https://img.shields.io/badge/Backend-Node.js-3c873a">
+- <img src="https://img.shields.io/badge/Database-PostgreSQL-316192">
+- <img src="https://img.shields.io/badge/Frontend-React-303030">
+- <img src="https://img.shields.io/badge/Style and Layout-Bootstrap-563D7C">
+- <img src="https://img.shields.io/badge/CI/CD-GitHub Actions-303030">
+- <img src="https://img.shields.io/badge/Deployment-Azure Portal-008ad7">
 
 ## :rocket: Start
 
@@ -95,10 +104,10 @@ The API document is called openAPI.json which is located on the /server folder.
 
 ## :gear: Deployment
 
-#### GitHub secrets are needed for deploying on azure by using GitHub Actions.
+#### GitHub secrets are needed for deploying a static web app on azure by using GitHub Actions - for frontend env
 
 ```sh
-# create GitHub secrets for GitHub Actions
+# create GitHub secrets for GitHub Actions - for frontend
 gh secret set <secret_name> --body <secret_value> --env <environment_name>
 # example:
 gh secret set REACT_APP_TMDB_API_KEY --body TheAPIKeyFromTMDB --env development
@@ -106,9 +115,12 @@ gh secret set REACT_APP_TMDB_API_KEY --body TheAPIKeyFromTMDB --env development
 gh secret list --env development
 ```
 
-[Azure Portal](https://mango-rock-0b5b48e10.5.azurestaticapps.net/)
+#### Enviroment Variables are needed for deploying a web service on azure by using GitHub Actions - for backend env
+
+![alt text](image.png)
 
 Of course you're very welcome to visit our site on Azure Portal and try it by yourself!
+This is our site. [Movie App](https://mango-rock-0b5b48e10.5.azurestaticapps.net/)
 
 ## :email: Contacts
 

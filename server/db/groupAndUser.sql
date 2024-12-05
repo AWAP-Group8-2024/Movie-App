@@ -39,12 +39,13 @@ CREATE TABLE group_post (
   movie_id VARCHAR(255),
   CONSTRAINT chk_movie_id_format CHECK (movie_id ~ '^(t|m)[0-9]+$')
 );
+
 CREATE TABLE comment (
-    id SERIAL PRIMARY KEY,                    -- Unique identifier for the comment
-    post_id INTEGER REFERENCES group_post(post_id) ON DELETE CASCADE,  -- Reference to the post being commented on
-    writer_id INTEGER REFERENCES account(id) ON DELETE CASCADE,        -- Reference to the user who wrote the comment
-    content VARCHAR(500) NOT NULL,             -- The content of the comment
-    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp of when the comment was created
+    id SERIAL PRIMARY KEY,
+    post_id INTEGER REFERENCES group_post(post_id) ON DELETE CASCADE,  
+    writer_id INTEGER REFERENCES account(id) ON DELETE CASCADE, 
+    content VARCHAR(500) NOT NULL,        
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
 );
 
 

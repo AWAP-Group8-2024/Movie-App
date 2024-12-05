@@ -41,12 +41,17 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
     const fetchReviews = async () => {
       const response = await fetch(`${url}/api/movie/reviews/${movieId}`);
       const data = await response.json();
-      setReviews(data);
+      if(data.length>0){
+        console.log(data.length)
+        setReviews(data);
+  
+        // Check if the logged-in user has already reviewed
+  
+        const userReview = data.find((review) => review.user_id === loggedInUserId);
+        setUserReview(userReview);
+      }
 
-      // Check if the logged-in user has already reviewed
-
-      const userReview = data.find((review) => review.user_id === loggedInUserId);
-      setUserReview(userReview);
+      
     };
 
     fetchReviews();

@@ -9,6 +9,7 @@ export const getReview = async (movieId) => {
          ORDER BY timestamp DESC`,
       [movieId]
     );
+    console.log(result);
     return result;
   } catch (error) {
     throw new ApiError("Internal server error while database queries.", 500);

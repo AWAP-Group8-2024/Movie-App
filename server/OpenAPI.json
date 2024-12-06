@@ -472,7 +472,7 @@
 
     "/api/group/": {
       "get": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Retrieve all groups",
         "description": "Fetch a list of all groups.",
         "operationId": "getAllGroupsListing",
@@ -516,7 +516,7 @@
 
     "/api/group/all": {
       "get": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Retrieve all groups accessible by the authenticated user",
         "description": "Fetch a list of all groups where the authenticated user is a member.",
         "operationId": "getGroupsByAuth",
@@ -561,7 +561,7 @@
 
     "/api/group/userGroup/{id}": {
       "get": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Retrieve groups associated with a user by the ID from url",
         "description": "Fetch a list of groups where the user, specified by their ID, is a member. Includes group details and member count.",
         "operationId": "getGroupsByUrlId",
@@ -601,7 +601,7 @@
 
     "/api/group/create": {
       "post": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Create a new group",
         "description": "Allows an authenticated user to create a new group with a specified name and description. The authenticated user is set as the group's creator and automatically added as a member.",
         "operationId": "createNewGroup",
@@ -639,7 +639,7 @@
 
     "/api/group/{groupId}": {
       "get": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Get Group by Group ID",
         "description": "Retrieve details of a specific group by its unique ID.",
         "operationId": "getGroupDetails",
@@ -675,7 +675,7 @@
         }
       },
       "put": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Update Group Details",
         "description": "Update the details of an existing group.",
         "operationId": "updateGroupDetails",
@@ -724,7 +724,7 @@
 
     "/api/group/{groupId}/join": {
       "post": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Send Join Request to a Group",
         "description": "Allows an authenticated user to send a request to join a specific group.",
         "operationId": "sendJoinRequest",
@@ -763,7 +763,7 @@
 
     "/api/group/{groupId}/cancel": {
       "post": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Cancel Join Request",
         "description": "Allows an authenticated user to cancel their pending join request for a specific group.",
         "operationId": "cancelJoinRequest",
@@ -802,7 +802,7 @@
 
     "/api/group/{groupId}/members": {
       "get": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Retrieve Group Members",
         "description": "Fetches a list of members for a specific group.",
         "operationId": "getGroupMembers",
@@ -841,7 +841,7 @@
 
     "/api/group/{groupId}/leave": {
       "delete": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Leave a Group",
         "description": "Allows an authenticated user to leave a specific group they are a member of.",
         "operationId": "leaveGroup",
@@ -882,7 +882,7 @@
 
     "/api/group/delete/{groupId}": {
       "delete": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Delete a Group",
         "description": "Allows the creator of a group to delete it permanently.",
         "operationId": "deleteGroupByGroupId",
@@ -924,7 +924,7 @@
 
     "/api/group/{groupId}/requests": {
       "get": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Get Pending Join Group Requests",
         "description": "Allows the owner of a group to view all pending join requests for their group.",
         "operationId": "viewPendingRequests",
@@ -985,7 +985,7 @@
 
     "/api/group/{groupId}/requests/{requestId}": {
       "put": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Update Join Request Status",
         "description": "Allows the owner of a group to accept or reject a join request for their group.",
         "operationId": "updateJoinRequestStatus",
@@ -1047,7 +1047,7 @@
 
     "/api/group/{groupId}/remove/{memberId}": {
       "put": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Remove Member from Group",
         "description": "Allows the creator of a group to remove a member from that group.",
         "operationId": "removeMemberFromGroup",
@@ -1098,7 +1098,7 @@
 
     "/api/group/{groupId}/posts": {
       "get": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Fetch All Posts in a Group",
         "description": "Retrieves all posts associated with the specified group ID.",
         "operationId": "getAllGroupPosts",
@@ -1155,7 +1155,7 @@
         }
       },
       "post": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Create a New Post in a Group",
         "description": "Allows authenticated users to create a new post in a specific group.",
         "operationId": "createGroupPost",
@@ -1206,7 +1206,7 @@
 
     "/api/group/delete/{groupId}/posts/{postId}": {
       "delete": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Delete a Post from a Group",
         "description": "Allows authenticated users to delete a specific post from a group by its ID.",
         "operationId": "deleteGroupPost",
@@ -1257,7 +1257,7 @@
 
     "/api/group/edit/{groupId}/posts/{postId}": {
       "put": {
-        "tags": ["groups"],
+        "tags": ["Groups"],
         "summary": "Edit a Post in a Group",
         "description": "Allows authenticated users to update the description of a specific post within a group.",
         "operationId": "editGroupPost",

@@ -6,7 +6,6 @@ import axios from "axios";
 import sinon from "sinon";
 import jwt from "jsonwebtoken";
 
-const { verify } = jwt;
 const url = process.env.SERVER_URL;
 
 describe(" Sign up test", () => {
@@ -178,5 +177,43 @@ describe(" Deleting account test", () => {
     expect(response.data.message).to.equal(
       `User ID ${user.id} deleted successfully.`
     );
+  });
+});
+
+describe(" Browsing reviews test", () => {
+  before(async () => {
+    console.log("   Initializing database...");
+    await testHelpers.initializeDB();
+  });
+  const testEndPoint = `${url}/api/movie/reviews`;
+
+  it("should return a 200 response with a list of reviews for a valid movie ID", async () => {
+    const movieId = 912649;
+    const response = await axios.get(`${testEndPoint}/${movieId}`);
+
+    expect(response.status).to.equal(200);
+    expect(response.data).to.be.an("array");
+    response.data.forEach((review) => {
+      expect(review).to.include.keys(
+        "id",
+        "movie_id",
+        "user_id",
+        "description",
+        "rating",
+        "reviewer_email",
+        "timestamp"
+      );
+      expect(review.movie_id).to.equal(movieId);
+    });
+  });
+
+  it("should return a 404 error when no reviews are found for a valid movie ID", async () => {
+    const movieId = 9999999;
+    try {
+      await axios.get(`${testEndPoint}/${movieId}`);
+    } catch (error) {
+      expect(error.response.status).to.equal(404);
+      expect(error.response.data.error).to.equal("Review not found");
+    }
   });
 });

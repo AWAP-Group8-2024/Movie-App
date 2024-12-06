@@ -9,7 +9,7 @@ export const getReviews = async (req, res, next) => {
     if (result.rowCount === 0) {
       return next(new ApiError("Review not found", 404));
     }
-
+    console.log(result);
     return res.status(200).json(result.rows || []);
   } catch (error) {
     return next(new ApiError("Server error while getReviews", 500));

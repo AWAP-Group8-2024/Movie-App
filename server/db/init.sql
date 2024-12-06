@@ -1,4 +1,5 @@
 BEGIN;
+DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS favorite;
 DROP TABLE IF EXISTS join_requests;
@@ -6,8 +7,8 @@ DROP TABLE IF EXISTS group_account;
 DROP TABLE IF EXISTS group_post;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS account;
-DROP TABLE IF EXISTS comment;
 COMMIT;
+
 
 BEGIN;
 CREATE TABLE account (
@@ -127,5 +128,16 @@ VALUES
     (12, 1, 791042, 'Levels', 'movie', '/y1xm0jMIlx9Oo2a3jWNyLGm43sJ.jpg', '2024-12-04 19:02:10.927379'),
     (13, 1, 1034541, 'Terrifier 3', 'movie', '/63xYQj1BwRFielxsBDXvHIJyXVm.jpg', '2024-12-04 19:02:14.087972'),
     (14, 1, 995803, 'Arena Wars', 'movie', '/4dRtXjk1rcsZlaMJpBn6Nh9cTfO.jpg', '2024-12-04 19:02:18.08618');
+
+INSERT INTO review (movie_id, user_id, description, rating, reviewer_email, timestamp)
+VALUES
+    (912649, 1, 'An amazing movie with stunning visuals and a gripping storyline!', 4.5, 'test1@movieapp.com', '2024-12-04 20:00:00'),
+    (1106739, 2, 'A thought-provoking story with outstanding performances.', 4.0, 'test2@movieapp.com', '2024-12-04 20:15:00'),
+    (1241982, 3, 'Good sequel, but it lacks the charm of the original.', 3.5, 'test3@movieapp.com', '2024-12-04 20:30:00'),
+    (38715, 4, 'A fun and light-hearted show, perfect for the holidays!', 4.2, 'test4@movieapp.com', '2024-12-04 20:45:00'),
+    (645757, 5, 'Heartwarming and entertaining. A must-watch for families.', 5.0, 'test5@movieapp.com', '2024-12-04 21:00:00'),
+    (248890, 6, 'Interesting concept, but it didn’t live up to the hype.', 2.8, 'test6@movieapp.com', '2024-12-04 21:15:00'),
+    (1034541, 1, 'Terrifying and thrilling! A horror fan’s dream movie.', 4.8, 'test1@movieapp.com', '2024-12-04 21:30:00');
+
 
 COMMIT;

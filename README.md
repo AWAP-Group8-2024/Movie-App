@@ -100,7 +100,7 @@ Make sure the database parameters are matched with the .env file
 cd server
 npm run devStart
 
-# run the frontend under root folder
+# run the frontend under the root folder
 npm start
 ```
 

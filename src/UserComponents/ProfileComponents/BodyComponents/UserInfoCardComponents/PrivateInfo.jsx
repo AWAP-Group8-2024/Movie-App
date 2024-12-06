@@ -72,7 +72,7 @@ export default function PrivateInfo({
           <Form.Group>
             <Form.Label>Password:</Form.Label>
             <Form.Control
-              type="text"
+              type="password"
               name="password"
               value={profileData.password ?? ""}
               onChange={handleInputChange}

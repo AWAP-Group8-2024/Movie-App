@@ -114,11 +114,13 @@ npm run test
 
 ## :art: UI Diagram
 
-TDB
+Please check our WireFrame on Figma.
 
 ## :floppy_disk: Database Structure
 
-TBD
+Here is our Entity Relationship Diagram for our project
+
+You can also check the ERD file under the /server/db folder.
 
 ## :video_camera: Video Demostration
 

@@ -1313,6 +1313,420 @@
       }
     },
 
+    "/api/group/{groupId}/posts/{postId}/comments": {
+      "get": {
+        "tags": ["Groups"],
+        "summary": "Fetch All Comments for a Post",
+        "description": "Retrieves all comments associated with a specific post within a group.",
+        "operationId": "getPostComments",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group containing the post.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "The unique ID of the post whose comments are being fetched.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of comments belonging to the specified post.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/get_post_comments_response"
+                  }
+                },
+                "example": [
+                  {
+                    "comment_id": 1,
+                    "writer_id": 3,
+                    "content": "Great post!",
+                    "creation_date": "2024-12-01T14:00:00Z",
+                    "firstname": "John",
+                    "lastname": "Doe"
+                  },
+                  {
+                    "comment_id": 2,
+                    "writer_id": 5,
+                    "content": "I totally agree!",
+                    "creation_date": "2024-12-01T14:10:00Z",
+                    "firstname": "Jane",
+                    "lastname": "Smith"
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Bad Request - Invalid post or group ID, or malformed request."
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+
+      "post": {
+        "tags": ["Groups"],
+        "summary": "Create a Comment on a Post",
+        "description": "Allows authenticated users to create a new comment on a specific post within a group.",
+        "operationId": "createComment",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "The unique ID of the post to comment on.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/create_comment_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Comment created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Comment created successfully"
+                    },
+                    "comment": {
+                      "$ref": "#/components/schemas/get_post_comments_response"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input or malformed request."
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+
+    "/api/group/{groupId}/posts/{postId}/comments/{commentId}": {
+      "post": {
+        "tags": ["Groups"],
+        "summary": "Create a Comment on a Post",
+        "description": "Allows authenticated users to create a new comment on a specific post within a group.",
+        "operationId": "createComment",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "The unique ID of the post to comment on.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/create_comment_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Comment created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Comment created successfully"
+                    },
+                    "comment": {
+                      "$ref": "#/components/schemas/get_post_comments_response"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input or malformed request."
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+
+      "put": {
+        "tags": ["Groups"],
+        "summary": "Update a Comment on a Post",
+        "description": "Allows authenticated users to update the content of a specific comment on a post within a group by its ID.",
+        "operationId": "editComment",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "The unique ID of the post containing the comment to be updated.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "The unique ID of the comment to be updated.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "newContent": {
+                    "type": "string",
+                    "description": "The new content for the comment.",
+                    "example": "This is the updated comment content."
+                  }
+                },
+                "required": ["newContent"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comment updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Comment updated successfully"
+                    },
+                    "comment": {
+                      "$ref": "#/components/schemas/get_post_comments_response"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input or malformed request."
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "404": { "description": "Comment not found." },
+          "500": { "description": "Internal server error." }
+        }
+      },
+
+      "delete": {
+        "tags": ["Groups"],
+        "summary": "Delete a Comment from a Post",
+        "description": "Allows authenticated users to delete a specific comment on a post within a group by its ID.",
+        "operationId": "removeComment",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "The unique ID of the group.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "The unique ID of the post from which the comment will be deleted.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "description": "The unique ID of the comment to be deleted.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Comment deleted successfully"
+                    },
+                    "comment": {
+                      "$ref": "#/components/schemas/get_post_comments_response"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input or malformed request."
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "404": { "description": "Comment not found." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+
+    "/api/user/{userId}/comments": {
+      "get": {
+        "tags": ["Groups"],
+        "summary": "Fetch All Comments by a User",
+        "description": "Retrieves all comments made by the specified user.",
+        "operationId": "getUserComments",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "The unique ID of the user whose comments are to be retrieved.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of comments made by the specified user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/get_user_comments_response"
+                  },
+                  "example": [
+                    {
+                      "id": 1,
+                      "content": "This is a comment.",
+                      "creation_date": "2024-12-01T12:00:00Z",
+                      "post_description": "Welcome to our group!"
+                    },
+                    {
+                      "id": 2,
+                      "content": "Another comment here.",
+                      "creation_date": "2024-12-02T13:00:00Z",
+                      "post_description": "Excited to be here!"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Incorrect password or invalid authorization)."
+          },
+          "403": { "description": "Forbidden - Invalid credentials provided." },
+          "500": { "description": "Internal server error." }
+        }
+      }
+    },
+
     "/api/movie/reviews/{id}": {
       "get": {
         "tags": ["Movies"],
@@ -2499,6 +2913,80 @@
             "post_id": 3,
             "description": "something",
             "creation_date": "2024-12-02T10:22:01.298Z"
+          }
+        }
+      },
+
+      "get_post_comments_response": {
+        "type": "object",
+        "properties": {
+          "comment_id": {
+            "type": "integer",
+            "description": "The unique identifier of the comment."
+          },
+          "writer_id": {
+            "type": "integer",
+            "description": "The unique identifier of the user who wrote the comment."
+          },
+          "content": {
+            "type": "string",
+            "description": "The content of the comment."
+          },
+          "creation_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp when the comment was created."
+          },
+          "firstname": {
+            "type": "string",
+            "description": "The first name of the comment writer."
+          },
+          "lastname": {
+            "type": "string",
+            "description": "The last name of the comment writer."
+          }
+        },
+        "example": {
+          "comment_id": 1,
+          "writer_id": 3,
+          "content": "Great post!",
+          "creation_date": "2024-12-01T14:00:00Z",
+          "firstname": "John",
+          "lastname": "Doe"
+        }
+      },
+
+      "create_comment_body": {
+        "type": "object",
+        "required": ["content"],
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "The content of the comment.",
+            "example": "This is my comment!"
+          }
+        }
+      },
+
+      "get_user_comments_response": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The unique ID of the comment."
+          },
+          "content": {
+            "type": "string",
+            "description": "The content of the comment."
+          },
+          "creation_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date and time when the comment was created."
+          },
+          "post_description": {
+            "type": "string",
+            "description": "Description of the post associated with the comment."
           }
         }
       },

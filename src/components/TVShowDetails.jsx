@@ -83,13 +83,9 @@ export default function TVShowDetails() {
     }
   };
 
-
-  
   useEffect(() => {
     setShareUrl(window.location.href);
   }, []);
-
-  console.log(shareUrl)
 
   useEffect(() => {
     const fetchFavoriteStatus = async () => {
@@ -115,7 +111,6 @@ export default function TVShowDetails() {
         </Container>
       </div>
     );
-
 
   const renderSeasonsList = () => {
     const availableSeasons = show.seasons?.filter(
@@ -385,8 +380,12 @@ export default function TVShowDetails() {
               </div>
 
               <section className="review-section">
-              <Reviews movieId={id} loggedInUserId={user.id} movieTitle={show.title} />
-            </section>
+                <Reviews
+                  movieId={id}
+                  loggedInUserId={user.id}
+                  movieTitle={show.title}
+                />
+              </section>
             </div>
           </Col>
         </Row>

@@ -5,28 +5,6 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import avatar from "../components/images/avatar.png";
 import { formatDate } from "./utils.js";
 
-// Retrieves the token and alerts if the user is not authenticated
-const getAuthToken = () => {
-  const token = JSON.parse(sessionStorage.getItem("user"))?.token;
-  if (!token) {
-    throw new Error("User not authenticated");
-  }
-  return token;
-};
-
-// Sets common headers for authorized requests
-const getAuthHeaders = () => {
-  const token = getAuthToken();
-  return token
-    ? {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    }
-    : null;
-};
-
-const headers = getAuthHeaders();
-
 const url = process.env.REACT_APP_BACKEND_URL;
 
 function Reviews({ movieId, loggedInUserId, movieTitle }) {
@@ -35,23 +13,27 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
   const [newReview, setNewReview] = useState({ text: "", rating: 0 });
   const [editingReview, setEditingReview] = useState(false);
   const { user } = useUser();
+  const token = user.token;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
 
   useEffect(() => {
     // Fetch reviews for the movie
     const fetchReviews = async () => {
       const response = await fetch(`${url}/api/movie/reviews/${movieId}`);
       const data = await response.json();
-      if(data.length>0){
-        console.log(data.length)
+      if (data.length > 0) {
         setReviews(data);
-  
+
         // Check if the logged-in user has already reviewed
-  
-        const userReview = data.find((review) => review.user_id === loggedInUserId);
+
+        const userReview = data.find(
+          (review) => review.user_id === loggedInUserId
+        );
         setUserReview(userReview);
       }
-
-      
     };
 
     fetchReviews();
@@ -117,8 +99,8 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
     <div className="review-card">
       <h3>Reviews</h3>
       {reviews && reviews.length > 0 ? (
-        reviews.map((review) => (
-          <div className="card mb-3 shadow-sm">
+        reviews.map((review, i) => (
+          <div className="card mb-3 shadow-sm" key={i}>
             <div className="card-body">
               <div className="d-flex mb-2 float-left" style={{ float: "left" }}>
                 <div className="me-3">
@@ -171,7 +153,7 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
                   </button>
                 </span>
               )}
-              <div
+              {/* <div
                 className="d-flex align-items-center"
                 style={{ float: "right" }}
               >
@@ -179,7 +161,7 @@ function Reviews({ movieId, loggedInUserId, movieTitle }) {
                   <i className="bi bi-hand-thumbs-up"></i> 100
                 </span>
                 <span className="text-muted">&nbsp;&nbsp;Liked</span>
-              </div>
+              </div> */}
             </div>
           </div>
         ))

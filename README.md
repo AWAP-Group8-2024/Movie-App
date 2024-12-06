@@ -115,6 +115,7 @@ npm run test
 ## :art: UI Diagram
 
 Please check our WireFrame on Figma.
+[Figma WireFrame](https://www.figma.com/design/fEHWvlf1j29CWxDRgzVSWy/MovieApp?node-id=0-1&node-type=canvas)
 
 ## :floppy_disk: Database Structure
 

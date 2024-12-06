@@ -121,6 +121,7 @@ Please check our WireFrame on Figma.
 Here is our Entity Relationship Diagram for our project
 
 You can also check the ERD file under the /server/db folder.
+![API document](/public/photo/ERD_diagram.jpg)
 
 ## :video_camera: Video Demostration
 

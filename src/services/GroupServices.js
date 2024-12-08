@@ -18,9 +18,9 @@ const getAuthHeaders = () => {
   const token = getAuthToken();
   return token
     ? {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      }
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    }
     : null;
 };
 
@@ -453,7 +453,8 @@ export const updateComment = async (
   try {
     const response = await axios.put(
       `${API_URL}/api/group/${groupId}/posts/${postId}/comments/${commentId}`,
-      { content: commentText, headers }
+      { newContent: commentText }, // Use the correct key
+      { headers }
     );
     return response.data;
   } catch (error) {
@@ -461,6 +462,7 @@ export const updateComment = async (
     throw error;
   }
 };
+
 
 // Deletes a comment by its ID
 export const deleteComment = async (groupId, postId, commentId) => {
@@ -480,14 +482,14 @@ export const deleteComment = async (groupId, postId, commentId) => {
 
 export function formatePostContentId(contentId) {
   if (contentId[0] === 'm') {
-      return {
-          media_type: 'movie',
-          id: contentId.replace('m', '')
-      }
+    return {
+      media_type: 'movie',
+      id: contentId.replace('m', '')
+    }
   } else {
-      return {
-          media_type: 'tv',
-          id: contentId.replace('t', '')
-      }
+    return {
+      media_type: 'tv',
+      id: contentId.replace('t', '')
+    }
   }
 }

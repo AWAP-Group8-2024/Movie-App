@@ -29,7 +29,7 @@
 
 ## :bulb: Introduction
 
-**MovieApp** is an application that users can browse the medias they are interested in, save and share the contents to their friends, or create a group to discuss the latest  trending movies.
+**MovieApp** is an application that users can browse the media which users are interested in, save and share the contents to their friends, or create a group to discuss the latest  trending movies.
 
 In this project, we use
 

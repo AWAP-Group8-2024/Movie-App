@@ -6,12 +6,14 @@ import {
   UserGroupDeleteButton,
 } from "./UserGroupComponents";
 import styles from "./UserGroups.module.css";
+import { useUser } from "../../../UserProvider";
 import { useGroup } from "../../../GroupProvider";
 import { useNavigate } from "react-router-dom";
 
 export default function UserGroups() {
   const navigate = useNavigate();
   const { groups, leaveGroup } = useGroup();
+  const { user } = useUser();
 
   const handleGroupViewButton = (groupId) => {
     navigate(`/groups/${groupId}`);
@@ -45,12 +47,14 @@ export default function UserGroups() {
                       group={group}
                       handleGroupViewButton={handleGroupViewButton}
                     />
-                    <UserGroupDeleteButton
-                      group={group}
-                      handleGroupDeleteButton={() => {
-                        handleGroupDeleteButton(group.id);
-                      }}
-                    />
+                    {user.id != group.creator_id ? (
+                      <UserGroupDeleteButton
+                        group={group}
+                        handleGroupDeleteButton={() => {
+                          handleGroupDeleteButton(group.id);
+                        }}
+                      />
+                    ) : null}
                   </Col>
                 </Row>
               </Card.Body>

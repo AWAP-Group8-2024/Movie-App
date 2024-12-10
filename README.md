@@ -29,7 +29,7 @@
 
 ## :bulb: Introduction
 
-**MovieApp** is an application that users can browse the media which users are interested in, save and share the contents to their friends, or create a group to discuss the latest  trending movies.
+**MovieApp** is an application that users can browse the media which users are interested in, save and share the contents to their friends, or create a group to discuss the latest trending movies.
 
 In this project, we use
 
@@ -126,7 +126,7 @@ You can also check the ERD file under the /server/db folder.
 
 ## :video_camera: Video Demostration
 
-![Presentation Video](https://youtu.be/vPJG9ogTeoQ)
+[Presentation Video](https://youtu.be/vPJG9ogTeoQ)
 
 ## :page_with_curl: API document
 

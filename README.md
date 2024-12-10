@@ -126,7 +126,7 @@ You can also check the ERD file under the /server/db folder.
 
 ## :video_camera: Video Demostration
 
-TBD
+![Presentation Video](https://youtu.be/vPJG9ogTeoQ)
 
 ## :page_with_curl: API document
 

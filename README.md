@@ -126,7 +126,7 @@ You can also check the ERD file under the /server/db folder.
 
 ## :video_camera: Video Demostration
 
-[Presentation Video](https://youtu.be/vPJG9ogTeoQ)
+[![Firebase Tutorial](https://img.youtube.com/vi/vPJG9ogTeoQ/0.jpg)](https://www.youtube.com/watch?v=vPJG9ogTeoQ)
 
 ## :page_with_curl: API document
 

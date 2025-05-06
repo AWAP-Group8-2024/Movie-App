@@ -169,4 +169,4 @@ This is our site. [Movie App](https://mango-rock-0b5b48e10.5.azurestaticapps.net
 - [Hamim Ifty](mailto:hifty24@students.oamk.fi)
 - [Jasintha Weerappu Hettiarachchige](mailto:t3weja00@students.oamk.fi)
 - [Roman Shrestha](mailto:t3shro00@students.oamk.fi)
-- [Sam Chou](mailto:t3chsa01@students.oamk.fi)
+- [Sam Chou](https://github.com/FuzzyKala)
